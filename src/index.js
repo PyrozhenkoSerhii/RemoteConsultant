@@ -6,10 +6,10 @@ import { Provider as ReduxProvider } from "react-redux"
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import AlertTemplate from "react-alert-template-basic"
 
-import './style/main'
-import { store, persistor } from './redux/store'
-import App from './react/App'
-import LoadingView from './react/LoadingView'
+import './style/main.scss'
+import { store, persistor } from './js/redux/store'
+import App from './js/App'
+import LoadingView from './js/LoadingView'
 
 
 const alertOptions = {

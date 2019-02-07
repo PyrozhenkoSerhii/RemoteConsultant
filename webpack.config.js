@@ -1,10 +1,13 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 const path = require('path')
+
+const outputDirectory = './public'
 
 module.exports = {
     entry: './src/index.js',
     output: {
-        path: path.join(__dirname, '/dist'),
+        path: path.resolve(__dirname, outputDirectory),
         filename: 'bundle.js',
         publicPath: '/'
     },
@@ -14,7 +17,7 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: "babel-loader"
+                    loader: 'babel-loader'
                 }
             },
             {
@@ -24,6 +27,10 @@ module.exports = {
                     'css-loader',
                     'sass-loader'
                 ]
+            },
+            {
+                test: /\.css$/,
+                loader: "style-loader!css-loader"
             },
             {
                 test: /\.(png|jpe?g|gif|svg)$/i,
@@ -37,13 +44,29 @@ module.exports = {
                         }
                     }
                 ]
+            },
+            {
+                test: /\.(jpe?g|png|gif)$/,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 10000
+                    }
+                }]
+            },
+            {
+                test: /\.(eot|svg|ttf|woff2?|otf)$/,
+                use: 'file-loader'
             }
         ]
     },
     devServer: {
-        historyAPIFallback: true,
+        historyApiFallback: true,
+        port: 3000,
+        open: false
     },
     plugins: [
+        new CleanWebpackPlugin([outputDirectory]),
         new HtmlWebpackPlugin({
             template: './src/index.html'
         })
