@@ -1,0 +1,37 @@
+{
+    "parser": "babel-eslint",
+    "extends": [
+      "standard",
+      "standard-react"
+    ],
+    "plugins": [
+      "babel",
+      "react",
+      "promise"
+    ],
+    "env": {
+      "browser" : true
+    },
+    "globals": {
+      "__DEV__"      : false,
+      "__TEST__"        : false,
+      "__PROD__"        : false,
+      "__COVERAGE__"    : false,
+      "__API__"         : false,
+      "__SETTINGS__"    : false,
+      "__APP_VERSION__" : false,
+      "__VERSION__" : false
+    },
+    "rules": {
+      "indent"                 : ["warn", 4, { "VariableDeclarator": 1, "ObjectExpression": 1, "ArrayExpression": 1, "MemberExpression": 1, "SwitchCase": 1 }],
+      "key-spacing"            : 0,
+      "jsx-quotes"             : [2, "prefer-single"],
+      "max-len"                : [2, 512, 2],
+      "object-curly-spacing"   : [2, "always"],
+      "no-undef"               : 1,
+      "semi"                   : ["error", "always", { "omitLastInOneLineBlock": true}],
+      "react/jsx-indent"       : ["error", 4],
+      "react/jsx-indent-props" : ["error", 4]
+    }
+  }
+  
