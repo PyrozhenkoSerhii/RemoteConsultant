@@ -7,8 +7,10 @@ exports.default = new Schema({
         trim: true
     },
     message: {
-        type: Number,
-        min: [1, 'Enter a valid product quantity']
+        type: String,
+        required: [true, 'The message field is required'],
+        minlength: [3, 'Message must contains at least 3 character'],
+        trim: true
     },
     date: {
         type: Date,

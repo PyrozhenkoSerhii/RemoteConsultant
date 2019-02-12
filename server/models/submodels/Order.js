@@ -6,6 +6,9 @@ exports.default = new Schema({
         required: [true, 'Product info is required'],
         trim: true
     },
+    consultant: {
+        type: String
+    },
     quantity: {
         type: Number,
         min: [1, 'Enter a valid product quantity']

@@ -8,11 +8,12 @@ exports.default = new Schema({
     },
     rate: {
         type: Number,
-        min: [1, 'Enter a valid product quantity']
+        min: [1, 'Rate must be in range 1-5'],
+        max: [5, 'Rate must be in range 1-5']
     },
     mark: {
-        type: Number,
-        min: [1, "The price field is invalid"]
+        type: String,
+        trim: true
     },
     date: {
         type: Date,

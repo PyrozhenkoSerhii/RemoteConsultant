@@ -9,7 +9,6 @@ import Comment from './submodels/Comment'
 import Evaluation from './submodels/Evaluation'
 
 
-
 const UserSchema = new Schema({
     email: {
         type: String,
@@ -50,8 +49,8 @@ const UserSchema = new Schema({
         match: [regex.url, 'Please, provide a valid secure url']
     },
     orders: [Order],
-    comment: [Comment],
-    evaluation: [Evaluation]
+    comments: [Comment],
+    evaluations: [Evaluation]
 })
 
 
