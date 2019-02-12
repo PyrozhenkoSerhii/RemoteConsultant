@@ -29,7 +29,7 @@
       "command": "jest"
     },
     "server-dev": {
-      "command": "nodemon --exec babel/node server/server.js",
+      "command": "nodemon --exec babel-node server/server.js",
       "env": {
         "NODE_ENV": "dev"
       }

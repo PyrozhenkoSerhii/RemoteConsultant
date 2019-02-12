@@ -5,6 +5,9 @@ import timestamps from 'mongoose-timestamp'
 import config from '../config'
 import regex from '../utils/regex'
 import Order from './submodels/Order'
+import Comment from './submodels/Comment'
+import Evaluation from './submodels/Evaluation'
+
 
 
 const UserSchema = new Schema({
@@ -46,7 +49,9 @@ const UserSchema = new Schema({
         default: config.defaults.image,
         match: [regex.url, 'Please, provide a valid secure url']
     },
-    orders: [Order]
+    orders: [Order],
+    comment: [Comment],
+    evaluation: [Evaluation]
 })
 
 
