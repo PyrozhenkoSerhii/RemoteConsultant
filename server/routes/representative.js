@@ -1,7 +1,7 @@
 import express from 'express'
 import ExpressBrute from 'express-brute'
 
-import Controller from '../controllers/сustomer'    
+import Controller from '../controllers/representative'    
 
 const router = express.Router()
 

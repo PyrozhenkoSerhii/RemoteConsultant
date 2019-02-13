@@ -168,6 +168,7 @@ exports.authenticate = (req, res) => {
 
 
 exports.logout = (req, res) => {
+    //add blacklist jwt first and then use it here
     return res.status(501).send({ error: `The logout will be implemented soon!` })
 }
 
