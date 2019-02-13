@@ -2,10 +2,9 @@ import _ from 'lodash'
 
 const enviroment = process.env.NODE_ENV || 'dev'
 
-import User from '../models/User'
+import User from '../models/Customer'
 import redis from '../utils/redis'
 import logger from '../utils/logger'
-import config from '../config'
 import { createTestTransport, createGmailTransport, verificationMessage, passwordResetMessage } from "../utils/mailer"
 import { sign } from '../utils/jwt'
 
@@ -58,7 +57,7 @@ exports.post = (req, res) => {
         username: req.body.username,
         password: req.body.password,
         age: req.body.age,
-        image: req.body.image || config.defaults.image,
+        image: req.body.image,
         orders: req.body.orders || []
     })
 
@@ -118,7 +117,7 @@ exports.put = (req, res) => {
                 })
             })
 
-            return res.status(200).send({message: 'User was updated'})
+            return res.status(200).send({ message: 'User was updated' })
         });
     })
 }
@@ -138,7 +137,7 @@ exports.delete = (req, res) => {
                 if (err) logger.error(`[Redis] Error occured while attempting to delete user with id ${req.params.id} `)
                 else logger.info(`[Redis] User with id (${req.params.id}) was deleted`)
 
-                return res.status(200).send({message: 'User was deleted'})
+                return res.status(200).send({ message: 'User was deleted' })
             })
         })
     })
@@ -242,7 +241,7 @@ exports.resetPasswordConfirm = (req, res) => {
                     })
                 })
 
-                return res.status(200).send({message: 'Password was changed'})
+                return res.status(200).send({ message: 'Password was changed' })
             })
         })
     })

@@ -29,7 +29,10 @@ const dev = {
         passwordResetBase: process.env.PASSWORD_RESET_BASE || 'http://localhost:8080/users/resetPasswordConfirm/'
     },
     defaults: {
-        image: "https://banner2.kisspng.com/20180401/dbq/kisspng-user-profile-computer-icons-profile-5ac09245049c32.0935523415225697970189.jpg"
+        customerImage: 'https://pngimage.net/wp-content/uploads/2018/06/profile-png-5.png',
+        companyImage: 'https://static.thenounproject.com/png/509354-200.png',
+        consultantImage: 'https://pngimage.net/wp-content/uploads/2018/05/consultant-png-3.png',
+        productImage: 'https://pngimage.net/wp-content/uploads/2018/06/icon-product-png-1.png'
     }
 }
 
@@ -58,7 +61,10 @@ const prod = {
         port: process.env.REDIS_PORT
     },
     defaults: {
-        image: "https://banner2.kisspng.com/20180401/dbq/kisspng-user-profile-computer-icons-profile-5ac09245049c32.0935523415225697970189.jpg"
+        customerImage: 'https://pngimage.net/wp-content/uploads/2018/06/profile-png-5.png',
+        companyImage: 'https://static.thenounproject.com/png/509354-200.png',
+        consultantImage: 'https://pngimage.net/wp-content/uploads/2018/05/consultant-png-3.png',
+        productImage: 'https://pngimage.net/wp-content/uploads/2018/06/icon-product-png-1.png'
     }
 }
 
@@ -88,7 +94,10 @@ const test = {
         passwordResetBase: 'http://localhost:8080/users/resetPasswordConfirm/'
     },
     defaults: {
-        image: "https://banner2.kisspng.com/20180401/dbq/kisspng-user-profile-computer-icons-profile-5ac09245049c32.0935523415225697970189.jpg"
+        customerImage: 'https://pngimage.net/wp-content/uploads/2018/06/profile-png-5.png',
+        companyImage: 'https://static.thenounproject.com/png/509354-200.png',
+        consultantImage: 'https://pngimage.net/wp-content/uploads/2018/05/consultant-png-3.png',
+        productImage: 'https://pngimage.net/wp-content/uploads/2018/06/icon-product-png-1.png'
     }
 }
 

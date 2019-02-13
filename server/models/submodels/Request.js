@@ -5,16 +5,18 @@ import { message } from '../../utils/validation/range'
 
 
 exports.default = new Schema({
-    product: {
+    consultant: {
         type: String,
-        required: [true, messages.required.product]
+        required: [true, messages.required.consultant]
     },
     message: {
         type: String,
         trim: true,
-        required: [true, messages.required.message],
-        minlength: [message.min, messages.restrictions.message],
         maxlength: [message.max, messages.restrictions.message]
+    },
+    approved: {
+        type: Boolean,
+        default: false
     },
     date: {
         type: Date,

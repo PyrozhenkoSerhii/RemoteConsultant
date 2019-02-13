@@ -1,21 +1,28 @@
 import { Schema } from 'mongoose'
 
+import messages from '../../utils/validation/messages'
+import { quantity, sum } from '../../utils/validation/range'
+
+
 exports.default = new Schema({
     product: {
         type: String,
-        required: [true, 'Product info is required'],
-        trim: true
+        required: [true, messages.required.product]
     },
     consultant: {
         type: String
     },
     quantity: {
         type: Number,
-        min: [1, 'Enter a valid product quantity']
+        required: [true, messages.required.quantity],
+        min: [quantity.min, messages.restrictions.quantity],
+        max: [quantity.max, messages.restrictions.quantity]
     },
-    price: {
+    sum: {
         type: Number,
-        min: [1, "The price field is invalid"]
+        required: [true, messages.required.sum],
+        min: [sum.min, messages.restrictions.sum],
+        max: [sum.max, messages.restrictions.sum]
     },
     date: {
         type: Date,

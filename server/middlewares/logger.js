@@ -1,7 +1,7 @@
 import shortid from 'shortid'
 
 import logger from '../utils/logger'
-import { idCharacters } from "../utils/regex";
+import { idCharacters } from "../utils/validation/regex";
 
 shortid.characters(idCharacters)
 

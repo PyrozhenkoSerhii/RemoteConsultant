@@ -2,21 +2,17 @@ import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'mongoose-bcrypt'
 import timestamps from 'mongoose-timestamp'
 
-import messages from '../utils/validation/messages'
-import { images, gender } from '../utils/validation/defaults'
 import regex from '../utils/validation/regex'
-import { email, username, fullname, password, matureAge, url, rating } from '../utils/validation/range'
+import messages from '../utils/validation/messages'
+import { gender, images } from '../utils/validation/defaults'
+import { email, username, password, age, url, fullname } from '../utils/validation/range'
 
-import Certificate from './submodels/Certificate'
-import Language from './submodels/Language'
+import Order from './submodels/Order'
+import Comment from './submodels/Comment'
+import Assessment from './submodels/Assessment'
 
 
-/**
- * Note: Fields [Age, Phone, Image, Gender] not required during registration
- *       They should be initialized by consultant from profile setting to
- *       set field {completed: true} and allow consultations
- */
-const ConsultantSchema = new Schema({
+const UserSchema = new Schema({
     email: {
         type: String,
         lowercase: true,
@@ -25,8 +21,8 @@ const ConsultantSchema = new Schema({
         unique: true,
         required: [true, messages.required.email],
         match: [regex.email, messages.match.email],
-        minLength: [email.min, mesasges.restrictions.email],
-        maxlength: [email.max, mesasges.restrictions.email]
+        minLength: [email.min, messages.restrictions.email],
+        maxlength: [email.max, messages.restrictions.email]
     },
     username: {
         type: String,
@@ -39,7 +35,6 @@ const ConsultantSchema = new Schema({
     fullname: {
         type: String,
         trim: true,
-        required: [true, messages.required.fullname],
         match: [regex.fullname, messages.match.fullname],
         minlength: [fullname.min, messages.restrictions.fullname],
         minlength: [fullname.max, messages.restrictions.fullname]
@@ -55,38 +50,33 @@ const ConsultantSchema = new Schema({
     },
     age: {
         type: Number,
-        min: [matureAge.min, messages.restrictions.matureAge],
-        max: [matureAge.max, messages.restrictions.matureAge]
+        min: [age.min, messages.restrictions.age],
+        max: [age.max, messages.restrictions.age]
     },
     gender: {
         type: String,
         enum: gender.enum,
         default: gender.default
     },
-    
-    rating: {
+    image: {
         type: String,
-        min: [rating.min, messages.restrictions.rating],
-        max: [rating.max, messages.restrictions.rating]
+        default: images.customer,
+        match: [regex.url, messages.match.url],
+        minlength: [url.min, messages.restrictions.url],
+        minlength: [url.max, messages.restrictions.url]
     },
-    phone: {
-        type: Number,
-        match: [regex.phone, messages.match.phone]
-    },
-    certificate: Certificate,
-    languages: [Language],
+    orders: [Order],
+    comments: [Comment],
+    assessments: [Assessment],
     verified: {
-        type: Boolean,
-        default: false
-    },
-    completed: {
         type: Boolean,
         default: false
     }
 })
 
-ConsultantSchema.plugin(bcrypt)
-ConsultantSchema.plugin(timestamps)
+
+UserSchema.plugin(bcrypt)
+UserSchema.plugin(timestamps)
 
 
-module.exports = mongoose.model('Consultant', ConsultantSchema)
+module.exports = mongoose.model('User', UserSchema)

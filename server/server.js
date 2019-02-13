@@ -9,7 +9,7 @@ import requestLimiter from 'express-rate-limit'
 import helmet from 'helmet'
 
 import config from './config'
-import userRouter from './routes/user'
+import customerRouter from './routes/customer'
 import loggerMiddleware from './middlewares/logger'
 import logger from './utils/logger'
 
@@ -42,12 +42,12 @@ enviroment !== 'test' && api.use(jwt({
     secret: config.api.secret,
 }).unless(req =>
     req.originalUrl === '/' ||
-    req.originalUrl === '/users' && req.method === 'POST' ||
-    req.originalUrl === '/users/authenticate' ||
-    req.originalUrl === '/users/resetPasswordRequest' ||
-    req.originalUrl === '/users/verifyEmail' ||
-    req.originalUrl.match(/^\/users\/verifying\/.*/) ||
-    req.originalUrl.match(/^\/users\/resetPasswordConfirm\/.*/)
+    req.originalUrl === '/customers' && req.method === 'POST' ||
+    req.originalUrl === '/customers/authenticate' ||
+    req.originalUrl === '/customers/resetPasswordRequest' ||
+    req.originalUrl === '/customers/verifyEmail' ||
+    req.originalUrl.match(/^\/customers\/verifying\/.*/) ||
+    req.originalUrl.match(/^\/customers\/resetPasswordConfirm\/.*/)
 ))
 api.use(loggerMiddleware)
 api.use((err, req, res, next) => {
@@ -58,7 +58,7 @@ api.use((err, req, res, next) => {
 })
 
 
-api.use('/users', userRouter)
+api.use('/customers', customerRouter)
 api.get('*', (req, res) => {
     res.status(404).send({ error: `${req.originalUrl} not found!` })
 })
