@@ -1,6 +1,7 @@
 import mongoose, {Schema} from 'mongoose'
 import bcrypt from 'mongoose-bcrypt'
 import timestamps from 'mongoose-timestamp'
+import queryParser from 'mongoose-string-query'
 
 import regex from '../utils/validation/regex'
 import messages from '../utils/validation/messages'
@@ -56,8 +57,9 @@ const CompanySchema = new Schema({
     products: [String]
 })
 
+CompanySchema.plugin(bcrypt)
+CompanySchema.plugin(timestamps)
+CompanySchema.plugin(queryParser)
 
-UserSchema.plugin(bcrypt)
-UserSchema.plugin(timestamps)
 
 mongoose.exports = mongoose.model('Company', CompanySchema)

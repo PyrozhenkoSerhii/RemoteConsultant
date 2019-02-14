@@ -4,7 +4,7 @@ import async from 'async'
 import mongoose from 'mongoose'
 
 import router from '../../server/server'
-import testData from './data/user.json'
+import testData from '../../server/mocs/user'
 import User from '../../server/models/User'
 
 const environment = process.env.NODE_ENV || 'dev'

@@ -49,6 +49,10 @@ const RepresentativeSchema = new Schema({
         minlength: [url.min, messages.restrictions.url],
         minlength: [url.max, messages.restrictions.url]
     },
+    company: {
+        type: String,
+        required: [true, messages.required.company]
+    }
 })
 
 RepresentativeSchema.plugin(bcrypt)
