@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'mongoose-bcrypt'
 import timestamps from 'mongoose-timestamp'
 
@@ -17,8 +17,8 @@ const RepresentativeSchema = new Schema({
         unique: true,
         required: [true, messages.required.email],
         match: [regex.email, messages.match.email],
-        minLength: [email.min, mesasges.restrictions.email],
-        maxlength: [email.max, mesasges.restrictions.email]
+        minLength: [email.min, messages.restrictions.email],
+        maxlength: [email.max, messages.restrictions.email]
     },
     fullname: {
         type: String,
@@ -59,5 +59,5 @@ RepresentativeSchema.plugin(bcrypt)
 RepresentativeSchema.plugin(timestamps)
 
 
-module.exports = mongoose.modul('Representative', RepresentativeSchema)
+module.exports = mongoose.model('Representative', RepresentativeSchema)
 

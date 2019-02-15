@@ -9,9 +9,16 @@ import requestLimiter from 'express-rate-limit'
 import helmet from 'helmet'
 
 import config from './config'
-import customerRouter from './routes/customer'
 import loggerMiddleware from './middlewares/logger'
+import errorHandler from './middlewares/errorHandler'
 import logger from './utils/logger'
+
+import customerRouter from './routes/customer'
+import companyRouter from './routes/company'
+import consultantRouter from './routes/consultant'
+import consultationRouter from './routes/consultation'
+import productRouter from './routes/product'
+import representativeRouter from './routes/representative'
 
 
 const api = express()
@@ -47,7 +54,8 @@ enviroment !== 'test' && api.use(jwt({
     req.originalUrl === '/customers/resetPasswordRequest' ||
     req.originalUrl === '/customers/verifyEmail' ||
     req.originalUrl.match(/^\/customers\/verifying\/.*/) ||
-    req.originalUrl.match(/^\/customers\/resetPasswordConfirm\/.*/)
+    req.originalUrl.match(/^\/customers\/resetPasswordConfirm\/.*/) ||
+    req.originalUrl === '/companies' 
 ))
 api.use(loggerMiddleware)
 api.use((err, req, res, next) => {
@@ -56,9 +64,13 @@ api.use((err, req, res, next) => {
         res.status(401).send({ error: `You have no permitions to make this request` })
     }
 })
-
-
 api.use('/customers', customerRouter)
+api.use('/products', productRouter)
+api.use('/companies', companyRouter)
+api.use('/consultants', consultantRouter)
+api.use('/consultations', consultationRouter)
+api.use('/representatives', representativeRouter)
+api.use(errorHandler)
 api.get('*', (req, res) => {
     res.status(404).send({ error: `${req.originalUrl} not found!` })
 })

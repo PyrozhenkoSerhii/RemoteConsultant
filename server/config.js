@@ -8,7 +8,10 @@ const dev = {
     api: {
         port: parseInt(process.env.DEV_API_PORT) || 8080,
         secret: process.env.DEV_JWT_SECRET || 'secret',
-        logFile: process.env.DEV_LOG_FILE || 'exceptions.log',
+        logs: {
+            warning: 'warnings.dev.log',
+            error: 'errors.dev.log'
+        }
     },
     db: {
         host: process.env.DEV_DB_HOST || 'localhost',
@@ -40,7 +43,10 @@ const prod = {
     api: {
         port: parseInt(process.env.PORT),
         secret: process.env.SECRET,
-        logFile: process.env.DEV_LOG_FILE
+        logs: {
+            warning: 'warnings.log',
+            error: 'errors.log'
+        }
     },
     db: {
         host: process.env.DB_HOST,
@@ -72,7 +78,10 @@ const test = {
     api: {
         port: 8080,
         secret: 'secret',
-        logFile: 'errors.log'
+        logs: {
+            warning: 'warnings.test.log',
+            error: 'errors.test.log'
+        }
 
     },
     db: {

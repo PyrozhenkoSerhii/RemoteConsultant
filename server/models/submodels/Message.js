@@ -18,7 +18,7 @@ exports.default = new Schema({
         trim: true,
         required: [true, messages.required.message],
         minlength: [message.min, messages.restrictions.message],
-        maxlength: [mesasge.max, messages.restrictions.message]
+        maxlength: [message.max, messages.restrictions.message]
     },
     date: {
         type: Date,

@@ -26,7 +26,7 @@ const CompanySchema = new Schema({
         required: [true, messages.required.website],
         trim: true,
         unique: true,
-        match: [regex.url, match.url],
+        match: [regex.url, messages.match.url],
         minlength: [url.max, messages.restrictions.url],
         maxlength: [url.max, messages.restrictions.url]
     },

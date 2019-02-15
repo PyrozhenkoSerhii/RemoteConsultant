@@ -22,7 +22,7 @@ const loggerMiddleware = (req, res, next) => {
         clearListeners()
         if (res.statusCode >= 500) {
             logger.error(`[${id}] Request on url ${req.originalUrl} finished with status ` +
-                `${res.statusCode} ${res.statusMessage}, err: ${JSON.stringify(res.JsonBody.error)}`)
+                `${res.statusCode} ${res.statusMessage}, err: ${JSON.stringify(res.JsonBody.error || `Unknown error. See the server.logs`)}`)
         }
         else if (res.statusCode >= 400) {
             logger.warn(`[${id}] Request on url ${req.originalUrl} finished with status ` +

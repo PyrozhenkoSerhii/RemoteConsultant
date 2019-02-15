@@ -21,12 +21,12 @@ let logger = createLogger({
             )
         }),
         new transports.File({
-            filename: config.api.logFile,
+            filename: config.api.logs.warning,
             level: 'warn',
             silent: enviroment === 'test'
         }),
         new transports.File({
-            filename: config.api.logFile,
+            filename: config.api.logs.error,
             level: 'error',
             silent: enviroment === 'test'
         })

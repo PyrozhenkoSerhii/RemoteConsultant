@@ -25,8 +25,8 @@ const ConsultantSchema = new Schema({
         unique: true,
         required: [true, messages.required.email],
         match: [regex.email, messages.match.email],
-        minLength: [email.min, mesasges.restrictions.email],
-        maxlength: [email.max, mesasges.restrictions.email]
+        minLength: [email.min, messages.restrictions.email],
+        maxlength: [email.max, messages.restrictions.email]
     },
     username: {
         type: String,

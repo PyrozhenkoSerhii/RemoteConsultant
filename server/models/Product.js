@@ -11,6 +11,8 @@ const ProductSchema = new Schema({
     title: {
         type: String,
         trim: true,
+        index: true,
+        unique: true,
         required: [true, messages.required.title],
         minlength: [title.min, messages.restrictions.title],
         minlength: [title.max, messages.restrictions.title]
