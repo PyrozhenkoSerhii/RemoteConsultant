@@ -1,54 +1,54 @@
-        PLATFORM ROLES
+        (PLATFORM ROLES)
 
-=== Company
-[x] Is registered manually by owners of platform with secret which should know company members only
-[x] Has related products which were added by Representatives*
-[x] Has list of requests from Consultants*
-[x] Sets a list of Certificates*** that are valid (to consult company's Products*)
-=== Representatives
-[x] Must provide a secret from company to register on platform
-[x] Manage products (import included)
-[x] Manage requests from Consultants*
-=== Consultants
-[x] Common registration
-[x] Should provide a valid certificate from API (will be written soon)
-[x] Should fill in additional info after registration to complete account and unlock registration
-[x] Can make a requests to company to ask them about work
-[x] Can provide a Consultations* in the area they know and which is proved by certificate
-[x] Get a points (that could be counverted in real money in future) after Customer* buy a product (besed on written assessment algorithm)**
-=== Customers
-[x] Common registration
-[x] Can search for a Product 
-[x] Can get a Consultantion from Consultants
-[x] Can assess a Consultant
-[x] Can buy a Product and leave a comment about it
+=== Company ===
+> Is registered manually by owners of platform with secret which should know company members only
+> Has related products which were added by Representatives*
+> Has list of requests from Consultants*
+> Sets a list of Certificates*** that are valid (to consult company's Products*)
+=== Representatives ===
+> Must provide a secret from company to register on platform
+> Manage products (import included)
+> Manage requests from Consultants*
+=== Consultants ===
+> Common registration
+> Should provide a valid certificate from API (will be written soon)
+> Should fill in additional info after registration to complete account and unlock registration
+> Can make a requests to company to ask them about work
+> Can provide a Consultations* in the area they know and which is proved by certificate
+> Get a points (that could be counverted in real money in future) after Customer* buy a product (besed on written assessment algorithm)**
+=== Customers ===
+> Common registration
+> Can search for a Product 
+> Can get a Consultantion from Consultants
+> Can assess a Consultant
+> Can buy a Product and leave a comment about it
 
-        DATABASE MODELS
+        (DATABASE MODELS)
 
-=== Company -> explained above
-=== Representatives -> explained above
-=== Consultants -> explained above
-=== Customers -> explained above
-=== Consultantions
-[x] Store an information about consultation between two people
-[x] Store chat history
-[x] Is used to assess a contribution of Consultant after Customer buy a Product (based on written assessment algorithm)**
-=== Products
-[x] Store information about the products of company
-[x] Can be imported by Representatives (using import algorithm)**
+=== Company ===  -> explained above
+=== Representatives ===  -> explained above
+=== Consultants ===  -> explained above
+=== Customers ===  -> explained above
+=== Consultantions ===
+> Store an information about consultation between two people
+> Store chat history
+> Is used to assess a contribution of Consultant after Customer buy a Product (based on written assessment algorithm)**
+=== Products ===
+> Store information about the products of company
+> Can be imported by Representatives (using import algorithm)**
 
-        MODULES
+        (MODULES)
 
-=== Import algorithm
-[x] Import algorithm is used by Representatives to import company products
-[x] Import algorithm can parse .bson and .json files which means, it can work with MongoDB dump files
-[x] Representatives can select fields (and paths to them) they want to import (+ fields that are necessary to platform) on client-side
-=== Asessment algorithm
-[x] Algorithm is made to assess the contribution of Consultants to sales of product
-[x] It uses a different info such as assessment of Customers, rating, delay before sale, quantity of Consultants and so on.
+=== ImportAlgorithm ===
+> Import algorithm is used by Representatives to import company products
+> Import algorithm can parse .bson and .json files which means, it can work with MongoDB dump files
+> Representatives can select fields (and paths to them) they want to import (+ fields that are necessary to platform) on client-side
+=== ContributionAlgorithm ===
+> Algorithm is made to assess the contribution of Consultants to sales of product
+> It uses a different info such as assessment of Customers, rating, delay before sale, quantity of Consultants and so on.
 
-        CERTIFICATES API (just a fake site that provides a certificates)
+        (CERTIFICATES API) -> just a fake site that provides a certificates
 
-[x] Allows Consultants to register on website, pass a test and get a certificate
-[x] Allows Consultants to add this certificate (as a link) to their profile
-[x] Allows Representatives to understand skills of Consultants when hiring to work
+> Allows Consultants to register on website, pass a test and get a certificate
+> Allows Consultants to add this certificate (as a link) to their profile
+> Allows Representatives to understand skills of Consultants when hiring to work

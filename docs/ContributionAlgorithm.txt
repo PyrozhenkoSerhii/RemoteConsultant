@@ -1,0 +1,10 @@
+Usage
+> it uses after customer buying a product
+> it uses for each consultant were engaged in sale
+> it calculates the contribution for each consultant
+
+Enter information
+> current rating after consulation
+> consultant overral rating
+> customer answer about the consultant usefullness
+

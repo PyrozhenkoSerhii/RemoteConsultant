@@ -10,6 +10,8 @@ exports.list = (req, res) => {
     //TODO: implement a parser
     const { where, limit, sort } = parser(req.query)
 
+    
+
     // Company.find(where).limit(limit).sort(sort).exec((err, companies) => {
         // if (err) return res.status(500).send({ error: 'Something went wrong while fetching companies' })
 

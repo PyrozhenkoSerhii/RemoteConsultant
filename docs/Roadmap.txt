@@ -1,0 +1,73 @@
+<SERVER>
+[x] Server setup
+    [x] structure
+    [x] modules
+    [x] configs
+        [x] development
+        [x] production
+        [x] test
+    [x] security
+        [x] base modules
+        [x] bruteforce
+            [x] base implementation
+            [] production implementation
+        [x] jwt
+[x] Models 
+    [x] customer
+    [x] consultant
+    [x] consultation
+    [x] product
+    [x] company
+    [x] representative
+[x] Routes 
+    [x] customer
+    [x] consultant
+    [x] consultation
+    [x] product
+    [x] company
+    [x] representative
+[] Utils
+    [x] validation
+    [x] logger
+    [x] mailer
+    [] jwt 
+        [x] base implementation
+        [] jwt blacklist
+    [] filter parser 
+        [] implementation 
+        [] integration with parameterized get requests
+    [] contribution (Important bussiness logic)
+        [] coefitients
+        [] calculator
+        [] integration
+    [] import (Important bussiness logic)
+        [] parse algorithm
+            [] Mongodb
+            [] Sql (Optional)
+        [] save algorithm
+[] Controllers
+    [x] customer controller
+    [] company controller
+    [] representative controller
+    [] consultant controller 
+    [] consultation controller
+    [] product controller
+[] Itegration tests and mocks
+    [x] customer
+    [] company
+    [] product
+    [] representative
+    [] consultant
+    [] consultation
+[] Sockets
+    [] base implementation
+    [] chat sockets
+    [] chat integretion with controllers
+    [] videochat (Optional) 
+    [] videochat intergration with controllers (Optional)
+
+<CLIENT-REACT>
+...
+
+<CLIENT-REACT-NATIVE>
+...
