@@ -4,6 +4,7 @@ import timestamps from 'mongoose-timestamp'
 import messages from '../utils/validation/messages'
 
 import Message from './submodels/Message'
+import Survey from './submodels/Survey'
 
 
 const ConsultationSchema = new Schema({
@@ -19,7 +20,8 @@ const ConsultationSchema = new Schema({
         type: String,
         required: [true, messages.required.product]
     },
-    messages: [Message]
+    messages: [Message],
+    survey: Survey
 })
 
 ConsultationSchema.plugin(timestamps)

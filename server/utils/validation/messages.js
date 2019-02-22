@@ -30,7 +30,12 @@ module.exports = Object.freeze({
         category: `Category is required`,
         quantity: `Quantity is required`,
         price: `Price is required`,
-        sum: `Sum is required`
+        sum: `Sum is required`,
+
+        usefulness: `Usefulness is required`,
+        competence: `Competence is required`,
+        impression: `Impression is required`,
+        impact: `Impact is required`,
     },
     match: {
         password: `Wrong password format, it must contains at least 1 number required and special symbol`,
@@ -58,5 +63,7 @@ module.exports = Object.freeze({
         quantity: `Quantity must be ranged from ${range.quantity.min} to ${range.quantity.max}`,
         price: `Price must be ranged from ${range.price.min} to ${range.price.max}`,
         sum: `Sum must be ranged from ${range.secret.min} to ${range.secret.max}`,
+        competence: `Competence must be ranged from ${range.competence.min} to ${range.competence.max}`,
+        impression: `Impression must be ranged from ${range.impression.min} to ${range.impression.max}`
     }
 })

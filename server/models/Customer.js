@@ -9,7 +9,6 @@ import { email, username, password, age, url, fullname } from '../utils/validati
 
 import Order from './submodels/Order'
 import Comment from './submodels/Comment'
-import Assessment from './submodels/Assessment'
 
 
 const UserSchema = new Schema({
@@ -67,7 +66,6 @@ const UserSchema = new Schema({
     },
     orders: [Order],
     comments: [Comment],
-    assessments: [Assessment],
     verified: {
         type: Boolean,
         default: false

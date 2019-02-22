@@ -11,6 +11,11 @@ module.exports = Object.freeze({
         ],
         default: 'unknown'
     },
+    impact: {
+        enum: [
+            'buy', 'uncertain', 'not_buy'
+        ],
+    },
     images: {
         consultant: 'https://pngimage.net/wp-content/uploads/2018/05/consultant-png-3.png',
         customer: 'https://pngimage.net/wp-content/uploads/2018/06/profile-png-5.png',

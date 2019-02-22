@@ -9,9 +9,6 @@ exports.default = new Schema({
         type: String,
         required: [true, messages.required.product]
     },
-    consultant: {
-        type: String
-    },
     quantity: {
         type: Number,
         required: [true, messages.required.quantity],
