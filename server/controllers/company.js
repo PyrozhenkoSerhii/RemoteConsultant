@@ -85,7 +85,7 @@ exports.delete = (req, res) => {
         if (err) return res.status(500).send({ error: `Something went wrong while fetching company with id ${req.params.id}` })
         if (!company) return res.status(400).send({ error: `Company with id ${req.params.id} wasn't found.` })
 
-        compan.remove(err => {
+        company.remove(err => {
             if (err) return res.status(500).send({ error: `Something went wrong while deleting company with id ${req.params.id}.` })
 
             return res.status(200).send({ message: 'Company was deleted' })

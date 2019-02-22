@@ -13,19 +13,22 @@
             [] production implementation
         [x] jwt
 [x] Models 
-    [x] customer
-    [x] consultant
-    [x] consultation
-    [x] product
-    [x] company
-    [x] representative
+    [x] customer model
+    [x] consultant model
+    [x] consultation model
+    [x] product model
+    [x] company model
+    [x] representative model
+    [x] submodels
+    [x] hooks
+    [x] validation
 [x] Routes 
-    [x] customer
-    [x] consultant
-    [x] consultation
-    [x] product
-    [x] company
-    [x] representative
+    [x] customer route
+    [x] consultant route
+    [x] consultation route
+    [x] product route
+    [x] company route
+    [x] representative route
 [] Utils
     [x] validation
     [x] logger
@@ -45,6 +48,8 @@
             [] Mongodb
             [] Sql (Optional)
         [] save algorithm
+[x] Middlewares
+    [x] logger middleware
 [] Controllers
     [x] customer controller
     [] company controller

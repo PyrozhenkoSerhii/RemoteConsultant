@@ -1,15 +1,17 @@
 import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'mongoose-bcrypt'
 import timestamps from 'mongoose-timestamp'
+import _pull from 'lodash/pull'
 
 import messages from '../utils/validation/messages'
 import { images, gender } from '../utils/validation/defaults'
 import regex from '../utils/validation/regex'
-import { email, username, fullname, password, matureAge, url, rating } from '../utils/validation/range'
+import { email, username, fullname, password, matureAge, url, rating, info } from '../utils/validation/range'
+import logger from '../utils/logger'
 
 import Certificate from './submodels/Certificate'
 import Language from './submodels/Language'
-
+import Company from './Company'
 
 /**
  * Note: Fields [Age, Phone, Image, Gender] not required during registration
@@ -63,7 +65,6 @@ const ConsultantSchema = new Schema({
         enum: gender.enum,
         default: gender.default
     },
-    
     rating: {
         type: String,
         min: [rating.min, messages.restrictions.rating],
@@ -73,8 +74,24 @@ const ConsultantSchema = new Schema({
         type: Number,
         match: [regex.phone, messages.match.phone]
     },
+    info: {
+        type: String,
+        trim: true,
+        maxlength: [info.max, messages.restrictions.info]
+    },
+    image: {
+        type: String,
+        default: images.customer,
+        match: [regex.url, messages.match.url],
+        minlength: [url.min, messages.restrictions.url],
+        minlength: [url.max, messages.restrictions.url]
+    },
     certificate: Certificate,
     languages: [Language],
+    company: { /* Title of company */
+        type: String,
+        trim: true
+    },
     verified: {
         type: Boolean,
         default: false
@@ -87,6 +104,22 @@ const ConsultantSchema = new Schema({
 
 ConsultantSchema.plugin(bcrypt)
 ConsultantSchema.plugin(timestamps)
+
+ConsultantSchema.pre('remove', next => {
+    Company.find({ title: this.company }, (err, company) => {
+        if (err) logger.error(`Something went wrong while fetching company. \n Method: consultant remove, cascade remove`)
+        if (!company) logger.error(`Company with title ${this.company} wasn't found. \n Method: consultant remove, cascade remove`)
+
+        _pull(company.consultants, this.username)
+
+        company.save((err, saved) => {
+            if (err) logger.error(`Something went wrong while updating company with title ${this.company} \n Method: consultant remove, cascade remove`)
+            if (saved) logger.log(`Company updated \n Method: consultant remove, cascade remove`)
+
+            return next()
+        })
+    })
+})
 
 
 module.exports = mongoose.model('Consultant', ConsultantSchema)

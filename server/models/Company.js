@@ -7,8 +7,11 @@ import regex from '../utils/validation/regex'
 import messages from '../utils/validation/messages'
 import { images } from '../utils/validation/defaults'
 import {title, url, secret, info } from '../utils/validation/range'
+import logger from '../utils/logger'
 
 import Request from './submodels/Request'
+import Representative from './Representative'
+import Product from './Product'
 
 
 const CompanySchema = new Schema({
@@ -50,16 +53,30 @@ const CompanySchema = new Schema({
         minlength: [url.max, messages.restrictions.url],
         maxlength: [url.max, messages.restrictions.url]
     },
-    certificates: [String],
-    requsts: [Request],
-    representives: [String],
-    consultants: [String],
-    products: [String]
+    certificates: [String], /* Title of certificate */
+    requsts: [Request], 
+    representives: [String], /* Username of representative */
+    consultants: [String], /* Username of consultant */
+    products: [String] /* Title of product */
 })
 
 CompanySchema.plugin(bcrypt)
 CompanySchema.plugin(timestamps)
 CompanySchema.plugin(queryParser)
+
+CompanySchema.pre('remove', next => {
+    /* Note: these functions don't trigger post/pre hooks */
+    Product.deleteMany({company: this.title}, err => {
+        if(err) logger.error(`Something went wrong while deleting products of company ${this.title} \n Method: company remove, cascade delete`)
+        else logger.log(`Products of company ${this.title} were deleted \n Method: company remove, cascade delete`)
+    })
+    Representative.deleteMany({company: this.title}, err => {
+        if(err) logger.error(`Something went wrong while deleting representatives of company ${this.title} \n Method: company remove, cascade delete`)        
+        else logger.log(`Representatives of company ${this.title} were deleted \n Method: company remove, cascade delete`)
+    })
+    
+    next()
+})
 
 
 mongoose.exports = mongoose.model('Company', CompanySchema)
