@@ -13,10 +13,11 @@ module.exports = Object.freeze({
     age: { min: 5, max: 115 },
     matureAge: { min: 18, max: 115 },
     rating: { min: 0, max: 100 },
+    onplatform: { min: 0, max: 500000 },
     assessment: { min: 1, max: 5 },
     quantity: { min: 1, max: 100 },
     price: { min: 1, max: 100000 },
     sum: { min: 1, max: 10000000 },
-    competence: {min: 1, max: 5},
-    impression: {min: 1, max: 5}
+    competence: { min: 1, max: 5 },
+    friendliness: { min: 1, max: 5 }
 })

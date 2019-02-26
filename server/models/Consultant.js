@@ -4,9 +4,9 @@ import timestamps from 'mongoose-timestamp'
 import _pull from 'lodash/pull'
 
 import messages from '../utils/validation/messages'
-import { images, gender } from '../utils/validation/defaults'
+import defaults from '../utils/validation/defaults'
 import regex from '../utils/validation/regex'
-import { email, username, fullname, password, matureAge, url, rating, info } from '../utils/validation/range'
+import { email, username, fullname, password, matureAge, url, rating, onplatform, info } from '../utils/validation/range'
 import logger from '../utils/logger'
 
 import Certificate from './submodels/Certificate'
@@ -62,13 +62,20 @@ const ConsultantSchema = new Schema({
     },
     gender: {
         type: String,
-        enum: gender.enum,
-        default: gender.default
+        enum: defaults.gender.enum,
+        default: defaults.gender.default
     },
     rating: {
-        type: String,
+        type: Number,
         min: [rating.min, messages.restrictions.rating],
-        max: [rating.max, messages.restrictions.rating]
+        max: [rating.max, messages.restrictions.rating],
+        default: defaults.rating 
+    },
+    onplatform: {
+        type: Number,
+        min: [onplatform.min, messages.restrictions.onplatform],
+        max: [onplatform.max, messages.restrictions.onplatform],
+        default: defaults.onplatform
     },
     phone: {
         type: Number,
@@ -81,7 +88,7 @@ const ConsultantSchema = new Schema({
     },
     image: {
         type: String,
-        default: images.customer,
+        default: defaults.images.customer,
         match: [regex.url, messages.match.url],
         minlength: [url.min, messages.restrictions.url],
         minlength: [url.max, messages.restrictions.url]
@@ -91,6 +98,10 @@ const ConsultantSchema = new Schema({
     company: { /* Title of company */
         type: String,
         trim: true
+    },
+    online: {
+        type: Boolean,
+        default: false
     },
     verified: {
         type: Boolean,

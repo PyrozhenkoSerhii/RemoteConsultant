@@ -1,7 +1,8 @@
-import mongoose, {Schema} from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import timestamps from 'mongoose-timestamp'
 
 import messages from '../utils/validation/messages'
+import { title } from '../utils/validation/range'
 
 import Message from './submodels/Message'
 import Survey from './submodels/Survey'
@@ -19,6 +20,11 @@ const ConsultationSchema = new Schema({
     product: {
         type: String,
         required: [true, messages.required.product]
+    },
+    alternative: { /* title of alternative product */
+        type: String,
+        minlength: [title.min, messages.restrictions.title],
+        minlength: [title.max, messages.restrictions.title]
     },
     messages: [Message],
     survey: Survey

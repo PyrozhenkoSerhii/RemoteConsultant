@@ -26,7 +26,7 @@ module.exports = Object.freeze({
         company: `Company is required`,
         sender: `Sender info is required`,
         receiver: `Receiver info is required`,
-        
+
         category: `Category is required`,
         quantity: `Quantity is required`,
         price: `Price is required`,
@@ -34,8 +34,7 @@ module.exports = Object.freeze({
 
         usefulness: `Usefulness is required`,
         competence: `Competence is required`,
-        impression: `Impression is required`,
-        impact: `Impact is required`,
+        friendliness: `Impression is required`,
     },
     match: {
         password: `Wrong password format, it must contains at least 1 number required and special symbol`,
@@ -59,11 +58,12 @@ module.exports = Object.freeze({
         age: `Age must be ranged from ${range.age.min} to ${range.age.max}`,
         matureAge: `Age must must be ranged from ${range.matureAge.min} to ${range.matureAge.max}`,
         rating: `Rating must be ranged from ${range.rating.min} to ${range.rating.max}`,
+        onplatform: `Onplatform must be ranged from ${range.onplatform.min} to ${range.onplatform.max}`,
         assessment: `Evaluation must be ranged from ${range.assessment.min} to ${range.assessment.max}`,
         quantity: `Quantity must be ranged from ${range.quantity.min} to ${range.quantity.max}`,
         price: `Price must be ranged from ${range.price.min} to ${range.price.max}`,
         sum: `Sum must be ranged from ${range.secret.min} to ${range.secret.max}`,
         competence: `Competence must be ranged from ${range.competence.min} to ${range.competence.max}`,
-        impression: `Impression must be ranged from ${range.impression.min} to ${range.impression.max}`
+        friendliness: `Impression must be ranged from ${range.friendliness.min} to ${range.friendliness.max}`
     }
 })
