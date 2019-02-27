@@ -26,8 +26,8 @@ router.get('/consultation/:id', wrap(async (req, res) => {
 router.post('/consultation/', wrap(async (req, res) => {
     const consultation = new Consultation({ ...req.body })
 
-    const vErrors = consultation.validateSync()
-    if (vErrors) return res.status(400).send({ error: vErrors })
+    const invalid = consultation.validateSync()
+    if (invalid) return res.status(400).send({ error: invalid })
 
     const saved = await consultation.save()
     res.status(201).send({ data: saved })
@@ -54,7 +54,7 @@ router.delete('/consultation/:id', wrap(async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
 
     const consultation = await Consultation.findById(req.params.id)
-    if (!consultation) return res.status(400).send({ error: `Consultaion Not Found` })
+    if (!consultation) return res.status(400).send({ error: `Consultation Not Found` })
 
     await consultation.remove()
     res.status(200).send({ message: `Consultation deleted` })

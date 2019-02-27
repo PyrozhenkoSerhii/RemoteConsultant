@@ -36,6 +36,9 @@
 === Products ===
 > Store information about the products of company
 > Can be imported by Representatives (using import algorithm)**
+=== Order ===
+> Store data about customers orders
+> After order cretion contribution algorithm starts
 
         (MODULES)
 

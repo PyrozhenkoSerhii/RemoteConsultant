@@ -20,15 +20,9 @@
     [x] company model
     [x] representative model
     [x] submodels
-    [x] hooks
+    [x] cascade remove/update hooks
     [x] validation
-[x] Routes 
-    [x] customer route
-    [x] consultant route
-    [x] consultation route
-    [x] product route
-    [x] company route
-    [x] representative route
+    [] validation hooks
 [] Utils
     [x] validation
     [x] logger
@@ -50,8 +44,9 @@
         [] save algorithm
 [x] Middlewares
     [x] logger middleware
+    [x] error handlers
 [] Controllers
-    [x] customer controller
+    [] customer controller
     [] company controller
     [] representative controller
     [] consultant controller 

@@ -1,10 +1,35 @@
-Usage
+=== Usage
 > it uses after customer buying a product
-> it uses for each consultant were engaged in sale
+> it uses for each consultant that were engaged in sale
 > it calculates the contribution for each consultant
+> the overall consultant rating is set based on this contribution and his previous rating 
 
-Enter information
-> current rating after consulation
-> consultant overral rating
-> customer answer about the consultant usefullness
+=== Input
+> created order
+> data fetched from order info
+
+=== Output
+> calculated % out of 100% for each consultant
+> recalculated total rating of each consultant
+
+=== Prerequisites
+> Data of each consultation must be stored in a database. This data must be accessible at least until the customer will order the product
+> The user should be able to evaluate the consultant after the consultation
+> User assessments history must be stored
+> The data about consultant’s activity must be stored in database to compare him with others
+
+=== Algrorithm
+To determine the contribution of the consultant, we choose the method of weighting coefficients
+We have following criterias that can add or subtract value to the total score [from; to]:
+> The opinion of the consultant was decisive in the purchase of this product [+0%; +30%]
+> Consultant competency (1-5 points, set by user) [-10%; +10%]
+> Consultant friendliness (1-5 points, set by user) [-10%; +10%]
+> Consultant suggest alternative product that was bought by the customer [0; +15%]
+> Number of consultations in comparison with others	[0; +10%]
+> Number of participations for sale in comparison with others [0; +10%]
+> Total consultants rating [-10%; +10%]
+> Number of hours online [0; +5%]
+The amount of reward each consultant will get is in direct proportion 
+to the points earned by consultant (from 0 to 100) and depends on the sum of points 
+earned by all consultants.
 

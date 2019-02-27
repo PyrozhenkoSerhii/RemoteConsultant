@@ -1,19 +1,20 @@
 import express from 'express'
 import _assignIn from 'lodash/assignIn'
 
-import Company from '../models/Company'
+import Order from '../models/Order'
 import wrap from '../middlewares/wrap'
 
 const router = express.Router()
 const ObjectId = require('mongoose').Types.ObjectId
 
-router.get('/company/', wrap(async (req, res) => {
+
+router.get('/order/', wrap(async (req, res) => {
     const orders = await Order.find()
     res.status(200).send({ data: orders })
 }))
 
 
-router.get('/company/:id', wrap(async (req, res) => {
+router.get('/order/:id', wrap(async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
 
     const order = await Order.findById(req.params.id)
@@ -22,7 +23,7 @@ router.get('/company/:id', wrap(async (req, res) => {
 }))
 
 
-router.post('/company', wrap(async (req, res) => {
+router.post('/order/', wrap(async (req, res) => {
     const order = new Order({ ...req.body })
 
     const invalid = order.validateSync()
@@ -33,7 +34,7 @@ router.post('/company', wrap(async (req, res) => {
 }))
 
 
-router.put('/company/:id', wrap(async (req, res) => {
+router.put('/order/:id', wrap(async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
 
     const order = await Order.findById(req.params.id)
@@ -49,7 +50,7 @@ router.put('/company/:id', wrap(async (req, res) => {
 }))
 
 
-router.delete('/company/:id', wrap(async (req, res) => {
+router.delete('/order/:id', wrap(async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
 
     const order = await Order.findById(req.params.id)
