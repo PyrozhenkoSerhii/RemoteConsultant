@@ -32,5 +32,14 @@ const ConsultationSchema = new Schema({
 
 ConsultationSchema.plugin(timestamps)
 
+ConsultationSchema.post('save', function (error, doc, next) {
+    logger.error(error)
+    if (error.name === 'MongoError' && error.code === 11000) {
+        next(new Error('email must be unique'));
+    } else {
+        next(error);
+    }
+});
 
-mongoose.exports = mongoose.model('Consultation', ConsultationSchema)
+
+module.exports = mongoose.model('Consultation', ConsultationSchema)

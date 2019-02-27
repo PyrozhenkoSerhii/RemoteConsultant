@@ -79,4 +79,4 @@ CompanySchema.pre('remove', next => {
 })
 
 
-mongoose.exports = mongoose.model('Company', CompanySchema)
+module.exports = mongoose.model('Company', CompanySchema)

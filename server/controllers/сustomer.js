@@ -1,16 +1,18 @@
+import express from 'express'
 import _ from 'lodash'
-
-const enviroment = process.env.NODE_ENV || 'dev'
 
 import User from '../models/Customer'
 import redis from '../utils/redis'
 import logger from '../utils/logger'
 import { createTestTransport, createGmailTransport, verificationMessage, passwordResetMessage } from "../utils/mailer"
 import { sign } from '../utils/jwt'
+import wrap from '../middlewares/wrap'
 
 
+const enviroment = process.env.NODE_ENV || 'dev'
 const ObjectId = require('mongoose').Types.ObjectId
 const UNIQUE_CHECK_FAILED_CODE = 11000
+const router = express.Router()
 
 
 let transport = null
@@ -21,16 +23,16 @@ if (enviroment === 'test') {
 }
 
 
-exports.list = (req, res) => {
+router.get('/customer/', (req, res) => {
     User.find((err, users) => {
         if (err) return res.status(500).send({ error: "Something went wrong while fetching all users." })
 
         return res.status(200).send({ data: users })
     });
-}
+})
 
 
-exports.get = (req, res) => {
+router.get('/customer/:id', (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id: ${req.params.id}` })
 
     redis.get(req.params.id, (err, user) => {
@@ -48,10 +50,10 @@ exports.get = (req, res) => {
             return res.status(200).send({ data: user })
         })
     })
-}
+})
 
 
-exports.post = (req, res) => {
+router.post('/customer/', (req, res) => {
     const user = new User({
         email: req.body.email,
         username: req.body.username,
@@ -84,10 +86,10 @@ exports.post = (req, res) => {
 
         return res.status(201).send({ data: savedUser })
     })
-}
+})
 
 
-exports.put = (req, res) => {
+router.put('/customer/:id', (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id: ${req.params.id}.` })
 
     User.findById(req.params.id, (err, user) => {
@@ -120,10 +122,10 @@ exports.put = (req, res) => {
             return res.status(200).send({ message: 'User was updated' })
         });
     })
-}
+})
 
 
-exports.delete = (req, res) => {
+router.delete('/customer/:id', (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id: ${req.params.id}` })
 
     User.findById(req.params.id, (err, user) => {
@@ -141,10 +143,10 @@ exports.delete = (req, res) => {
             })
         })
     })
-}
+})
 
 
-exports.authenticate = (req, res) => {
+router.post('/customer/authenticate', (req, res) => {
     if (!req.body.email || !req.body.password) return res.status(400).json({ error: 'Email and password are required!' })
 
     User.findOne({ email: req.body.email }).select('+password').exec((err, user) => {
@@ -164,16 +166,16 @@ exports.authenticate = (req, res) => {
             return res.status(400).send({ error: 'Email or password is incorrect' })
         })
     })
-}
+})
 
 
-exports.logout = (req, res) => {
+router.post('/customer/logout', (req, res) => {
     //add blacklist jwt first and then use it here
     return res.status(501).send({ error: `The logout will be implemented soon!` })
-}
+})
 
 
-exports.resetPasswordRequest = (req, res) => {
+router.post('/customer/resetPasswordRequest', (req, res) => {
     if (!req.body.email || !req.body.hash) return res.status(400).send({ error: 'Some data are needed for password reseting is absent!' })
 
     User.findOne({ email: req.body.email }, (err, user) => {
@@ -199,10 +201,10 @@ exports.resetPasswordRequest = (req, res) => {
             return res.status(200).send({ message: `Message was sent to ${user.email}` })
         })
     })
-}
+})
 
 
-exports.resetPasswordConfirm = (req, res) => {
+router.post('/customer/resetPasswordConfirm/:hash', (req, res) => {
     if (!req.params.hash) return res.status(403).send({ error: 'You have no permissions to make a password reset!' })
     if (!req.body.password) return res.status(400).send({ error: 'There is no password provided' })
 
@@ -246,10 +248,10 @@ exports.resetPasswordConfirm = (req, res) => {
             })
         })
     })
-}
+})
 
 
-exports.verifyEmail = (req, res) => {
+router.post('/customer/verifyEmail', (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
         if (err) return res.status(500).send({ error: 'Something went wrong while sending verifying message!' })
         if (!user) return res.status(400).send({ error: `There are no users with such credentials!` })
@@ -268,10 +270,10 @@ exports.verifyEmail = (req, res) => {
             return res.status(200).send({ message: `Message was sent to ${user.email}` })
         })
     })
-}
+})
 
 
-exports.verifying = (req, res) => {
+router.get('/customer/verifying/:id', (req, res) => {
     User.findById(req.params.id, (err, user) => {
         if (err) return res.status(500).send({ error: 'Something went wrong while verifying email!' })
         if (!user) return res.status(400).send({ error: `There are no users with such credentials!` })
@@ -284,4 +286,7 @@ exports.verifying = (req, res) => {
             return res.status(200).send({ message: 'Email was verified!' })
         })
     })
-}
+})
+
+
+module.exports = router

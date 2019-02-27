@@ -35,4 +35,4 @@ const OrderSchema = new Schema({
 OrderSchema.plugin(timestamps)
 
 
-mongoose.exports = mongoose.model('Order', OrderSchema)
+module.exports = mongoose.model('Order', OrderSchema)

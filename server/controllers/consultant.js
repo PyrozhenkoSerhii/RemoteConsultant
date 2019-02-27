@@ -1,62 +1,36 @@
-import Company from '../models/Consultant'
-import logger from '../utils/logger'
-import redis from '../utils/redis'
+import express from 'express'
+import _assignIn from 'lodash/assignIn'
 
+import Consultant from '../models/Consultant'
+import wrap from '../middlewares/wrap'
+
+const router = express.Router()
 const ObjectId = require('mongoose').Types.ObjectId
-const UNIQUE_CHECK_FAILED_CODE = 11000
-
-exports.list = (req, res) => {
-
-}
 
 
-exports.get = (req, res) => {
+router.get('/consultant/', wrap(async (req, res) => {
 
-}
-
-
-exports.post = (req, res) => {
-
-}
+}))
 
 
-exports.put = (req, res) => {
+router.get('/consultant/:id', wrap(async (req, res) => {
 
-}
-
-
-exports.delete = (req, res) => {
-    
-}
+}))
 
 
-exports.authenticate = (req, res) => {
+router.post('/consultant/', wrap(async (req, res) => {
 
-}
-
-
-exports.logout = (req, res) => {
-
-}
+}))
 
 
-exports.resetPasswordRequest = (req, res) => {
+router.put('/consultant/:id', wrap(async (req, res) => {
 
-}
-
-
-exports.resetPasswordConfirm = (req, res) => {
-
-}
+}))
 
 
-exports.verifyEmail = (req, res) => {
+router.delete('/consultant/:id', wrap(async (req, res) => {
 
-}
-
-
-exports.verifying = (req, res) => {
-
-}
+}))
 
 
+module.exports = router

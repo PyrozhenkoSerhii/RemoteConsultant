@@ -57,4 +57,4 @@ const ProductSchema = new Schema({
 ProductSchema.plugin(timestamps)
 
 
-mongoose.exports = mongoose.model('Product', ProductSchema)
+module.exports = mongoose.model('Product', ProductSchema)

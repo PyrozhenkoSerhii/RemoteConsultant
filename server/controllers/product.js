@@ -1,40 +1,36 @@
-import Company from '../models/Product'
-import logger from '../utils/logger'
-import redis from '../utils/redis'
+import express from 'express'
+import _assignIn from 'lodash/assignIn'
 
+import Product from '../models/Product'
+import wrap from '../middlewares/wrap'
+
+const router = express.Router()
 const ObjectId = require('mongoose').Types.ObjectId
-const UNIQUE_CHECK_FAILED_CODE = 11000
-
-exports.list = (req, res) => {
-
-}
 
 
-exports.get = (req, res) => {
+router.get('/product/', wrap(async (req, res) => {
 
-}
-
-
-exports.post = (req, res) => {
-
-}
+}))
 
 
-exports.put = (req, res) => {
+router.get('/product/:id', wrap(async (req, res) => {
 
-}
-
-
-exports.delete = (req, res) => {
-    
-}
+}))
 
 
-exports.structuralize = (req, res) => {
+router.post('/product/', wrap(async (req, res) => {
 
-}
+}))
 
 
-exports.import = (req, res) => {
+router.put('/product/:id', wrap(async (req, res) => {
 
-}
+}))
+
+
+router.delete('/product/:id', wrap(async (req, res) => {
+
+}))
+
+
+module.exports = router

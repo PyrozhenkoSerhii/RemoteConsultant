@@ -13,13 +13,12 @@ import loggerMiddleware from './middlewares/logger'
 import errorHandler from './middlewares/errorHandler'
 import logger from './utils/logger'
 
-import customerRouter from './routes/customer'
-import companyRouter from './routes/company'
-import consultantRouter from './routes/consultant'
-import consultationRouter from './routes/consultation'
-import productRouter from './routes/product'
-import representativeRouter from './routes/representative'
-
+import customer from './controllers/сustomer'
+import company from './controllers/company'
+import consultant from './controllers/consultant'
+import consultation from './controllers/consultation'
+import product from './controllers/product'
+import representative from './controllers/representative'
 
 const api = express()
 const limiter = requestLimiter({
@@ -45,7 +44,7 @@ api.use(bodyParser.urlencoded({ extended: true }))
 api.use(bodyParser.json())
 api.use(limiter)
 
-enviroment !== 'test' && api.use(jwt({
+enviroment === 'prod' && api.use(jwt({
     secret: config.api.secret,
 }).unless(req =>
     req.originalUrl === '/' ||
@@ -55,21 +54,23 @@ enviroment !== 'test' && api.use(jwt({
     req.originalUrl === '/customers/verifyEmail' ||
     req.originalUrl.match(/^\/customers\/verifying\/.*/) ||
     req.originalUrl.match(/^\/customers\/resetPasswordConfirm\/.*/) ||
-    req.originalUrl === '/companies' 
+    req.originalUrl === '/companies' ||
+    req.originalUrl === '/consultations' && req.method === 'POST'
 ))
 api.use(loggerMiddleware)
-api.use((err, req, res, next) => {
+enviroment === 'prod' && api.use((err, req, res, next) => {
     if (err.name === 'UnauthorizedError') {
         logger.warn(`[JWT] No authorization provided with request ${req.originalUrl}`)
         res.status(401).send({ error: `You have no permitions to make this request` })
     }
 })
-api.use('/customers', customerRouter)
-api.use('/products', productRouter)
-api.use('/companies', companyRouter)
-api.use('/consultants', consultantRouter)
-api.use('/consultations', consultationRouter)
-api.use('/representatives', representativeRouter)
+
+api.use('/api/', customer)
+api.use('/api/', product)
+api.use('/api/', company)
+api.use('/api/', consultant)
+api.use('/api/', consultation)
+api.use('/api/', representative)
 api.use(errorHandler)
 api.get('*', (req, res) => {
     res.status(404).send({ error: `${req.originalUrl} not found!` })
@@ -94,5 +95,5 @@ api.listen(config.api.port, err => {
     }
 })
 
-
+console.log(api)
 exports.default = api

@@ -1,21 +1,22 @@
+import express from 'express'
+import _assignIn from 'lodash/assignIn'
+
 import Company from '../models/Company'
-import logger from '../utils/logger'
-import redis from '../utils/redis'
-import parser from '../utils/parser'
 
+
+const router = express.Router()
 const ObjectId = require('mongoose').Types.ObjectId
-const UNIQUE_CHECK_FAILED_CODE = 11000
 
-exports.list = (req, res) => {
+router.get('/company/', (req, res) => {
     Company.find((err, companies) => {
         if (err) return res.status(500).send({ error: "Something went wrong while fetching all companies." })
 
         return res.status(200).send({ data: companies })
     });
-}
+})
 
 
-exports.get = (req, res) => {
+router.get('/company/:id', (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id: ${req.params.id}` })
 
     Company.findById(req.params.id, (err, company) => {
@@ -23,10 +24,10 @@ exports.get = (req, res) => {
 
         return res.status(200).send({ data: company })
     })
-}
+})
 
 
-exports.post = (req, res) => {
+router.post('/company', (req, res) => {
     const { title, website, secret, info, image } = req.body
     const company = new Company({ title, website, secret, info, image })
 
@@ -45,17 +46,17 @@ exports.post = (req, res) => {
 
         return res.status(201).send({ data: savedCompany })
     })
-}
+})
 
 
-exports.put = (req, res) => {
+router.put('/company/:id', (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id: ${req.params.id}` })
 
     Company.findById(req.params.id, (err, company) => {
         if (err) return res.status(500).send({ error: `Something went wrong while fetching a company with id ${req.params.id}` })
         if (!company) return res.status(400).send({ error: `Company with id ${req.params.id} wasn't found.` })
 
-        _.assignIn(company, req.body)
+        _assignIn(company, req.body)
 
         company.save((err, updatedCompany) => {
             if (err) {
@@ -70,10 +71,10 @@ exports.put = (req, res) => {
             return res.status(200).send({ message: 'User was updated' })
         })
     })
-}
+})
 
 
-exports.delete = (req, res) => {
+router.delete('/company/:id', (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id: ${req.params.id}` })
 
     Company.findById(req.params.id, (err, company) => {
@@ -86,4 +87,7 @@ exports.delete = (req, res) => {
             return res.status(200).send({ message: 'Company was deleted' })
         })
     })
-}
+})
+
+
+module.exports = router
