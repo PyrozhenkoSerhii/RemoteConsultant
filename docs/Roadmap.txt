@@ -26,7 +26,7 @@
 [] Utils
     [x] validation
     [x] logger
-    [x] mailer
+    [] mailer (!) add singleton
     [] jwt 
         [x] base implementation
         [] jwt blacklist
