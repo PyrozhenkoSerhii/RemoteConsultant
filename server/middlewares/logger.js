@@ -64,7 +64,7 @@ const addJsonBody = res => {
 
     res.end = (...rest) => {
         try {
-            if (rest[0]) bodyBuffer.push(new Buffer(rest[0]))
+            if (rest[0]) bodyBuffer.push(new Buffer.from(rest[0]))
             res.JsonBody = JSON.parse(Buffer.concat(bodyBuffer).toString('utf8'))
             oldEnd.apply(res, rest)
         } catch (e) {

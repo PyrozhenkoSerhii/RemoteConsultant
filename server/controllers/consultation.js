@@ -1,5 +1,6 @@
 import express from 'express'
-import _assignIn from 'lodash/assignIn'
+import _merge from 'lodash/assignIn'
+import _last from 'lodash/last'
 
 import Consultation from '../models/Consultation'
 import wrap from '../middlewares/wrap'
@@ -8,13 +9,13 @@ const router = express.Router()
 const ObjectId = require('mongoose').Types.ObjectId
 
 
-router.get('/consultation/', wrap(async (req, res) => {
+router.get('/consultation/list/', wrap(async (req, res) => {
     const consultations = await Consultation.find()
     res.status(200).send({ data: consultations })
 }))
 
 
-router.get('/consultation/:id', wrap(async (req, res) => {
+router.get('/consultation/list/:id', wrap(async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
 
     const consultation = await Consultation.findById(req.params.id)
@@ -24,33 +25,55 @@ router.get('/consultation/:id', wrap(async (req, res) => {
 
 
 router.post('/consultation/', wrap(async (req, res) => {
-    const consultation = new Consultation({ ...req.body })
+    let consultation = new Consultation({ ...req.body })
 
-    const invalid = consultation.validateSync()
-    if (invalid) return res.status(400).send({ error: invalid })
+    const error = consultation.validateSync()
+    if (error) return res.status(400).send({ error })
 
     const saved = await consultation.save()
     res.status(201).send({ data: saved })
 }))
 
 
-router.put('/consultation/:id', wrap(async (req, res) => {
+router.put('/consultation/list/:id', wrap(async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
 
     const consultation = await Consultation.findById(req.params.id)
     if (!consultation) return res.status(400).send({ error: `Consultation Not Found` })
 
-    _assignIn(consultation, req.body)
+    _merge(consultation, req.body)
 
-    const invalid = consultation.validateSync()
-    if (invalid) return res.status(400).send({ error: invalid })
+    /* TODO: remove duplication of validator errors and get rid of this if statement */
+    if (consultation.survey) {
+        const error = consultation.survey.validateSync()
+        if (error) return res.status(400).send({ error })
+    }
+
+    const error = consultation.validateSync()
+    if (error) return res.status(400).send({ error })
 
     const saved = await consultation.save()
     res.status(200).send({ data: saved })
 }))
 
 
-router.delete('/consultation/:id', wrap(async (req, res) => {
+router.patch('/consultation/list/:id/message', wrap(async (req, res) => {
+    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
+
+    const consultation = await Consultation.findById(req.params.id)
+    if (!consultation) return res.status(400).send({ error: `Consultation Not Found` })
+
+    consultation.messages.push(req.body)
+
+    const error = _last(consultation.messages).validateSync()
+    if (error) return res.status(400).send({ error })
+
+    const saved = await consultation.save()
+    res.status(200).send({ data: saved })
+}))
+
+
+router.delete('/consultation/list/:id', wrap(async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
 
     const consultation = await Consultation.findById(req.params.id)
@@ -58,6 +81,19 @@ router.delete('/consultation/:id', wrap(async (req, res) => {
 
     await consultation.remove()
     res.status(200).send({ message: `Consultation deleted` })
+}))
+
+
+/**
+ * Adding an opportunity to clear a collection for non-production environment
+ */
+process.env.NODE_ENV !== 'prod' && router.delete('/consultation/clear', wrap(async (req, res) => {
+    await Consultation.deleteMany()
+
+    const consultations = await Consultation.find()
+    if (consultations.length) return res.status(500).send({ error: `Due to unknown reason consultation weren't deleted` })
+
+    res.status(200).send({ message: 'Consultaions were deleted' })
 }))
 
 

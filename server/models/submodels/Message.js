@@ -4,7 +4,7 @@ import messages from '../../utils/validation/messages'
 import { message } from '../../utils/validation/range'
 
 
-exports.default = new Schema({
+exports.Message = new Schema({
     sender: {
         type: String,
         required: [true, messages.required.sender]

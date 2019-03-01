@@ -19,6 +19,8 @@ import consultant from './controllers/consultant'
 import consultation from './controllers/consultation'
 import product from './controllers/product'
 import representative from './controllers/representative'
+import order from './controllers/order'
+
 
 const api = express()
 const limiter = requestLimiter({
@@ -71,6 +73,7 @@ api.use('/api/', company)
 api.use('/api/', consultant)
 api.use('/api/', consultation)
 api.use('/api/', representative)
+api.use('/api/', order)
 api.use(errorHandler)
 api.get('*', (req, res) => {
     res.status(404).send({ error: `${req.originalUrl} not found!` })
@@ -95,5 +98,5 @@ api.listen(config.api.port, err => {
     }
 })
 
-console.log(api)
+
 exports.default = api

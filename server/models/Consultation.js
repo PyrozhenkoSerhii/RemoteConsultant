@@ -4,8 +4,8 @@ import timestamps from 'mongoose-timestamp'
 import messages from '../utils/validation/messages'
 import { title } from '../utils/validation/range'
 
-import Message from './submodels/Message'
-import Survey from './submodels/Survey'
+import { Message } from './submodels/Message'
+import { Survey } from './submodels/Survey'
 
 
 const ConsultationSchema = new Schema({
@@ -32,14 +32,6 @@ const ConsultationSchema = new Schema({
 
 ConsultationSchema.plugin(timestamps)
 
-ConsultationSchema.post('save', function (error, doc, next) {
-    logger.error(error)
-    if (error.name === 'MongoError' && error.code === 11000) {
-        next(new Error('email must be unique'));
-    } else {
-        next(error);
-    }
-});
 
 
 module.exports = mongoose.model('Consultation', ConsultationSchema)

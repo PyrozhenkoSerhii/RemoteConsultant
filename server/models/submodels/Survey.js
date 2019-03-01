@@ -4,7 +4,7 @@ import messages from '../../utils/validation/messages'
 import { competence, friendliness, note } from '../../utils/validation/range'
 
 
-exports.default = new Schema({
+const SurveySchema = new Schema({
     competence: {
         type: Number,
         required: [true, messages.required.competence],
@@ -23,3 +23,8 @@ exports.default = new Schema({
         maxlength: [note.max, messages.restrictions.note]
     }
 })
+
+SurveySchema.set('validateBeforeSave', false)
+
+
+exports.Survey = SurveySchema
