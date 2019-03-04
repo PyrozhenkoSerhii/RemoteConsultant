@@ -7,7 +7,7 @@ import messages from '../utils/validation/messages'
 import { gender, images } from '../utils/validation/defaults'
 import { email, username, password, age, url, fullname } from '../utils/validation/range'
 
-import Comment from './submodels/Comment'
+import { Comment } from './submodels/Comment'
 
 
 const UserSchema = new Schema({

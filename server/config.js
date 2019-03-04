@@ -87,7 +87,7 @@ const test = {
     db: {
         host: 'localhost',
         port: 27017,
-        connectionString: process.env.TEST_DB_CONNECTION_STRING || 'mongodb://192.168.2.111/user',
+        connectionString: process.env.TEST_DB_CONNECTION_STRING || 'mongodb://192.168.2.111/test',
         databaseName: process.env.TEST_DB_NAME || 'test database',
         options: {
             useNewUrlParser: true

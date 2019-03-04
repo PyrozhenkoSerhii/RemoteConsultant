@@ -9,8 +9,8 @@ import regex from '../utils/validation/regex'
 import { email, username, fullname, password, matureAge, url, rating, onplatform, info } from '../utils/validation/range'
 import logger from '../utils/logger'
 
-import Certificate from './submodels/Certificate'
-import Language from './submodels/Language'
+import { Certificate } from './submodels/Certificate'
+import { Language } from './submodels/Language'
 import Company from './Company'
 
 /**
@@ -69,7 +69,7 @@ const ConsultantSchema = new Schema({
         type: Number,
         min: [rating.min, messages.restrictions.rating],
         max: [rating.max, messages.restrictions.rating],
-        default: defaults.rating 
+        default: defaults.rating
     },
     onplatform: {
         type: Number,

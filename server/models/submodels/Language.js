@@ -7,7 +7,7 @@ import { title } from '../../utils/validation/range'
 import Certificate from './Certificate'
 
 
-exports.default = new Schema({
+exports.Language = new Schema({
     title: {
         type: String,
         trim: true,

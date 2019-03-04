@@ -5,7 +5,7 @@ import regex from '../../utils/validation/regex'
 import { title, url, note } from '../../utils/validation/range'
 
 
-exports.default = new Schema({
+exports.Certificate = new Schema({
     title: {
         type: String,
         trim: true,

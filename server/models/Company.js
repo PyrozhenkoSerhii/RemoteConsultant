@@ -1,4 +1,4 @@
-import mongoose, {Schema} from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'mongoose-bcrypt'
 import timestamps from 'mongoose-timestamp'
 import queryParser from 'mongoose-string-query'
@@ -6,10 +6,10 @@ import queryParser from 'mongoose-string-query'
 import regex from '../utils/validation/regex'
 import messages from '../utils/validation/messages'
 import { images } from '../utils/validation/defaults'
-import {title, url, secret, info } from '../utils/validation/range'
+import { title, url, secret, info } from '../utils/validation/range'
 import logger from '../utils/logger'
 
-import Request from './submodels/Request'
+import { Request } from './submodels/Request'
 import Representative from './Representative'
 import Product from './Product'
 
@@ -39,7 +39,7 @@ const CompanySchema = new Schema({
         trim: true,
         match: [regex.secret, messages.match.secret],
         minlength: [secret.min, messages.restrictions.secret],
-        maxlength: [secret.max, messages.restrictions.secret] 
+        maxlength: [secret.max, messages.restrictions.secret]
     },
     info: {
         type: String,
@@ -54,7 +54,7 @@ const CompanySchema = new Schema({
         maxlength: [url.max, messages.restrictions.url]
     },
     certificates: [String], /* Title of certificate */
-    requsts: [Request], 
+    requsts: [Request],
     representives: [String], /* Username of representative */
     consultants: [String], /* Username of consultant */
     products: [String] /* Title of product */
@@ -66,15 +66,15 @@ CompanySchema.plugin(queryParser)
 
 CompanySchema.pre('remove', next => {
     /* Note: these functions don't trigger post/pre hooks */
-    Product.deleteMany({company: this.title}, err => {
-        if(err) logger.error(`Something went wrong while deleting products of company ${this.title} \n Method: company remove, cascade delete`)
+    Product.deleteMany({ company: this.title }, err => {
+        if (err) logger.error(`Something went wrong while deleting products of company ${this.title} \n Method: company remove, cascade delete`)
         else logger.log(`Products of company ${this.title} were deleted \n Method: company remove, cascade delete`)
     })
-    Representative.deleteMany({company: this.title}, err => {
-        if(err) logger.error(`Something went wrong while deleting representatives of company ${this.title} \n Method: company remove, cascade delete`)        
+    Representative.deleteMany({ company: this.title }, err => {
+        if (err) logger.error(`Something went wrong while deleting representatives of company ${this.title} \n Method: company remove, cascade delete`)
         else logger.log(`Representatives of company ${this.title} were deleted \n Method: company remove, cascade delete`)
     })
-    
+
     next()
 })
 

@@ -4,7 +4,7 @@ import messages from '../../utils/validation/messages'
 import { message } from '../../utils/validation/range'
 
 
-exports.default = new Schema({
+exports.Request = new Schema({
     consultant: {
         type: String,
         required: [true, messages.required.consultant]
