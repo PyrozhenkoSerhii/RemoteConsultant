@@ -15,7 +15,7 @@ const ProductSchema = new Schema({
         unique: true,
         required: [true, messages.required.title],
         minlength: [title.min, messages.restrictions.title],
-        minlength: [title.max, messages.restrictions.title]
+        maxlength: [title.max, messages.restrictions.title]
     },
     company: {
         type: String,

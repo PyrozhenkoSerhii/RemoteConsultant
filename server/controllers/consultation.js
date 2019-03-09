@@ -91,9 +91,9 @@ process.env.NODE_ENV !== 'prod' && router.delete('/consultation/clear', wrap(asy
     await Consultation.deleteMany()
 
     const consultations = await Consultation.find()
-    if (consultations.length) return res.status(500).send({ error: `Due to unknown reason consultation weren't deleted` })
+    if (consultations.length) return res.status(500).send({ error: `Due to unknown reason consultations weren't deleted` })
 
-    res.status(200).send({ message: 'Consultaions were deleted' })
+    res.status(200).send({ message: 'Consultations were deleted' })
 }))
 
 

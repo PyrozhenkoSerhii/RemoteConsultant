@@ -1,7 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'mongoose-bcrypt'
 import timestamps from 'mongoose-timestamp'
-import queryParser from 'mongoose-string-query'
 
 import regex from '../utils/validation/regex'
 import messages from '../utils/validation/messages'
@@ -62,7 +61,6 @@ const CompanySchema = new Schema({
 
 CompanySchema.plugin(bcrypt)
 CompanySchema.plugin(timestamps)
-CompanySchema.plugin(queryParser)
 
 CompanySchema.pre('remove', next => {
     /* Note: these functions don't trigger post/pre hooks */

@@ -71,12 +71,6 @@ const ConsultantSchema = new Schema({
         max: [rating.max, messages.restrictions.rating],
         default: defaults.rating
     },
-    onplatform: {
-        type: Number,
-        min: [onplatform.min, messages.restrictions.onplatform],
-        max: [onplatform.max, messages.restrictions.onplatform],
-        default: defaults.onplatform
-    },
     phone: {
         type: Number,
         match: [regex.phone, messages.match.phone]

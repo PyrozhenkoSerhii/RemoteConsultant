@@ -58,7 +58,6 @@ module.exports = Object.freeze({
         age: `Age must be ranged from ${range.age.min} to ${range.age.max}`,
         matureAge: `Age must must be ranged from ${range.matureAge.min} to ${range.matureAge.max}`,
         rating: `Rating must be ranged from ${range.rating.min} to ${range.rating.max}`,
-        onplatform: `Onplatform must be ranged from ${range.onplatform.min} to ${range.onplatform.max}`,
         assessment: `Evaluation must be ranged from ${range.assessment.min} to ${range.assessment.max}`,
         quantity: `Quantity must be ranged from ${range.quantity.min} to ${range.quantity.max}`,
         price: `Price must be ranged from ${range.price.min} to ${range.price.max}`,
