@@ -130,9 +130,9 @@ const fetchData = async (order) => {
 /**
  * Function to transform input value to defined range
  * @param {number} value The value to transform
- * @param {number} in_min Min input value
- * @param {number} in_max Max input value
- * @param {number} out_min Lower bound of output range
- * @param {number} out_max Upper bound of output range
+ * @param {number} inMin Min input value
+ * @param {number} inMax Max input value
+ * @param {number} outMin Lower bound of output range
+ * @param {number} outMax Upper bound of output range
  */
-const scale = (value, in_min, in_max, out_min = 0, out_max = 100) => (value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+const scale = (value, inMin, inMax, outMin, outMax) => (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin

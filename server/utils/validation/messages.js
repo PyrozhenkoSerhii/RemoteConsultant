@@ -37,9 +37,10 @@ module.exports = Object.freeze({
         friendliness: `Impression is required`,
     },
     match: {
-        password: `Wrong password format, it must contains at least 1 number required and special symbol`,
+        password: `Wrong password format, it must contains at least 1 number and special symbol`,
+        secret: `Wrong secret format, it must contains at least 1 number and special symbol`,
         email: `Wrong email format, valid example: "name@domain.com"`,
-        url: `Wrong url format, please, provide a valid <b>secure</b> url which uses https`,
+        url: `Wrong url format, please, provide a valid secure url which uses https`,
         fullname: `Wrong full name format, it must contains at least 2 words`,
         phone: `Wrong phone format, valid examples: (000)4445566 or 1112223344 or 000-111-22-33`,
     },

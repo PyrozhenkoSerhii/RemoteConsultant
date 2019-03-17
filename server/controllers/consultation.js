@@ -57,6 +57,9 @@ router.put('/consultation/list/:id', wrap(async (req, res) => {
 }))
 
 
+/**
+ * The request body must contain a valid Message to insert
+ */
 router.patch('/consultation/list/:id/message', wrap(async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
 

@@ -29,7 +29,7 @@ const CompanySchema = new Schema({
         trim: true,
         unique: true,
         match: [regex.url, messages.match.url],
-        minlength: [url.max, messages.restrictions.url],
+        minlength: [url.min, messages.restrictions.url],
         maxlength: [url.max, messages.restrictions.url]
     },
     secret: {
@@ -49,11 +49,11 @@ const CompanySchema = new Schema({
         type: String,
         default: images.company,
         match: [regex.url, messages.match.url],
-        minlength: [url.max, messages.restrictions.url],
+        minlength: [url.min, messages.restrictions.url],
         maxlength: [url.max, messages.restrictions.url]
     },
     certificates: [String], /* Title of certificate */
-    requsts: [Request],
+    requests: [Request],
     representives: [String], /* Username of representative */
     consultants: [String], /* Username of consultant */
     products: [String] /* Title of product */
