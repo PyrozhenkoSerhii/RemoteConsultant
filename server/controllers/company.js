@@ -1,14 +1,15 @@
 import express from 'express'
-
 import _assignIn from 'lodash/assignIn'
-import _pull from 'lodash/pull'
 import _isUndefined from 'lodash/isUndefined'
+import _find from 'lodash/find'
 
 import Company from '../models/Company'
+import Consultant from '../models/Consultant'
+
 import wrap from '../middlewares/wrap'
+import { isObjectId } from '../middlewares/validators'
 
 const router = express.Router()
-const ObjectId = require('mongoose').Types.ObjectId
 
 
 router.get('/company/list/', wrap(async (req, res) => {
@@ -17,9 +18,7 @@ router.get('/company/list/', wrap(async (req, res) => {
 }))
 
 
-router.get('/company/list/:id', wrap(async (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
-
+router.get('/company/list/:id', isObjectId, wrap(async (req, res) => {
     const company = await Company.findById(req.params.id)
     if (!company) return res.status(400).send({ error: `Company Not Found` })
     res.status(200).send({ data: company })
@@ -37,9 +36,7 @@ router.post('/company/', wrap(async (req, res) => {
 }))
 
 
-router.put('/company/list/:id', wrap(async (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
-
+router.put('/company/list/:id', isObjectId, wrap(async (req, res) => {
     const company = await Company.findById(req.params.id)
     if (!company) return res.status(400).send({ error: `Company Not Found` })
 
@@ -54,26 +51,30 @@ router.put('/company/list/:id', wrap(async (req, res) => {
 
 
 /**
- * This request is uses to change an arrays inside document
- * Request must have a 'removing' boolean field which specifies the action with arrays
+ * Request body must be like:
+ *  @param {string}  field Field you want to change
+ *  @param {string}  value New value
+ * Note: If the value is already in an array, it will be removed
+ * Note: Request field value must match the Requst Schema (submodel)
  */
-router.patch('/company/list/:id', wrap(async (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
+router.patch('/company/list/:id', isObjectId, wrap(async (req, res) => {
+    const { field, value } = req.body
+
+    if (!field || !value) return res.status(400).send({ error: `Wrong data! Field and value must be provided` })
 
     const company = await Company.findById(req.params.id)
     if (!company) return res.status(400).send({ error: `Company Not Found` })
-    if (_isUndefined(company[req.body.field])) {
-        return res.status(400).send({ error: `Inexistent field provided: ${req.body.field}` })
-    }
-    if (typeof company[req.body.field] !== 'object')
-        return res.status(400).send({ error: `Invalid field provided: ${req.body.field}, field must be an array` })
 
-    if (req.body.removing) {
-        req.body.field = 'requests'
-            ? _pull(company[req.body.field], req.body.value)
-            : _pull(company[req.body.field], req.body.value)
+    if (_isUndefined(company[field])) return res.status(400).send({ error: `Inexistent field provided: ${field}` })
+
+    if (typeof company[field] !== 'object') {
+        company[field] = value
+    } else if (field !== 'requests') {
+        const index = company[field].indexOf(value)
+        index === -1 ? company[field].push(value) : company[field].pull(value)
     } else {
-        company[req.body.field].push(req.body.value)
+        const subdoc = _find(company.requests, { consultant: value.consultant, message: value.message })
+        subdoc && subdoc._id ? company.requests.pull(subdoc._id) : company.requests.push(value)
     }
 
     const validationError = company.validateSync()
@@ -84,22 +85,34 @@ router.patch('/company/list/:id', wrap(async (req, res) => {
 }))
 
 
-router.patch('/company/list/:id/request', wrap(async (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
+/**
+ * Request body must be like:
+ *  @param {boolean} approved Has consultants been request approved or not?
+ *  @param {string}  request  Object of Request {consultant, message}
+ */
+router.patch('/company/list/:id/request', isObjectId, wrap(async (req, res) => {
+    const { approved, request } = req.body
+
+    if (!request) return res.status(400).send({ error: `Please, provide a consultants Request` })
 
     const company = await Company.findById(req.params.id)
     if (!company) return res.status(400).send({ error: `Company Not Found` })
 
-    if(req.body.approved) {
-        
+    const { _id, consultant: username } = _find(company.requests, { consultant: request.consultant, message: request.message })
+
+    company.requests.pull(_id)
+
+    if (approved) {
+        const consultant = await Consultant.findOneAndUpdate({ username: username }, { $set: { company: company.title } }, { new: true })
+        if (consultant.company !== company.title) return res.status(500).send(`Something went wrong while hiring consultant, ${consultant}`)
     }
 
-
+    const saved = await company.save()
+    return res.status(200).send({ data: saved })
 }))
 
-router.delete('/company/list/:id', wrap(async (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
 
+router.delete('/company/list/:id', isObjectId, wrap(async (req, res) => {
     const company = await Company.findById(req.params.id)
     if (!company) return res.status(400).send({ error: `Company Not Found` })
 
@@ -109,7 +122,7 @@ router.delete('/company/list/:id', wrap(async (req, res) => {
 
 
 /**
- * Adding an opportunity to clear a collection for non-production environment
+ * Providing an opportunity to clear a collection for non-production environment
  */
 process.env.NODE_ENV !== 'prod' && router.delete('/company/clear', wrap(async (req, res) => {
     await Company.deleteMany()

@@ -46,9 +46,10 @@ api.use(bodyParser.urlencoded({ extended: true }))
 api.use(bodyParser.json())
 api.use(limiter)
 
-enviroment === 'prod' && api.use(jwt({
-    secret: config.api.secret,
-}).unless(req =>
+api.use(loggerMiddleware)
+
+// force jwt to work in production env only
+enviroment === 'prod' && api.use(jwt({ secret: config.api.secret }).unless(req =>
     req.originalUrl === '/' ||
     req.originalUrl === '/customers' && req.method === 'POST' ||
     req.originalUrl === '/customers/authenticate' ||
@@ -59,7 +60,6 @@ enviroment === 'prod' && api.use(jwt({
     req.originalUrl === '/companies' ||
     req.originalUrl === '/consultations' && req.method === 'POST'
 ))
-api.use(loggerMiddleware)
 enviroment === 'prod' && api.use((err, req, res, next) => {
     if (err.name === 'UnauthorizedError') {
         logger.warn(`[JWT] No authorization provided with request ${req.originalUrl}`)
@@ -75,8 +75,8 @@ api.use('/api/', consultation)
 api.use('/api/', representative)
 api.use('/api/', order)
 api.use(errorHandler)
-api.get('*', (req, res) => {
-    res.status(404).send({ error: `${req.originalUrl} not found!` })
+api.all('*', (req, res) => {
+    res.status(404).send({ error: `Path ${req.originalUrl} with method ${req.method} not found!` })
 })
 
 mongoose.connect(config.db.connectionString, config.db.options).then(

@@ -54,7 +54,7 @@ const CompanySchema = new Schema({
     },
     certificates: [String], /* Title of certificate */
     requests: [Request],
-    representives: [String], /* Username of representative */
+    representatives: [String], /* Username of representative */
     consultants: [String], /* Username of consultant */
     products: [String] /* Title of product */
 })
@@ -62,15 +62,15 @@ const CompanySchema = new Schema({
 CompanySchema.plugin(bcrypt)
 CompanySchema.plugin(timestamps)
 
-CompanySchema.pre('remove', next => {
+CompanySchema.pre('remove', function(next){
     /* Note: these functions don't trigger post/pre hooks */
     Product.deleteMany({ company: this.title }, err => {
-        if (err) logger.error(`Something went wrong while deleting products of company ${this.title} \n Method: company remove, cascade delete`)
-        else logger.log(`Products of company ${this.title} were deleted \n Method: company remove, cascade delete`)
+        if (err) logger.error(`Something went wrong while deleting products of company ${this.title}. Method: company remove, cascade delete`)
+        else logger.log(`Products of company ${this.title} were deleted. Method: company remove, cascade delete`)
     })
     Representative.deleteMany({ company: this.title }, err => {
-        if (err) logger.error(`Something went wrong while deleting representatives of company ${this.title} \n Method: company remove, cascade delete`)
-        else logger.log(`Representatives of company ${this.title} were deleted \n Method: company remove, cascade delete`)
+        if (err) logger.error(`Something went wrong while deleting representatives of company ${this.title}. Method: company remove, cascade delete`)
+        else logger.log(`Representatives of company ${this.title} were deleted. Method: company remove, cascade delete`)
     })
 
     next()

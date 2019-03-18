@@ -14,10 +14,6 @@ exports.Request = new Schema({
         trim: true,
         maxlength: [message.max, messages.restrictions.message]
     },
-    approved: {
-        type: Boolean,
-        default: false
-    },
     date: {
         type: Date,
         default: Date.now()
