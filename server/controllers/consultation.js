@@ -4,9 +4,9 @@ import _last from 'lodash/last'
 
 import Consultation from '../models/Consultation'
 import wrap from '../middlewares/wrap'
+import { isObjectId } from '../middlewares/validators'
 
 const router = express.Router()
-const ObjectId = require('mongoose').Types.ObjectId
 
 
 router.get('/consultation/list/', wrap(async (req, res) => {
@@ -15,9 +15,7 @@ router.get('/consultation/list/', wrap(async (req, res) => {
 }))
 
 
-router.get('/consultation/list/:id', wrap(async (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
-
+router.get('/consultation/list/:id', isObjectId, wrap(async (req, res) => {
     const consultation = await Consultation.findById(req.params.id)
     if (!consultation) return res.status(400).send({ error: `Consultation Not Found` })
     res.status(200).send({ data: consultation })
@@ -35,9 +33,7 @@ router.post('/consultation/', wrap(async (req, res) => {
 }))
 
 
-router.put('/consultation/list/:id', wrap(async (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
-
+router.put('/consultation/list/:id', isObjectId, wrap(async (req, res) => {
     const consultation = await Consultation.findById(req.params.id)
     if (!consultation) return res.status(400).send({ error: `Consultation Not Found` })
 
@@ -60,9 +56,7 @@ router.put('/consultation/list/:id', wrap(async (req, res) => {
 /**
  * The request body must contain a valid Message to insert
  */
-router.patch('/consultation/list/:id/message', wrap(async (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
-
+router.patch('/consultation/list/:id/message', isObjectId, wrap(async (req, res) => {
     const consultation = await Consultation.findById(req.params.id)
     if (!consultation) return res.status(400).send({ error: `Consultation Not Found` })
 
@@ -76,9 +70,7 @@ router.patch('/consultation/list/:id/message', wrap(async (req, res) => {
 }))
 
 
-router.delete('/consultation/list/:id', wrap(async (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id provided: ${req.params.id}` })
-
+router.delete('/consultation/list/:id', isObjectId, wrap(async (req, res) => {
     const consultation = await Consultation.findById(req.params.id)
     if (!consultation) return res.status(400).send({ error: `Consultation Not Found` })
 

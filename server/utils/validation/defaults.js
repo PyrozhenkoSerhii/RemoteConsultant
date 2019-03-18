@@ -23,6 +23,6 @@ module.exports = Object.freeze({
         representative: 'https://pngimage.net/wp-content/uploads/2018/05/consultant-png-3.png',
         company: 'https://static.thenounproject.com/png/509354-200.png'
     },
-    rating: 40,
-    onplatform: 0,
+    rating: 50,
+    bill: 0
 })

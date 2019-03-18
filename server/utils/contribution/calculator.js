@@ -136,3 +136,15 @@ const fetchData = async (order) => {
  * @param {number} outMax Upper bound of output range
  */
 const scale = (value, inMin, inMax, outMin, outMax) => (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin
+
+
+
+const getValue = (sum, contribution) => {
+    const result = {}
+    const percentFromOrder = output.PERCENT_FROM_ORDER
+    const sumToContribute = sum * (percentFromOrder / 100)
+
+    _forEach(contribution, (coefficient, consultant) => result[consultant] = Math.floor(sumToContribute * (coefficient / 100)))
+
+    return result
+}

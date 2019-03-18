@@ -6,7 +6,7 @@ import _pull from 'lodash/pull'
 import messages from '../utils/validation/messages'
 import defaults from '../utils/validation/defaults'
 import regex from '../utils/validation/regex'
-import { email, username, fullname, password, matureAge, url, rating, onplatform, info } from '../utils/validation/range'
+import { email, username, fullname, password, matureAge, url, rating, info } from '../utils/validation/range'
 import logger from '../utils/logger'
 
 import { Certificate } from './submodels/Certificate'
@@ -70,6 +70,10 @@ const ConsultantSchema = new Schema({
         min: [rating.min, messages.restrictions.rating],
         max: [rating.max, messages.restrictions.rating],
         default: defaults.rating
+    },
+    bill: {
+        type: Number,
+        default: defaults.bill
     },
     phone: {
         type: Number,

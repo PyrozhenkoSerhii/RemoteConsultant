@@ -1,8 +1,12 @@
 import mongoose, { Schema } from 'mongoose'
 import timestamps from 'mongoose-timestamp'
+import _forEach from 'lodash/forEach'
 
 import messages from '../utils/validation/messages'
 import { quantity, sum } from '../utils/validation/range'
+import { calculate, getValue } from '../utils/contribution/calculator'
+
+import Consultant from './Consultant'
 
 
 const OrderSchema = new Schema({
@@ -33,6 +37,17 @@ const OrderSchema = new Schema({
 })
 
 OrderSchema.plugin(timestamps)
+
+
+OrderSchema.post('save', async order => {
+    const coefficients = await calculate(order)
+
+    const sums = getValue(order.sum, coefficients)
+
+    _forEach(sums, (sum, consultant) => {
+        Consultant.findOneAndUpdate({ username: consultant }, { $inc: { bill: sum } })
+    })
+})
 
 
 module.exports = mongoose.model('Order', OrderSchema)

@@ -33,9 +33,9 @@
     [] filter parser 
         [] implementation 
         [] integration with parameterized get requests
-    [] contribution (Important bussiness logic)
-        [] coefitients
-        [] calculator
+    [x] contribution (Important bussiness logic)
+        [x] coefitients
+        [x] calculator
         [] integration
     [] import (Important bussiness logic)
         [] parse algorithm
