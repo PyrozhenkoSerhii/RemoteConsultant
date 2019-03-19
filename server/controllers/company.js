@@ -53,9 +53,9 @@ router.put('/company/list/:id', isObjectId, wrap(async (req, res) => {
 /**
  * Request body must be like:
  *  @param {string}  field Field you want to change
- *  @param {string}  value New value
+ *  @param {string|object}  value New value
  * Note: If the value is already in an array, it will be removed
- * Note: Request field value must match the Requst Schema (submodel)
+ *       Request field value must match the Requst Schema (submodel)
  */
 router.patch('/company/list/:id', isObjectId, wrap(async (req, res) => {
     const { field, value } = req.body
@@ -73,6 +73,7 @@ router.patch('/company/list/:id', isObjectId, wrap(async (req, res) => {
         const index = company[field].indexOf(value)
         index === -1 ? company[field].push(value) : company[field].pull(value)
     } else {
+        if (typeof value !== 'object') return res.status(400).send({ error: `Field type and provided value type must match` })
         const subdoc = _find(company.requests, { consultant: value.consultant, message: value.message })
         subdoc && subdoc._id ? company.requests.pull(subdoc._id) : company.requests.push(value)
     }
@@ -88,12 +89,12 @@ router.patch('/company/list/:id', isObjectId, wrap(async (req, res) => {
 /**
  * Request body must be like:
  *  @param {boolean} approved Has consultants been request approved or not?
- *  @param {string}  request  Object of Request {consultant, message}
+ *  @param {object}  request  Object of Request {consultant, message}
  */
 router.patch('/company/list/:id/request', isObjectId, wrap(async (req, res) => {
     const { approved, request } = req.body
 
-    if (!request) return res.status(400).send({ error: `Please, provide a consultants Request` })
+    if (!request || typeof request !== 'object') return res.status(400).send({ error: `Request must be an object type` })
 
     const company = await Company.findById(req.params.id)
     if (!company) return res.status(400).send({ error: `Company Not Found` })

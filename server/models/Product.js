@@ -1,4 +1,4 @@
-import mongoose, {Schema} from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import timestamps from 'mongoose-timestamp'
 
 import { images } from '../utils/validation/defaults'
@@ -51,8 +51,11 @@ const ProductSchema = new Schema({
         minlength: [description.min, messages.restrictions.description],
         maxlength: [description.max, messages.restrictions.description]
     },
-    specification: [Object]
-})
+    specification: {
+        type: Object,
+        default: {}
+    }
+}, { minimize: false })
 
 ProductSchema.plugin(timestamps)
 
