@@ -27,7 +27,10 @@
 [] Utils
     [x] validation
     [x] logger
-    [] mailer (!) add singleton
+    [] mailer
+        [x] implementation
+        [] singletone
+        [] integration
     [] jwt 
         [x] base implementation
         [] jwt blacklist
@@ -38,6 +41,9 @@
         [x] coefitients
         [x] calculator
         [x] integration
+    [] redis
+        [x] redis implementation
+        [] redis integration
 [x] Middlewares
     [x] logger middleware
     [x] error handlers

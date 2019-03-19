@@ -7,7 +7,11 @@ import messages from '../utils/validation/messages'
 import { gender, images } from '../utils/validation/defaults'
 import { email, username, password, age, url, fullname } from '../utils/validation/range'
 
-import { Comment } from './submodels/Comment'
+/**
+ * Remove comments field for now
+ * Don't forget to change Patch request after its returning
+ */
+//import { Comment } from './submodels/Comment'
 
 
 const UserSchema = new Schema({
@@ -28,7 +32,7 @@ const UserSchema = new Schema({
         unique: true,
         required: [true, messages.required.username],
         minlength: [username.min, messages.restrictions.username],
-        minlength: [username.max, messages.restrictions.username]
+        maxlength: [username.max, messages.restrictions.username]
     },
     fullname: {
         type: String,
@@ -63,7 +67,7 @@ const UserSchema = new Schema({
         minlength: [url.min, messages.restrictions.url],
         maxlength: [url.max, messages.restrictions.url]
     },
-    comments: [Comment],
+    //comments: [Comment],
     verified: {
         type: Boolean,
         default: false

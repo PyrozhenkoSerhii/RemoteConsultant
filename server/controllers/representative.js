@@ -39,8 +39,8 @@ router.post('/representative/', wrap(async (req, res) => {
 
     const representative = new Representative({ ...data })
 
-    const invalid = representative.validateSync()
-    if (invalid) return res.status(400).send({ error: invalid })
+    const validationError = representative.validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
 
     const saved = await representative.save()
     res.status(201).send({ data: saved })

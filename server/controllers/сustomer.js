@@ -1,292 +1,102 @@
 import express from 'express'
-import _ from 'lodash'
+import _isUndefined from 'lodash/isUndefined'
 
-import User from '../models/Customer'
-import redis from '../utils/redis'
-import logger from '../utils/logger'
-import { createTestTransport, createGmailTransport, verificationMessage, passwordResetMessage } from "../utils/mailer"
+import Customer from '../models/Customer'
 import { sign } from '../utils/jwt'
+
 import wrap from '../middlewares/wrap'
+import { isObjectId } from '../middlewares/validators';
 
-
-const enviroment = process.env.NODE_ENV || 'dev'
-const ObjectId = require('mongoose').Types.ObjectId
-const UNIQUE_CHECK_FAILED_CODE = 11000
 const router = express.Router()
 
 
-let transport = null
-if (enviroment === 'test') {
-    createTestTransport(callback => transport = callback)
-} else {
-    createGmailTransport(callback => transport = callback)
-}
+router.get('/customer/list/', wrap(async (req, res) => {
+    const customer = await Customer.find()
+    return res.status(200).send({ data: customer })
+}))
 
 
-router.get('/customer/', (req, res) => {
-    User.find((err, users) => {
-        if (err) return res.status(500).send({ error: "Something went wrong while fetching all users." })
-
-        return res.status(200).send({ data: users })
-    });
-})
+router.get('/customer/list/:id', isObjectId, wrap(async (req, res) => {
+    const customer = await Customer.findById(req.params.id)
+    if (!customer) return res.status(400).send({ error: `Customer not found` })
+    return res.status(200).send({ data: customer })
+}))
 
 
-router.get('/customer/:id', (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id: ${req.params.id}` })
+router.post('/customer/', wrap(async (req, res) => {
+    const customer = new Customer({ ...req.body })
 
-    redis.get(req.params.id, (err, user) => {
-        if (err) logger.error(`[Redis] Error while attempting to fetch user with id ${req.params.id}, req: ${req.originalUrl}`, err)
-        if (user) return res.status(200).send({ data: JSON.parse(user) })
+    const validationError = customer.validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
 
-        User.findById(req.params.id, (err, user) => {
-            if (err) return res.status(500).send({ error: `Something went wrong while fetching user with id ${req.params.id}.` })
-
-            redis.set(req.params.id, JSON.stringify(user), err => {
-                if (err) logger.error(`[Redis] Error while attempting to save user with id ${req.params.id}, req: ${req.originalUrl}`, err)
-                else logger.info(`[Redis] User with id ${req.params.id} was saved`)
-            })
-
-            return res.status(200).send({ data: user })
-        })
-    })
-})
+    const saved = await customer.save()
+    res.status(201).send({ data: saved })
+}))
 
 
-router.post('/customer/', (req, res) => {
-    const user = new User({
-        email: req.body.email,
-        username: req.body.username,
-        password: req.body.password,
-        age: req.body.age,
-        image: req.body.image,
-        orders: req.body.orders || []
-    })
-
-    user.save((err, savedUser) => {
-        if (err) {
-            let validationErrors = _.map(err.errors, error => { return { field: error.path, error: error.message } })
-
-            if (validationErrors.length !== 0) return res.status(400).send({ errors: validationErrors })
-
-            return err.code === UNIQUE_CHECK_FAILED_CODE
-                ? res.status(400).send({ error: `User with email ${req.body.email} is already exist.` })
-                : res.status(500).send({ error: "Something went wrong while creating user." });
-        }
-
-        const message = verificationMessage(savedUser)
-        transport.sendMail(message, (err, info) => {
-            if (err) return logger.error(`[Node mailer] Error occured while sending message to ${savedUser.email}`, err.message || err)
-
-            logger.info(`[Node mailer] Message was successfully delivered to ${savedUser.email} from ${info.envelope.from}`)
-
-            transport.close()
-        })
-
-
-        return res.status(201).send({ data: savedUser })
-    })
-})
-
-
-router.put('/customer/:id', (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id: ${req.params.id}.` })
-
-    User.findById(req.params.id, (err, user) => {
-        if (err) return res.status(500).send({ error: `Something went wrong while fetching user with id ${req.params.id}.` })
-        if (!user) return res.status(400).send({ error: `User with id ${req.params.id} wasn't found.` })
-
-        user.email = req.body.email || user.email;
-        user.username = req.body.username || user.username;
-        user.age = req.body.age || user.age;
-        user.image = req.body.image || user.image;
-        user.orders = req.body.orders || user.orders;
-
-        user.save((err, updatedUser) => {
-            if (err) {
-                let validationErrors = _.map(err.errors, error => { return { field: error.path, error: error.message } })
-                if (validationErrors.length !== 0) return res.status(400).send({ errors: validationErrors })
-
-                return res.status(500).send({ error: `Something went wrong while updating user with id ${req.params.id}.` })
-            }
-
-            redis.get(updatedUser._id.toString(), (err, user) => {
-                if (err) logger.error(`[Redis] Error while attemping to fetch user with id ${req.params.id}, req: ${req.originalUrl}`, err)
-
-                if (user) redis.set(updatedUser._id.toString(), JSON.stringify(updatedUser), err => {
-                    if (err) logger.error(`[Redis] Error while attemping to update user with id ${req.params.id}, req: ${req.originalUrl}`, err)
-                    else logger.info(`[Redis] User with id ${req.params.id} was updated`)
-                })
-            })
-
-            return res.status(200).send({ message: 'User was updated' })
-        });
-    })
-})
-
-
-router.delete('/customer/:id', (req, res) => {
-    if (!ObjectId.isValid(req.params.id)) return res.status(400).send({ error: `Invalid id: ${req.params.id}` })
-
-    User.findById(req.params.id, (err, user) => {
-        if (err) return res.status(500).send({ error: `Something went wrong while fetching user with id ${req.params.id}.` })
-        if (!user) return res.status(400).send({ error: `User with id ${req.params.id} wasn't found.` })
-
-        user.remove(err => {
-            if (err) return res.status(500).send({ error: `Something went wrong while deleting user with id ${req.params.id}.` })
-
-            redis.del(req.params.id, err => {
-                if (err) logger.error(`[Redis] Error occured while attempting to delete user with id ${req.params.id} `)
-                else logger.info(`[Redis] User with id (${req.params.id}) was deleted`)
-
-                return res.status(200).send({ message: 'User was deleted' })
-            })
-        })
-    })
-})
-
-
-router.post('/customer/authenticate', (req, res) => {
+router.post('/customer/authenticate', wrap(async (req, res) => {
     if (!req.body.email || !req.body.password) return res.status(400).json({ error: 'Email and password are required!' })
 
-    User.findOne({ email: req.body.email }).select('+password').exec((err, user) => {
-        if (err) return res.status(500).send({ error: `Something went wrong while fetching user with id ${req.params.id}.` })
-        if (!user) return res.status(400).send({ error: 'Wrong username or password' })
-        if (!user.verified) return res.status(403).send({ error: 'You need to verify your email first' })
+    let customer = await Customer.findOne({ email: req.body.email }).select('+password').exec()
+    if (!customer) return res.status(400).send({ error: `Customer Not Found` })
 
-        user.verifyPassword(req.body.password, (err, valid) => {
-            if (err) return res.status(500).send({ error: 'Something went wrong while verifying the password' })
+    const verified = await customer.verifyPassword(req.body.password)
+    if (!verified) return res.status(400).send({ error: 'Email or password is incorrect' })
 
-            if (valid) {
-                const token = sign(user)
+    const token = sign(customer)
 
-                return res.status(200).send({ token })
-            }
+    customer.password = undefined
 
-            return res.status(400).send({ error: 'Email or password is incorrect' })
-        })
-    })
-})
+    return res.status(200).send({ token, data: customer })
+}))
 
 
-router.post('/customer/logout', (req, res) => {
-    //add blacklist jwt first and then use it here
-    return res.status(501).send({ error: `The logout will be implemented soon!` })
-})
+/**
+ * Request body must be like:
+ *  @param {string}  field Field you want to change
+ *  @param {string|number}  value New value
+ */
+router.patch('/customer/list/:id', isObjectId, wrap(async (req, res) => {
+    const { field, value } = req.body
+
+    if (!field || !value) return res.status(400).send({ error: `Wrong data! Field and value must be provided` })
+
+    const customer = await Customer.findById(req.params.id)
+    if (!customer) return res.status(400).send({ error: `Customer Not Found` })
+
+    if (typeof value === 'object') return res.status(400).send({ error: `Field type must match the provided value type` })
+
+    customer[field] = value
+
+    const validationError = customer.validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
+
+    const saved = await customer.save()
+    if (saved.password) return res.status(200).send({ message: `Password was changed` })
+    res.status(200).send({ data: saved })
+}))
 
 
-router.post('/customer/resetPasswordRequest', (req, res) => {
-    if (!req.body.email || !req.body.hash) return res.status(400).send({ error: 'Some data are needed for password reseting is absent!' })
+router.delete('/customer/list/:id', isObjectId, wrap(async (req, res) => {
+    const customer = await RepreCustomersentative.findById(req.params.id)
+    if (!customer) return res.status(400).send({ error: `Customer Not Found` })
 
-    User.findOne({ email: req.body.email }, (err, user) => {
-        if (err) return res.status(500).send({ error: `Something went wrong while fetching user with email ${req.body.email}` })
-        if (!user) return res.status(400).send({ error: `There are no users with email ${req.body.email}` })
-
-        redis.set(req.body.hash, req.body.email, err => {
-            if (err) {
-                logger.error(`[Redis] Error while setting data for password reset (${req.body.hash}:${req.body.email})`, err)
-                return res.status(500).send({ error: `Something went wrong while storing data for password reset` })
-            }
-            logger.info(`[Redis] Item for password reset was created (${req.body.hash}:${req.body.email})`)
-        })
-
-        const message = passwordResetMessage(user, req.body.hash)
-        transport.sendMail(message, (err, info) => {
-            if (err) return res.status(500).send({ error: `Something went wrong while sending message to ${user.email}` })
-
-            logger.info(`[Node mailer] Message was successfully delivered to ${user.email} from ${info.envelope.from}`)
-
-            transport.close()
-
-            return res.status(200).send({ message: `Message was sent to ${user.email}` })
-        })
-    })
-})
+    await customer.remove()
+    res.status(200).send({ message: `Customer deleted` })
+}))
 
 
-router.post('/customer/resetPasswordConfirm/:hash', (req, res) => {
-    if (!req.params.hash) return res.status(403).send({ error: 'You have no permissions to make a password reset!' })
-    if (!req.body.password) return res.status(400).send({ error: 'There is no password provided' })
+/**
+ * Adding an opportunity to clear a collection for non-production environment
+ */
+process.env.NODE_ENV !== 'prod' && router.delete('/customer/clear', wrap(async (req, res) => {
+    await Customer.deleteMany()
 
-    redis.get(req.params.hash, (err, emailFromHash) => {
-        if (err) {
-            logger.error(`[Redis] Error occured while attempting to fetch hash for password restore: ${req.params.hash}`, err)
-            return res.status(500).send({ error: 'Something went wrong while handling password reset' })
-        }
+    const customers = await Customer.find()
+    if (customers.length) return res.status(500).send({ error: `Due to unknown reason customers weren't deleted` })
 
-        if (!emailFromHash) return res.status(403).send({ error: 'You have no permissions to make a password reset! (Wrong hash)' })
-
-        redis.del(req.params.hash, err => {
-            if (err) logger.error(`[Redis] Error occured while attempting to delete hash ${req.params.hash} `)
-            else logger.info(`[Redis] Used hash for password reset (${req.params.hash}) was deleted`)
-        })
-
-        User.findOne({ email: emailFromHash }, (err, user) => {
-            if (err) return res.status(500).send({ error: `Something went wrong while fetching user with email: ${emailFromHash}` })
-            if (!user) return res.status(400).send({ error: 'User wasn\'t found' })
-
-            user.password = req.body.password
-
-            user.save((err, updatedUser) => {
-                if (err) {
-                    let validationErrors = _.map(err.errors, error => { return { field: error.path, error: error.message } })
-                    if (validationErrors.length !== 0) return res.status(400).send({ errors: validationErrors })
-
-                    return res.status(500).send({ error: `Something went wrong while changing users' password with id ${req.params.id}.` })
-                }
-
-                redis.get(updatedUser._id.toString(), (err, user) => {
-                    if (err) logger.error(`[Redis] Error while attemping to fetch user with id ${req.params.id}, req: ${req.originalUrl}`, err)
-
-                    if (user) redis.set(updatedUser._id.toString(), JSON.stringify(updatedUser), err => {
-                        if (err) logger.error(`[Redis] Error while attemping to update user with id ${req.params.id}, req: ${req.originalUrl}`, err)
-                        else logger.info(`[Redis] User with id ${req.params.id} was updated`)
-                    })
-                })
-
-                return res.status(200).send({ message: 'Password was changed' })
-            })
-        })
-    })
-})
-
-
-router.post('/customer/verifyEmail', (req, res) => {
-    User.findOne({ email: req.body.email }, (err, user) => {
-        if (err) return res.status(500).send({ error: 'Something went wrong while sending verifying message!' })
-        if (!user) return res.status(400).send({ error: `There are no users with such credentials!` })
-
-        const message = verificationMessage(user)
-        transport.sendMail(message, (err, info) => {
-            if (err) {
-                logger.error(`[Node mailer] Error occured while sending message to ${user.email}`, err.message || err)
-                return res.status(400).send({ error: 'Something went wrong while message sending' })
-            }
-
-            logger.info(`[Node mailer] Message was successfully delivered to ${user.email} from ${info.envelope.from}`)
-
-            transport.close()
-
-            return res.status(200).send({ message: `Message was sent to ${user.email}` })
-        })
-    })
-})
-
-
-router.get('/customer/verifying/:id', (req, res) => {
-    User.findById(req.params.id, (err, user) => {
-        if (err) return res.status(500).send({ error: 'Something went wrong while verifying email!' })
-        if (!user) return res.status(400).send({ error: `There are no users with such credentials!` })
-
-        user.verified = true
-
-        user.save(err => {
-            if (err) return res.status(500).send({ error: `Something went wrong while verifying email of user ${req.params.id}.` })
-
-            return res.status(200).send({ message: 'Email was verified!' })
-        })
-    })
-})
+    res.status(200).send({ message: 'Customers were deleted' })
+}))
 
 
 module.exports = router
