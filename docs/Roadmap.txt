@@ -19,6 +19,7 @@
     [x] product model
     [x] company model
     [x] representative model
+    [x] order model
     [x] submodels
     [x] cascade remove/update hooks
     [x] validation
@@ -36,24 +37,20 @@
     [x] contribution (Important bussiness logic)
         [x] coefitients
         [x] calculator
-        [] integration
-    [] import (Important bussiness logic)
-        [] parse algorithm
-            [] Mongodb
-            [] Sql (Optional)
-        [] save algorithm
+        [x] integration
 [x] Middlewares
     [x] logger middleware
     [x] error handlers
 [] Controllers
     [] customer controller
-    [] company controller
+    [x] company controller
     [] representative controller
     [] consultant controller 
-    [] consultation controller
-    [] product controller
+    [x] consultation controller
+    [x] product controller
+    [x] order controller
 [] Itegration tests and mocks
-    [x] customer
+    [] customer
     [] company
     [] product
     [] representative

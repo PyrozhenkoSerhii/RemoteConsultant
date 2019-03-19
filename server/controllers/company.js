@@ -42,8 +42,8 @@ router.put('/company/list/:id', isObjectId, wrap(async (req, res) => {
 
     _assignIn(company, req.body)
 
-    const invalid = company.validateSync()
-    if (invalid) return res.status(400).send({ error: invalid })
+    const validationError = company.validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
 
     const saved = await company.save()
     res.status(200).send({ data: saved })
@@ -87,6 +87,7 @@ router.patch('/company/list/:id', isObjectId, wrap(async (req, res) => {
 
 
 /**
+ * Method to approve or reject consultants request
  * Request body must be like:
  *  @param {boolean} approved Has consultants been request approved or not?
  *  @param {object}  request  Object of Request {consultant, message}

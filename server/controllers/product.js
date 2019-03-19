@@ -27,8 +27,8 @@ router.get('/product/list/:id', isObjectId, wrap(async (req, res) => {
 router.post('/product/', wrap(async (req, res) => {
     const product = new Product({ ...req.body })
 
-    const invalid = product.validateSync()
-    if (invalid) return res.status(400).send({ errors: invalid })
+    const validationError = product.validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
 
     const saved = await product.save()
     res.status(201).send({ data: saved })
@@ -41,8 +41,8 @@ router.put('/product/list/:id', isObjectId, wrap(async (req, res) => {
 
     _assignIn(product, req.body)
 
-    const invalid = product.validateSync()
-    if (invalid) return res.status(400).send({ error: invalid })
+    const validationError = product.validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
 
     const saved = await product.save()
     res.status(200).send({ data: saved })
@@ -56,6 +56,7 @@ router.put('/product/list/:id', isObjectId, wrap(async (req, res) => {
  * Note: If you want to change a specification, provide an object like {attr1:val1, attr2:val2}
  *       If the attr and the value match the existent attr and val, this attr will be removed
  *       If the attr matches but its the value differs, the attr value will be changed
+ *       Company field can't be changed
  */
 router.patch('/product/list/:id', isObjectId, wrap(async (req, res) => {
     const { field, value } = req.body
@@ -66,6 +67,7 @@ router.patch('/product/list/:id', isObjectId, wrap(async (req, res) => {
     if (!product) return res.status(400).send({ error: `Product Not Found` })
 
     if (_isUndefined(product[field])) return res.status(400).send({ error: `Inexistent field provided: ${field}` })
+    if (filed === 'company') return res.status(400).send({error: `Company can't be changed`})
 
     if (typeof product[field] !== 'object') {
         product[field] = value
@@ -92,7 +94,8 @@ router.patch('/product/list/:id', isObjectId, wrap(async (req, res) => {
 
 
 /**
- * Provide array of objects you want to insert
+ * Method to import bunch of company's products
+ * Requst body must be like:
  * @param {array} products An array with Product objects to import
  * Note: Each objtct in array must match Product Schema
  *       Only first object is going to be validated due to performance reasons, so be careful what you put here!

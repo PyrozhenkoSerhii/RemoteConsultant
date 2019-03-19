@@ -25,8 +25,8 @@ router.get('/consultation/list/:id', isObjectId, wrap(async (req, res) => {
 router.post('/consultation/', wrap(async (req, res) => {
     let consultation = new Consultation({ ...req.body })
 
-    const error = consultation.validateSync()
-    if (error) return res.status(400).send({ error })
+    const validationError = consultation.validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
 
     const saved = await consultation.save()
     res.status(201).send({ data: saved })
@@ -39,14 +39,8 @@ router.put('/consultation/list/:id', isObjectId, wrap(async (req, res) => {
 
     _merge(consultation, req.body)
 
-    /* TODO: remove duplication of validator errors and get rid of this if statement */
-    if (consultation.survey) {
-        const error = consultation.survey.validateSync()
-        if (error) return res.status(400).send({ error })
-    }
-
-    const error = consultation.validateSync()
-    if (error) return res.status(400).send({ error })
+    const validationError = consultation.validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
 
     const saved = await consultation.save()
     res.status(200).send({ data: saved })
@@ -54,16 +48,17 @@ router.put('/consultation/list/:id', isObjectId, wrap(async (req, res) => {
 
 
 /**
- * The request body must contain a valid Message to insert
+ * Request body must be like:
+ * @param {object} message Message object you want to insert
  */
 router.patch('/consultation/list/:id/message', isObjectId, wrap(async (req, res) => {
     const consultation = await Consultation.findById(req.params.id)
     if (!consultation) return res.status(400).send({ error: `Consultation Not Found` })
 
-    consultation.messages.push(req.body)
+    consultation.messages.push(req.body.message)
 
-    const error = _last(consultation.messages).validateSync()
-    if (error) return res.status(400).send({ error })
+    const validationError = _last(consultation.messages).validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
 
     const saved = await consultation.save()
     res.status(200).send({ data: saved })
