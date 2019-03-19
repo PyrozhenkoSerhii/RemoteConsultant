@@ -24,7 +24,7 @@ const ConsultationSchema = new Schema({
     alternative: { /* title of alternative product */
         type: String,
         minlength: [title.min, messages.restrictions.title],
-        minlength: [title.max, messages.restrictions.title]
+        maxlength: [title.max, messages.restrictions.title]
     },
     messages: [Message],
     survey: Survey

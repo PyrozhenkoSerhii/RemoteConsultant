@@ -35,7 +35,7 @@ const UserSchema = new Schema({
         trim: true,
         match: [regex.fullname, messages.match.fullname],
         minlength: [fullname.min, messages.restrictions.fullname],
-        minlength: [fullname.max, messages.restrictions.fullname]
+        maxlength: [fullname.max, messages.restrictions.fullname]
     },
     password: {
         type: String,
@@ -44,7 +44,7 @@ const UserSchema = new Schema({
         required: [true, messages.required.password],
         match: [regex.password, messages.match.password],
         minlength: [password.min, messages.restrictions.password],
-        minlength: [password.max, messages.restrictions.password]
+        maxlength: [password.max, messages.restrictions.password]
     },
     age: {
         type: Number,
@@ -61,7 +61,7 @@ const UserSchema = new Schema({
         default: images.customer,
         match: [regex.url, messages.match.url],
         minlength: [url.min, messages.restrictions.url],
-        minlength: [url.max, messages.restrictions.url]
+        maxlength: [url.max, messages.restrictions.url]
     },
     comments: [Comment],
     verified: {

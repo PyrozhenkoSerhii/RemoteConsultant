@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose'
-import bcrypt from 'mongoose-bcrypt'
 import timestamps from 'mongoose-timestamp'
 
 import regex from '../utils/validation/regex'
@@ -36,6 +35,7 @@ const CompanySchema = new Schema({
         type: String,
         required: [true, messages.required.secret],
         trim: true,
+        select: false,
         match: [regex.secret, messages.match.secret],
         minlength: [secret.min, messages.restrictions.secret],
         maxlength: [secret.max, messages.restrictions.secret]
@@ -59,7 +59,6 @@ const CompanySchema = new Schema({
     products: [String] /* Title of product */
 })
 
-CompanySchema.plugin(bcrypt)
 CompanySchema.plugin(timestamps)
 
 CompanySchema.pre('remove', function(next){

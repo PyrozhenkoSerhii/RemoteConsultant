@@ -26,7 +26,7 @@ const RepresentativeSchema = new Schema({
         required: [true, messages.required.fullname],
         match: [regex.fullname, messages.match.fullname],
         minlength: [fullname.min, messages.restrictions.fullname],
-        minlength: [fullname.max, messages.restrictions.fullname]
+        maxlength: [fullname.max, messages.restrictions.fullname]
     },
     password: {
         type: String,
@@ -35,7 +35,7 @@ const RepresentativeSchema = new Schema({
         required: [true, messages.required.password],
         match: [regex.password, messages.match.password],
         minlength: [password.min, messages.restrictions.password],
-        minlength: [password.max, messages.restrictions.password]
+        maxlength: [password.max, messages.restrictions.password]
     },
     phone: {
         type: Number,
@@ -47,7 +47,7 @@ const RepresentativeSchema = new Schema({
         default: images.representative,
         match: [regex.url, messages.match.url],
         minlength: [url.min, messages.restrictions.url],
-        minlength: [url.max, messages.restrictions.url]
+        maxlength: [url.max, messages.restrictions.url]
     },
     company: {
         type: String,

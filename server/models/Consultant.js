@@ -36,7 +36,7 @@ const ConsultantSchema = new Schema({
         unique: true,
         required: [true, messages.required.username],
         minlength: [username.min, messages.restrictions.username],
-        minlength: [username.max, messages.restrictions.username]
+        maxlength: [username.max, messages.restrictions.username]
     },
     fullname: {
         type: String,
@@ -44,7 +44,7 @@ const ConsultantSchema = new Schema({
         required: [true, messages.required.fullname],
         match: [regex.fullname, messages.match.fullname],
         minlength: [fullname.min, messages.restrictions.fullname],
-        minlength: [fullname.max, messages.restrictions.fullname]
+        maxlength: [fullname.max, messages.restrictions.fullname]
     },
     password: {
         type: String,
@@ -53,7 +53,7 @@ const ConsultantSchema = new Schema({
         required: [true, messages.required.password],
         match: [regex.password, messages.match.password],
         minlength: [password.min, messages.restrictions.password],
-        minlength: [password.max, messages.restrictions.password]
+        maxlength: [password.max, messages.restrictions.password]
     },
     age: {
         type: Number,
@@ -89,7 +89,7 @@ const ConsultantSchema = new Schema({
         default: defaults.images.customer,
         match: [regex.url, messages.match.url],
         minlength: [url.min, messages.restrictions.url],
-        minlength: [url.max, messages.restrictions.url]
+        maxlength: [url.max, messages.restrictions.url]
     },
     certificate: Certificate,
     languages: [Language],

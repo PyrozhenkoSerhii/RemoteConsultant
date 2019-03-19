@@ -25,7 +25,10 @@ router.get('/company/list/:id', isObjectId, wrap(async (req, res) => {
 }))
 
 
-router.post('/company/', wrap(async (req, res) => {
+/**
+ * In production, companies must be created directly in database by platform administrator
+ */
+process.env.NODE_ENV !== 'prod' && router.post('/company/', wrap(async (req, res) => {
     const company = new Company({ ...req.body })
 
     const validationError = company.validateSync()
@@ -33,20 +36,6 @@ router.post('/company/', wrap(async (req, res) => {
 
     const saved = await company.save()
     res.status(201).send({ data: saved })
-}))
-
-
-router.put('/company/list/:id', isObjectId, wrap(async (req, res) => {
-    const company = await Company.findById(req.params.id)
-    if (!company) return res.status(400).send({ error: `Company Not Found` })
-
-    _assignIn(company, req.body)
-
-    const validationError = company.validateSync()
-    if (validationError) return res.status(400).send({ error: validationError.errors })
-
-    const saved = await company.save()
-    res.status(200).send({ data: saved })
 }))
 
 
@@ -65,6 +54,7 @@ router.patch('/company/list/:id', isObjectId, wrap(async (req, res) => {
     const company = await Company.findById(req.params.id)
     if (!company) return res.status(400).send({ error: `Company Not Found` })
 
+    if (field === 'secret') return res.status(400).send({ error: `Secret can be changed manually only. Please contact platform administrator` })
     if (_isUndefined(company[field])) return res.status(400).send({ error: `Inexistent field provided: ${field}` })
 
     if (typeof company[field] !== 'object') {
