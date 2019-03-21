@@ -80,9 +80,9 @@ router.patch('/product/list/:id', isObjectId, wrap(async (req, res) => {
             if (currentValue && currentValue === val) delete product.specification[attr]
             else if (currentValue && currentValue !== val) product.specification[attr] = val
             else product.specification[attr] = val
-
-            product.markModified('specification')
         })
+
+        product.markModified('specification')
     }
 
     const validationError = product.validateSync()
