@@ -14,14 +14,12 @@ const dev = {
         }
     },
     db: {
-        host: process.env.DEV_DB_HOST || 'localhost',
-        port: parseInt(process.env.DEV_DB_PORT) || 27017,
         connectionString: process.env.DEV_DB_CONNECTION_STRING || 'Enter your DB connString',
         databaseName: process.env.DEV_DB_NAME || 'devDB',
         options: {
             useNewUrlParser: true
         },
-        maxDumpSize: process.env.MAX_DUMP_SIZE || 10e7 
+        maxDumpSize: 10e7
     },
     redis: {
         host: process.env.REDIS_URL || '127.0.0.1',
@@ -49,14 +47,12 @@ const prod = {
         }
     },
     db: {
-        host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT),
         connectionString: process.env.DB_CONNECTION_STRING,
         databaseName: process.env.DB_NAME,
         options: {
             useNewUrlParser: true
         },
-        maxDumpSize: process.env.MAX_DUMP_SIZE 
+        maxDumpSize: 10e7
     },
     urls: {
         emailVerifyingBase: process.env.EMAIL_VERIFYING_BASE,
@@ -85,14 +81,12 @@ const test = {
 
     },
     db: {
-        host: 'localhost',
-        port: 27017,
-        connectionString: process.env.TEST_DB_CONNECTION_STRING || 'mongodb://192.168.2.111/test',
-        databaseName: process.env.TEST_DB_NAME || 'test database',
+        connectionString: process.env.TEST_DB_CONNECTION_STRING || 'mongodb://test123:test123@ds119996.mlab.com:19996/remote-advisor-test',
+        databaseName: process.env.TEST_DB_NAME || 'RemoteAdvisor-Test',
         options: {
             useNewUrlParser: true
         },
-        maxDumpSize: 10e7 
+        maxDumpSize: 10e7
     },
     redis: {
         host: '127.0.0.1',
