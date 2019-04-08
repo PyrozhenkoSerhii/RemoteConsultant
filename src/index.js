@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-import { Provider as AlertProvider } from 'react-alert'
+import { transitions, positions, Provider as AlertProvider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-basic'
 import 'bootstrap/dist/css/bootstrap.css'
 
@@ -12,7 +12,8 @@ import App from './js/App'
 const alertOptions = {
     offset: '50px',
     timeout: 3000,
-    position: "top center"
+    position: positions.TOP_CENTER,
+    transition: transitions.SCALE
 }
 
 

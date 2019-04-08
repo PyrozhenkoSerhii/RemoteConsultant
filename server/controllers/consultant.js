@@ -38,7 +38,7 @@ router.post('/consultant/authenticate', wrap(async (req, res) => {
     if (!req.body.email || !req.body.password) return res.status(400).json({ error: 'Email and password are required!' })
 
     let consultant = await Consultant.findOne({ email: req.body.email }).select('+password').exec()
-    if (!consultant) return res.status(400).send({ error: `Consultant Not Found` })
+    if (!consultant) return res.status(400).send({ error: `Email or password is incorrect` })
 
     const verified = await consultant.verifyPassword(req.body.password)
     if (!verified) return res.status(400).send({ error: 'Email or password is incorrect' })

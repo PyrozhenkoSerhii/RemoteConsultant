@@ -51,7 +51,7 @@ router.post('/representative/authenticate', wrap(async (req, res) => {
     if (!req.body.email || !req.body.password) return res.status(400).json({ error: 'Email and password are required!' })
 
     let representative = await Representative.findOne({ email: req.body.email }).select('+password').exec()
-    if (!representative) return res.status(400).send({ error: `Representative Not Found` })
+    if (!representative) return res.status(400).send({ error: `Email or password is incorrect` })
 
     const verified = await representative.verifyPassword(req.body.password)
     if (!verified) return res.status(400).send({ error: 'Email or password is incorrect' })
