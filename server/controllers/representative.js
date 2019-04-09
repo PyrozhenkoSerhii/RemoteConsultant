@@ -1,6 +1,7 @@
 import express from 'express'
 import _assignIn from 'lodash/assignIn'
 import _isUndefined from 'lodash/isUndefined'
+import _forEach from 'lodash/forEach'
 
 import Representative from '../models/Representative'
 import Company from '../models/Company'
@@ -31,11 +32,21 @@ router.get('/representative/list/:id', isObjectId, wrap(async (req, res) => {
  * @param {object} representative Representative object you want to save
  */
 router.post('/representative/', wrap(async (req, res) => {
-    const { secret, representative: data } = req.body
+    const { secret, data } = req.body
 
-    const company = await Company.findOne({ title: data.company }).select('+secret').exec()
-    if (!company) return res.status(400).send({ error: `Company not found ${data.company}` })
-    if (company.secret !== secret) return res.status(400).send({ error: `Secret doesn't match with one provided by company ${data.company}` })
+    if (!secret || !data) return res.status(400).send({ error: `Secret and personal info are required!` })
+
+    const companies = await Company.find({}).select('+secret').exec()
+    let match = null
+    _forEach(companies, company => {
+        if (company.secret === secret) {
+            match = company
+            return false
+        }
+    })
+    if (!match) return res.status(400).send({ error: `Secret doesn't match any company` })
+    data.company = match.title
+
 
     const representative = new Representative({ ...data })
 

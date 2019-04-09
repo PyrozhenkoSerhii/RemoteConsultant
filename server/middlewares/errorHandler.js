@@ -10,7 +10,7 @@ const errorHandler = (err, req, res, next) => {
         field = field.substring(0, field.lastIndexOf("_"));
         return res.status(400).send({ error: `This ${field} already exists` })
     }
-    res.status(500).send({ error: `Error occured on the server. If you are owner, check the logs of the server` });
+    return res.status(500).send({ error: `Error occured on the server. If you are owner, check the logs of the server` });
 }
 
 export default errorHandler
