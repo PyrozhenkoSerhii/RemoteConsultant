@@ -18,7 +18,8 @@ const ProductSchema = new Schema({
         maxlength: [title.max, messages.restrictions.title]
     },
     company: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Company',
         required: [true, messages.required.company]
     },
     category: {

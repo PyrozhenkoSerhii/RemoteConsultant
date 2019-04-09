@@ -93,8 +93,9 @@ const ConsultantSchema = new Schema({
     },
     certificate: Certificate,
     languages: [Language],
-    company: { /* Title of company */
-        type: String,
+    company: {
+        type: Schema.Types.ObjectId,
+        ref: 'Company',
         trim: true
     },
     online: {
@@ -115,11 +116,11 @@ ConsultantSchema.plugin(bcrypt)
 ConsultantSchema.plugin(timestamps)
 
 ConsultantSchema.pre('remove', next => {
-    Company.find({ title: this.company }, (err, company) => {
+    Company.findById(this.company, (err, company) => {
         if (err) logger.error(`Something went wrong while fetching company. \n Method: consultant remove, cascade remove`)
         if (!company) logger.error(`Company with title ${this.company} wasn't found. \n Method: consultant remove, cascade remove`)
 
-        _pull(company.consultants, this.username)
+        company.consultants.pull(this._id)
 
         company.save((err, saved) => {
             if (err) logger.error(`Something went wrong while updating company with title ${this.company} \n Method: consultant remove, cascade remove`)

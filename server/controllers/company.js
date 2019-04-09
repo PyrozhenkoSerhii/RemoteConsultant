@@ -90,13 +90,14 @@ router.patch('/company/list/:id/request', isObjectId, wrap(async (req, res) => {
     const company = await Company.findById(req.params.id)
     if (!company) return res.status(400).send({ error: `Company Not Found` })
 
-    const { _id, consultant: username } = _find(company.requests, { consultant: request.consultant, message: request.message })
+    const { _id, consultant } = _find(company.requests, { consultant: request.consultant, message: request.message })
 
     company.requests.pull(_id)
 
     if (approved) {
-        const consultant = await Consultant.findOneAndUpdate({ username: username }, { $set: { company: company.title } }, { new: true })
-        if (consultant.company !== company.title) return res.status(500).send(`Something went wrong while hiring consultant, ${consultant}`)
+        const consultantObj = await Consultant.findOneAndUpdate({ _id: consultant }, { $set: { company: company._id } }, { new: true })
+        if (consultantObj.company !== company._id) return res.status(500).send(`Something went wrong while hiring consultant, ${consultantObj}`)
+        company.consultants.push(consultant)
     }
 
     const saved = await company.save()

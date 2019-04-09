@@ -5,8 +5,7 @@ import timestamps from 'mongoose-timestamp'
 import { images } from '../utils/validation/defaults'
 import messages from '../utils/validation/messages'
 import regex from '../utils/validation/regex'
-import {email, fullname, password, url, } from '../utils/validation/range'
-
+import { email, fullname, password, url, } from '../utils/validation/range'
 
 const RepresentativeSchema = new Schema({
     email: {
@@ -50,7 +49,8 @@ const RepresentativeSchema = new Schema({
         maxlength: [url.max, messages.restrictions.url]
     },
     company: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Company',
         required: [true, messages.required.company]
     }
 })
@@ -58,6 +58,17 @@ const RepresentativeSchema = new Schema({
 RepresentativeSchema.plugin(bcrypt)
 RepresentativeSchema.plugin(timestamps)
 
+RepresentativeSchema.post('save', async function (doc, next) {
+    // to avoid circular dependency use model directly from mongoose
+    const company = await mongoose.model('Company').findById(doc.company)
+    company.representatives.push(this._id)
+    const saved = await company.save()
+
+    next()
+})
+
+
 
 module.exports = mongoose.model('Representative', RepresentativeSchema)
+
 

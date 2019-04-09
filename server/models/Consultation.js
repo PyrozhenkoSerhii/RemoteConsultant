@@ -10,19 +10,23 @@ import { Survey } from './submodels/Survey'
 
 const ConsultationSchema = new Schema({
     customer: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Customer',
         required: [true, messages.required.customer]
     },
     consultant: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Consultant',
         required: [true, messages.required.consultant]
     },
     product: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
         required: [true, messages.required.product]
     },
-    alternative: { /* title of alternative product */
-        type: String,
+    alternative: { /* _id of an alternative product */
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
         minlength: [title.min, messages.restrictions.title],
         maxlength: [title.max, messages.restrictions.title]
     },

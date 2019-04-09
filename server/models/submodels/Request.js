@@ -6,7 +6,8 @@ import { message } from '../../utils/validation/range'
 
 exports.Request = new Schema({
     consultant: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Consultant',
         required: [true, messages.required.consultant]
     },
     message: {

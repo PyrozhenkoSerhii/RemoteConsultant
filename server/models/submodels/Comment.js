@@ -6,7 +6,8 @@ import { message } from '../../utils/validation/range'
 
 exports.Comment = new Schema({
     product: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
         required: [true, messages.required.product]
     },
     message: {

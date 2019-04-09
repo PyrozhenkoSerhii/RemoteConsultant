@@ -45,7 +45,7 @@ router.post('/representative/', wrap(async (req, res) => {
         }
     })
     if (!match) return res.status(400).send({ error: `Secret doesn't match any company` })
-    data.company = match.title
+    data.company = match._id
 
 
     const representative = new Representative({ ...data })

@@ -11,11 +11,13 @@ import Consultant from './Consultant'
 
 const OrderSchema = new Schema({
     customer: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Customer',
         required: [true, messages.required.customer]
     },
     product: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
         required: [true, messages.required.product]
     },
     quantity: {
@@ -30,8 +32,9 @@ const OrderSchema = new Schema({
         min: [sum.min, messages.restrictions.sum],
         max: [sum.max, messages.restrictions.sum]
     },
-    consultant: { /* Username of most useful consultant */
-        type: String,
+    consultant: { /* _id of the most useful consultant */
+        type: Schema.Types.ObjectId,
+        ref: 'Consultant',
         required: [true, messages.required.consultant]
     }
 })
