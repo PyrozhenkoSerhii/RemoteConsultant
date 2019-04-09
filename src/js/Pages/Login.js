@@ -33,8 +33,10 @@ const Login = ({ alert }) => {
                 context.authenticateRepresentative(res.data.data, res.data.token)
                 setRedirect(true)
             })
-            .catch(err => alert.error(err.response.data.error))
-
+            .catch(err => {
+                console.log(err.response)
+                alert.error(JSON.stringify(err.response.data.error))
+            })
     }
 
     return redirect

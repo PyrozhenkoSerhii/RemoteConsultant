@@ -11,7 +11,6 @@ const RepresentativeProvider = props => {
         setToken(token)
         localStorage.setItem('token', token)
         localStorage.setItem('representative', JSON.stringify(representative))
-        console.log('authenticated', representative, token)
 
     }
     const logoutRepresentative = () => {
@@ -19,7 +18,6 @@ const RepresentativeProvider = props => {
         setToken(null)
         localStorage.removeItem('representative')
         localStorage.removeItem('token')
-        console.log('logout')
     }
 
     return <RepresentativeContext.Provider value={{

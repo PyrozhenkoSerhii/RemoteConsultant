@@ -8,7 +8,7 @@
         [x] test
     [x] security
         [x] base modules
-        [x] bruteforce
+        [x] bruteforce (Optional)
             [x] base implementation
             [] production implementation
         [x] jwt
@@ -27,50 +27,80 @@
 [] Utils
     [x] validation
     [x] logger
-    [] mailer
+    [] mailer (Optional)
         [x] implementation
         [] singletone
         [] integration
-    [] jwt 
+    [x] jwt 
         [x] base implementation
-        [] jwt blacklist
-    [] filter parser 
+        [] jwt blacklist (Optional)
+    [] filter parser (Optional)
         [] implementation 
         [] integration with parameterized get requests
     [x] contribution (Important bussiness logic)
         [x] coefitients
         [x] calculator
         [x] integration
-    [] redis
+    [] redis (Optional)
         [x] redis implementation
         [] redis integration
 [x] Middlewares
     [x] logger middleware
     [x] error handlers
-[] Controllers
-    [] customer controller
+[x] Controllers
+    [x] customer controller
     [x] company controller
-    [] representative controller
-    [] consultant controller 
+    [x] representative controller
+    [x] consultant controller 
     [x] consultation controller
     [x] product controller
     [x] order controller
-[] Itegration tests and mocks
+[] Itegration tests and mocks (Optional)
     [] customer
     [] company
     [] product
     [] representative
     [] consultant
     [] consultation
-[] Sockets
+[] Sockets (Important bussiness logic)
     [] base implementation
     [] chat sockets
     [] chat integretion with controllers
     [] videochat (Optional) 
     [] videochat intergration with controllers (Optional)
 
-<CLIENT-REACT>
-...
-
-<CLIENT-REACT-NATIVE>
+<CLIENT-WEB>
+[x] Client setup
+    [x] structure
+    [x] webpack
+[] Customer/consultant pages
+    [] Home
+    [] Company
+        [] Certificates
+            [] View
+        [] View products
+[] Representative pages
+    [x] Login 
+    [x] Register
+    [] Home
+    [] Company
+        [] Certificates
+            [] View
+            [] Add 
+        [] Import products
+        [] View products
+            [] View&edit specific product
+        [] Requests
+            [] View list & approve/reject
+        [] Representatives
+            [] View list & remove account
+        [] Consultants
+            [] View list
+                [] View details & dissmiss
+                    [] View sales
+                    [] View consultations
+        [] Settings (Optional)
+[] Make a distinquish between roles for the future as a new home page (Optional)        
+ 
+<CLIENT-MOBILE>
 ...

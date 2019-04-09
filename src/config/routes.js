@@ -3,7 +3,7 @@ module.exports = {
     REPRESENTATIVE: 'representative/',
     CUSTOMER: 'customer/',
     CONSULTANT: 'consultant/',
-    COMPANY: 'companie/',
+    COMPANY: 'company/',
     PRODUCT: 'product/',
     ORDER: 'order/',
     CONSULTATION: 'consultation/',

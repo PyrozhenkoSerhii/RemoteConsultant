@@ -30,6 +30,9 @@ const Navigation = () => {
                 {context.token && <li className="nav-item">
                     <Link className="nav-link" to="/login" onClick={context.logoutRepresentative}>Logout</Link>
                 </li>}
+                {context.token && context.representative.fullname && <li className="nav-item">
+                    <Link className="nav-link" to="/profile">{context.representative.fullname}</Link>
+                </li>}
             </ul>
         </div>
     </nav>

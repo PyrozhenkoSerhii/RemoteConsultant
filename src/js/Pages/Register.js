@@ -38,7 +38,7 @@ const Register = ({ alert }) => {
             })
             .catch(err => {
                 console.log(err.response)
-                alert.error(err.response.data.error)
+                alert.error(JSON.stringify(err.response.data.error))
             })
 
 

@@ -6,8 +6,8 @@ export default React.createContext({
         email: '',
         fullname: '',
         phone: '',
-        image: ''
-
+        image: '',
+        company: ''
     },
     token: null,
     authenticateRepresentative: (representative, token) => { },
