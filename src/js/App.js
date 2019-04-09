@@ -6,7 +6,7 @@ import Navigation from './Navigation'
 import Home from './Pages/Home'
 import Login from './Pages/Login'
 import Register from './Pages/Register'
-import Profile from './Pages/Profile'
+import Company from './Pages/Company/Main'
 
 import PrivateRoute from './Components/HOCs/PrivateRoute'
 import RepresentativeProvider from './state/providers/RepresentativeProvider'
@@ -18,9 +18,9 @@ const App = () => (
 
         <Switch>
             <Route exact path='/' component={Home} />
+            <PrivateRoute path="/company" component={Company} />
             <Route path='/login' render={(props) => <Login {...props} />} />
             <Route path='/register' render={(props) => <Register {...props} />} />
-            <PrivateRoute path="/profile" component={Profile} />
         </Switch>
     </RepresentativeProvider>
 )

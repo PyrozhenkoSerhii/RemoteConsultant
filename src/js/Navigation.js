@@ -19,7 +19,7 @@ const Navigation = () => {
                     <Link className="nav-link" to="/">Home</Link>
                 </li>
                 {context.token && <li className="nav-item">
-                    <Link className="nav-link" to="/profile">Profile</Link>
+                    <Link className="nav-link" to="/company">Company</Link>
                 </li>}
                 {!context.token && <li className="nav-item">
                     <Link className="nav-link" to="/register">Register</Link>
