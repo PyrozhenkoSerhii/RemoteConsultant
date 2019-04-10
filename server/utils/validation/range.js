@@ -18,5 +18,6 @@ module.exports = Object.freeze({
     price: { min: 1, max: 100000 },
     sum: { min: 1, max: 10000000 },
     competence: { min: 1, max: 5 },
-    friendliness: { min: 1, max: 5 }
+    friendliness: { min: 1, max: 5 },
+    type: {min: 2, max: 50}
 })

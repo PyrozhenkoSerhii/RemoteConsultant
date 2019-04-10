@@ -12,7 +12,7 @@ const router = express.Router()
 
 
 router.get('/product/list/', wrap(async (req, res) => {
-    const products = await Product.find()
+    const products = await Product.find(req.query)
     res.status(200).send({ data: products })
 }))
 

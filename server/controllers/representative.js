@@ -14,7 +14,7 @@ const router = express.Router()
 
 
 router.get('/representative/list', wrap(async (req, res) => {
-    const representatives = await Representative.find()
+    const representatives = await Representative.find(req.query)
     res.status(200).send({ data: representatives })
 }))
 

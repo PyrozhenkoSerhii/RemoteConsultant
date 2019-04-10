@@ -9,7 +9,6 @@ import logger from '../utils/logger'
 
 import { Request } from './submodels/Request'
 import Representative from './Representative'
-import { Certificate } from './submodels/Certificate';
 
 
 const CompanySchema = new Schema({
@@ -53,15 +52,18 @@ const CompanySchema = new Schema({
         maxlength: [url.max, messages.restrictions.url]
     },
     requests: [Request],
-    certificates: [Certificate], 
+    certificates: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Certificate'
+    }],
     representatives: [{
         type: Schema.Types.ObjectId,
         ref: 'Consultant'
-    }], 
+    }],
     consultants: [{
         type: Schema.Types.ObjectId,
         ref: 'Consultant'
-    }], 
+    }],
     products: [{
         type: Schema.Types.ObjectId,
         ref: 'Product'

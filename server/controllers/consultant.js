@@ -11,7 +11,7 @@ const router = express.Router()
 
 
 router.get('/consultant/list', wrap(async (req, res) => {
-    const consultants = await Consultant.find()
+    const consultants = await Consultant.find(req.query)
     res.status(200).send({ data: consultants })
 }))
 
@@ -56,14 +56,14 @@ router.post('/consultant/authenticate', wrap(async (req, res) => {
  *  @param {string} field Field you want to change
  *  @param {string|number|array|object|boolean}  value New value
  *  @param {string} old (Optional) Must be provided if you want to change password, 
- *  Note: 'Bill', 'company', 'verified', 'completed' fields can't be changed explicitly using this method
+ *  Note: 'Bill', 'verified', 'completed' fields can't be changed explicitly using this method
  *        'Completed' field may be set to true if all fields required for it was initialized
  */
 router.patch('/consultant/list/:id', isObjectId, wrap(async (req, res) => {
     const { field, value, old } = req.body
 
     if (!field || !value) return res.status(400).send({ error: `Wrong data! Field and value must be provided` })
-    if (['bill', 'company', 'verified', 'completed'].includes(field)) {
+    if (['bill', 'verified', 'completed'].includes(field)) {
         return res.status(400).send({ error: `${field} field can't be changed this way ` })
     }
 

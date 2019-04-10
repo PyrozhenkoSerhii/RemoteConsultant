@@ -21,7 +21,8 @@ module.exports = Object.freeze({
         customer: 'https://pngimage.net/wp-content/uploads/2018/06/profile-png-5.png',
         product: 'https://pngimage.net/wp-content/uploads/2018/06/icon-product-png-1.png',
         representative: 'https://pngimage.net/wp-content/uploads/2018/05/consultant-png-3.png',
-        company: 'https://static.thenounproject.com/png/509354-200.png'
+        company: 'https://static.thenounproject.com/png/509354-200.png',
+        certificate: 'http://www.i2clipart.com/cliparts/a/7/3/d/clipart-certificate-512x512-a73d.png',
     },
     rating: 50,
     bill: 0

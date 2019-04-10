@@ -11,7 +11,7 @@ const router = express.Router()
 
 
 router.get('/customer/list/', wrap(async (req, res) => {
-    const customer = await Customer.find()
+    const customer = await Customer.find(req.query)
     return res.status(200).send({ data: customer })
 }))
 

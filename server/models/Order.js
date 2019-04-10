@@ -13,7 +13,8 @@ const OrderSchema = new Schema({
     customer: {
         type: Schema.Types.ObjectId,
         ref: 'Customer',
-        required: [true, messages.required.customer]
+        required: [true, messages.required.customer],
+        index: true
     },
     product: {
         type: Schema.Types.ObjectId,

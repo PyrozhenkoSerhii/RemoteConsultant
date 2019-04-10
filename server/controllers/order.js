@@ -9,7 +9,7 @@ const router = express.Router()
 
 
 router.get('/order/list/', wrap(async (req, res) => {
-    const orders = await Order.find()
+    const orders = await Order.find(req.query)
     res.status(200).send({ data: orders })
 }))
 

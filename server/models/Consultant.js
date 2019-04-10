@@ -9,7 +9,6 @@ import regex from '../utils/validation/regex'
 import { email, username, fullname, password, matureAge, url, rating, info } from '../utils/validation/range'
 import logger from '../utils/logger'
 
-import { Certificate } from './submodels/Certificate'
 import { Language } from './submodels/Language'
 import Company from './Company'
 
@@ -91,7 +90,10 @@ const ConsultantSchema = new Schema({
         minlength: [url.min, messages.restrictions.url],
         maxlength: [url.max, messages.restrictions.url]
     },
-    certificate: Certificate,
+    certificate: {
+        type: Schema.Types.ObjectId,
+        ref: 'Certificate'
+    },
     languages: [Language],
     company: {
         type: Schema.Types.ObjectId,

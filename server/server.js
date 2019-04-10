@@ -20,6 +20,7 @@ import consultation from './controllers/consultation'
 import product from './controllers/product'
 import representative from './controllers/representative'
 import order from './controllers/order'
+import certificate from './controllers/certificate'
 
 
 const api = express()
@@ -44,7 +45,7 @@ api.use(express.static(path.join(__dirname, 'public')))
 api.use(cors())
 api.use(bodyParser.urlencoded({ extended: true }))
 api.use(bodyParser.json())
-api.use(limiter)
+// api.use(limiter)
 
 api.use(loggerMiddleware)
 
@@ -74,6 +75,7 @@ api.use('/api/', consultant)
 api.use('/api/', consultation)
 api.use('/api/', representative)
 api.use('/api/', order)
+api.use('/api/', certificate)
 api.use(errorHandler)
 api.all('*', (req, res) => {
     res.status(404).send({ error: `Path ${req.originalUrl} with method ${req.method} not found!` })

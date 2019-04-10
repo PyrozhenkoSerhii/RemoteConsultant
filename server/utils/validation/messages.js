@@ -35,6 +35,8 @@ module.exports = Object.freeze({
         usefulness: `Usefulness is required`,
         competence: `Competence is required`,
         friendliness: `Impression is required`,
+
+        type: `Type is required`,
     },
     match: {
         password: `Wrong password format, its length must be at least 8 symbols and contain at least 1 number`,
@@ -64,6 +66,7 @@ module.exports = Object.freeze({
         price: `Price must be ranged from ${range.price.min} to ${range.price.max}`,
         sum: `Sum must be ranged from ${range.secret.min} to ${range.secret.max}`,
         competence: `Competence must be ranged from ${range.competence.min} to ${range.competence.max}`,
-        friendliness: `Impression must be ranged from ${range.friendliness.min} to ${range.friendliness.max}`
+        friendliness: `Impression must be ranged from ${range.friendliness.min} to ${range.friendliness.max}`,
+        type: `Type length must be ranged from ${range.type.min} to ${range.type.max}`,
     }
 })

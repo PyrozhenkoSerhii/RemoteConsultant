@@ -17,7 +17,8 @@ const ConsultationSchema = new Schema({
     consultant: {
         type: Schema.Types.ObjectId,
         ref: 'Consultant',
-        required: [true, messages.required.consultant]
+        required: [true, messages.required.consultant],
+        index: true
     },
     product: {
         type: Schema.Types.ObjectId,

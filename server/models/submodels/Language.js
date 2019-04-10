@@ -4,8 +4,6 @@ import messages from '../../utils/validation/messages'
 import { language } from '../../utils/validation/defaults'
 import { title } from '../../utils/validation/range'
 
-import Certificate from './Certificate'
-
 
 exports.Language = new Schema({
     title: {
@@ -19,6 +17,5 @@ exports.Language = new Schema({
         type: String,
         required: [true, messages.required.level],
         enum: language.enum
-    },
-    certificate: [Certificate]
+    }
 })

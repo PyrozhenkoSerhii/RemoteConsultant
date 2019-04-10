@@ -13,7 +13,7 @@ const router = express.Router()
 
 
 router.get('/company/list/', wrap(async (req, res) => {
-    const companies = await Company.find()
+    const companies = await Company.find(req.query)
     res.status(200).send({ data: companies })
 }))
 
