@@ -11,7 +11,7 @@ import { BASE_URL, PRODUCT, GET, DELETE, PUT } from '../../../../config/routes'
 import { buildUrl } from '../../../functions/query'
 
 
-const Product = ({ data: company, alert }) => {
+const Product = ({ company, alert }) => {
     const [modified, setModified] = useState('')
 
     // _id of product which is editable now

@@ -8,7 +8,7 @@ import { buildUrl } from '../../../functions/query'
 import { BASE_URL, COMPANY, PATCH } from '../../../../config/routes'
 
 
-const Request = ({ data: company, alert }) => {
+const Request = ({ company, alert }) => {
     const [requests, setRequests] = useState(company.requests)
 
     const handleRequest = (approved, request) => {

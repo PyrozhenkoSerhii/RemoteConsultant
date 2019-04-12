@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import PrivateRoute from '../../Components/HOCs/PrivateRoute'
 
@@ -7,7 +7,7 @@ import representativeContext from '../../state/context/representative-context';
 import { BASE_URL, COMPANY, GET } from '../../../config/routes'
 import { buildUrl } from '../../functions/query'
 
-import Main from '../../Components/Company/Main'
+import MainComponent from '../../Components/Company/Main'
 import Navigation from './Navigation'
 
 import Certificate from './subpages/Certificate'
@@ -20,10 +20,11 @@ import Representative from './subpages/Representative'
 import Loading from '../../Components/Loading'
 import Error from '../../Components/Error'
 
-const Profile = () => {
+const Main = () => {
     const context = useContext(representativeContext)
 
     const [loading, company, error] = useHTTP(buildUrl(BASE_URL + COMPANY + GET, context.representative.company), [])
+
 
     return (
         <React.Fragment>
@@ -33,15 +34,15 @@ const Profile = () => {
                 !company ? <Error error={error} /> :
                     <div className='company-wrapper'>
 
-                        <Main company={company} />
+                        <MainComponent company={company} />
 
                         <Switch>
-                            <PrivateRoute path='/company/certificates' component={Certificate} data={company} />
-                            <PrivateRoute exact path="/company/products" component={Product} data={company} />
-                            <PrivateRoute path="/company/products/import" component={Import} data={company} />
-                            <PrivateRoute path="/company/requests" component={Request} data={company} />
-                            <PrivateRoute path="/company/consultants" component={Consultant} data={company} />
-                            <PrivateRoute path="/company/representatives" component={Representative} data={company} />
+                            <PrivateRoute path='/company/certificates' component={Certificate} company={company} />
+                            <PrivateRoute exact path="/company/products" component={Product} company={company} />
+                            <PrivateRoute path="/company/products/import" component={Import} company={company} />
+                            <PrivateRoute path="/company/requests" component={Request} company={company} />
+                            <PrivateRoute path="/company/consultants" component={Consultant} company={company} />
+                            <PrivateRoute path="/company/representatives" component={Representative} company={company} />
                         </Switch>
                     </div>
             }
@@ -51,4 +52,4 @@ const Profile = () => {
 }
 
 
-export default Profile
+export default React.memo(Main)

@@ -7,6 +7,7 @@ module.exports = {
     PRODUCT: 'product/',
     ORDER: 'order/',
     CONSULTATION: 'consultation/',
+    CERTIFICATE: 'certificate/',
     GET: 'list/',
     PUT: 'list/',
     PATCH: 'list/',

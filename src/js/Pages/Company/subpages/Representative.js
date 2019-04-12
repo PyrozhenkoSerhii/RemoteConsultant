@@ -11,7 +11,7 @@ import { BASE_URL, REPRESENTATIVE, GET, DELETE } from '../../../../config/routes
 import { buildUrl } from '../../../functions/query'
 
 
-const Representative = ({ data: company, alert }) => {
+const Representative = ({ company, alert }) => {
     const [modified, setModified] = useState('')
     const [loading, representatives, error] = useHTTP(buildUrl(BASE_URL + REPRESENTATIVE + GET, null, { company: company._id }), [modified])
 

@@ -19,8 +19,9 @@ router.get('/company/list/', wrap(async (req, res) => {
 
 
 router.get('/company/list/:id', isObjectId, wrap(async (req, res) => {
-    const company = await Company.findById(req.params.id)
+    const company = await Company.findById(req.params.id).populate('certificates')
     if (!company) return res.status(400).send({ error: `Company Not Found` })
+    console.log(company)
     res.status(200).send({ data: company })
 }))
 
@@ -72,7 +73,8 @@ router.patch('/company/list/:id', isObjectId, wrap(async (req, res) => {
     if (validationError) return res.status(400).send({ error: validationError.errors })
 
     const saved = await company.save()
-    res.status(200).send({ data: saved })
+    const populated = await Company.populate(saved, 'certificates')
+    res.status(200).send({ data: populated })
 }))
 
 

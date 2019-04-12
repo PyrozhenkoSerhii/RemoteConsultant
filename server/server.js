@@ -45,7 +45,7 @@ api.use(express.static(path.join(__dirname, 'public')))
 api.use(cors())
 api.use(bodyParser.urlencoded({ extended: true }))
 api.use(bodyParser.json())
-// api.use(limiter)
+api.use(limiter)
 
 api.use(loggerMiddleware)
 

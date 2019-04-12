@@ -11,7 +11,7 @@ import { useHTTP } from '../../../hooks/http'
 import { BASE_URL, CONSULTANT, GET, PATCH } from '../../../../config/routes'
 import { buildUrl } from '../../../functions/query'
 
-const Consultant = ({ data: company, alert }) => {
+const Consultant = ({ company, alert }) => {
     const [modified, setModified] = useState('')
     const [loading, consultants, error] = useHTTP(buildUrl(BASE_URL + CONSULTANT + GET, null, { company: company._id }), [modified])
 
