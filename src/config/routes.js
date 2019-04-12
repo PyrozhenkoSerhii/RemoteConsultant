@@ -9,7 +9,8 @@ module.exports = {
     CONSULTATION: 'consultation/',
     GET: 'list/',
     PUT: 'list/',
+    PATCH: 'list/',
     POST: '',
-    DELETE: '',
+    DELETE: 'list/',
     AUTHENTICATE: 'authenticate'
 }

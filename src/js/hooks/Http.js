@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-
-export const useHTTP = (url, dependencies, param) => {
+/**
+ * Hook to load data when component was mounted
+ * @param {string} url Url with params and query
+ * @param {array} dependencies Rerequest when provided fields were changed
+ * @returns {Array} [loading, data, error]
+ */
+const useHTTP = (url, dependencies) => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState(null)
     const [error, setError] = useState(null)
@@ -10,13 +15,15 @@ export const useHTTP = (url, dependencies, param) => {
     useEffect(() => {
         setLoading(true)
 
-        console.log(`Sending request to ${url} with params ${param}`)
-
-        axios.get(url + param)
-            .then(response => setData(response.data))
+        axios.get(url)
+            .then(response => setData(response.data.data))
             .catch(err => setError(err.response.data.error || 'Unknown error on the server'))
             .finally(setLoading(false))
     }, dependencies)
 
+    if (data) console.log(`Data from ${url}: \n ${JSON.stringify(data, null, 4)}`)
+
     return [loading, data, error]
 }
+
+export { useHTTP }

@@ -3,6 +3,7 @@ import CertificateComponent from '../../../Components/Company/Certificate'
 
 
 const Certificate = () => {
+
     return <CertificateComponent />
 }
 
