@@ -13,5 +13,6 @@ module.exports = {
     PATCH: 'list/',
     POST: '',
     DELETE: 'list/',
-    AUTHENTICATE: 'authenticate'
+    AUTHENTICATE: 'authenticate',
+    IMPORT: 'import/'
 }

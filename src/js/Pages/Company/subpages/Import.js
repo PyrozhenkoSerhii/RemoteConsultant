@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react'
 import { withAlert } from 'react-alert'
 import { useDropzone } from 'react-dropzone'
 import BSON from 'bson'
+import _forEach from 'lodash/forEach'
+import _pull from 'lodash/pull'
 
 import DropZone from '../../../Components/Company/DropZone'
 import Graph from './Graph'
@@ -26,7 +28,6 @@ const Import = ({ company }) => {
     const [importedStructure, setImportedStructure] = useState(null)
     const [products, setProducts] = useState(null)
 
-
     const confirmUpload = () => acceptedFiles.length > 0 && reader.readAsArrayBuffer(acceptedFiles[0])
 
     reader.onload = () => {
@@ -44,6 +45,8 @@ const Import = ({ company }) => {
         }
         finally {
             setProducts(parsed)
+            let keys = Object.keys(parsed[0])
+            _forEach(keys)
             setImportedStructure(Object.keys(parsed[0]))
         }
     }
@@ -67,11 +70,12 @@ const Import = ({ company }) => {
                 confirmUpload={confirmUpload}
                 dropDownClass={dropDownClass}
             />
-            {products && <Graph
+            {importedStructure && <Graph
                 products={products}
                 importedStructure={importedStructure}
                 requiredStructure={requiredStructure}
                 optionalStructure={optionalStructure}
+                company={company}
             />}
         </React.Fragment>
     )

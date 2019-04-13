@@ -67,7 +67,7 @@ router.patch('/product/list/:id', isObjectId, wrap(async (req, res) => {
     if (!product) return res.status(400).send({ error: `Product Not Found` })
 
     if (_isUndefined(product[field])) return res.status(400).send({ error: `Inexistent field provided: ${field}` })
-    if (filed === 'company') return res.status(400).send({error: `Company can't be changed`})
+    if (filed === 'company') return res.status(400).send({ error: `Company can't be changed` })
 
     if (typeof product[field] !== 'object') {
         product[field] = value
@@ -103,6 +103,7 @@ router.patch('/product/list/:id', isObjectId, wrap(async (req, res) => {
  */
 router.post('/product/import', wrap(async (req, res) => {
     const { products } = req.body
+    console.log(products)
 
     if (!products || products instanceof Array === false || typeof products[0] !== 'object')
         return res.status(400).send({ error: `Imported data must be an array with objects` })
