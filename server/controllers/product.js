@@ -103,7 +103,6 @@ router.patch('/product/list/:id', isObjectId, wrap(async (req, res) => {
  */
 router.post('/product/import', wrap(async (req, res) => {
     const { products } = req.body
-    console.log(products)
 
     if (!products || products instanceof Array === false || typeof products[0] !== 'object')
         return res.status(400).send({ error: `Imported data must be an array with objects` })

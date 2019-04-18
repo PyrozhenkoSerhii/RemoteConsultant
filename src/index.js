@@ -6,7 +6,7 @@ import AlertTemplate from 'react-alert-template-basic'
 import 'bootstrap/dist/css/bootstrap.css'
 
 import './style/main.scss'
-import App from './js/App'
+import Distributor from './react/distributor/distributor'
 
 
 const alertOptions = {
@@ -20,7 +20,7 @@ const alertOptions = {
 ReactDOM.render((
     <AlertProvider template={AlertTemplate}{...alertOptions}>
         <BrowserRouter>
-            <App />
+            <Distributor />
         </BrowserRouter>
     </AlertProvider>
 ), document.getElementById('app'))

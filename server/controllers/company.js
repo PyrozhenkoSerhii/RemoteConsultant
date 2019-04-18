@@ -21,7 +21,6 @@ router.get('/company/list/', wrap(async (req, res) => {
 router.get('/company/list/:id', isObjectId, wrap(async (req, res) => {
     const company = await Company.findById(req.params.id).populate('certificates')
     if (!company) return res.status(400).send({ error: `Company Not Found` })
-    console.log(company)
     res.status(200).send({ data: company })
 }))
 
