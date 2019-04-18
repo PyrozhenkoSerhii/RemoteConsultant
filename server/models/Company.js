@@ -9,6 +9,7 @@ import logger from '../utils/logger'
 
 import { Request } from './submodels/Request'
 import Representative from './Representative'
+import { ImportConfig } from './submodels/ImportConfig'
 
 
 const CompanySchema = new Schema({
@@ -51,6 +52,7 @@ const CompanySchema = new Schema({
         minlength: [url.min, messages.restrictions.url],
         maxlength: [url.max, messages.restrictions.url]
     },
+    importConfig: ImportConfig,
     requests: [Request],
     certificates: [{
         type: Schema.Types.ObjectId,
