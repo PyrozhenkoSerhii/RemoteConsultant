@@ -4,7 +4,7 @@ import Authentication from '../distributor/authentication'
 import globalContext from '../tools/state/context/global-context'
 
 
-const WithAuthenticate = ({ entity, callbackUrl }) => Component => {
+const WithAuthenticate = (entity, callbackUrl, Component) => {
     const WithContextComponent = () => {
         const context = useContext(globalContext)
 
@@ -12,7 +12,7 @@ const WithAuthenticate = ({ entity, callbackUrl }) => Component => {
             return <Authentication callbackUrl={callbackUrl} entity={entity} action='login' />
         }
 
-        return <Component/>
+        return <Component />
     }
     return WithContextComponent
 }

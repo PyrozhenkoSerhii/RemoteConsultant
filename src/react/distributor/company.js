@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Switch } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 
 // pages
 import certificatesPage from '../pages/company/certificates'
@@ -12,7 +12,6 @@ import importPage from '../pages/company/import/import'
 
 // HOCs
 import WithAuthenticate from '../HOCs/WithAuthenticate'
-import PrivateRoute from '../HOCs/PrivateRoute'
 
 // components
 import NavigationComponent from '../Components/Company/Navigation'
@@ -41,13 +40,13 @@ const Company = () => {
             {loading ? <Loading /> :
                 !company ? <Error error={error} /> :
                     <Switch>
-                        <PrivateRoute exact path="/company" component={homePage} entity={entity} />
-                        <PrivateRoute path='/company/certificates' component={certificatesPage} company={company} entity={entity} />
-                        <PrivateRoute exact path="/company/products" component={productsPage} company={company} entity={entity} />
-                        <PrivateRoute path="/company/products/import" component={importPage} company={company} entity={entity} />
-                        <PrivateRoute path="/company/requests" component={requestsPage} company={company} entity={entity} />
-                        <PrivateRoute path="/company/consultants" component={consultantsPage} company={company} entity={entity} />
-                        <PrivateRoute path="/company/representatives" component={representativesPage} company={company} entity={entity} />
+                        <Route exact path="/company" component={homePage} company={company} />
+                        <Route path='/company/certificates' component={certificatesPage} company={company} />
+                        <Route exact path="/company/products" component={productsPage} company={company} />
+                        <Route path="/company/products/import" component={importPage} company={company} />
+                        <Route path="/company/requests" component={requestsPage} company={company} />
+                        <Route path="/company/consultants" component={consultantsPage} company={company} />
+                        <Route path="/company/representatives" component={representativesPage} company={company} />
                     </Switch>
             }
         </React.Fragment>
@@ -55,4 +54,4 @@ const Company = () => {
 }
 
 
-export default WithAuthenticate({ entity, callbackUrl })(Company)
+export default WithAuthenticate(entity, callbackUrl, Company)
