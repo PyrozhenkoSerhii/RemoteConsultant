@@ -10,12 +10,12 @@ import RepresentativesPage from '../pages/company/representatives'
 import RequestsPage from '../pages/company/requests'
 import ImportPage from '../pages/company/import/import'
 
-import withAuthentication from './withAuthentication'
-
 // components
 import NavigationComponent from '../Components/Company/Navigation'
 import Loading from '../Components/Loading'
 import Error from '../Components/Error'
+
+import withAuthentication from './withAuthentication'
 
 // tools
 import globalContext from '../tools/state/context/global-context';

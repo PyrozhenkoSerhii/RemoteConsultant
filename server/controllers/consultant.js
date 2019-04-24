@@ -2,6 +2,7 @@ import express from 'express'
 import _assignIn from 'lodash/assignIn'
 import _forEach from 'lodash/forEach'
 
+import { sign } from '../utils/jwt'
 import Consultant from '../models/Consultant'
 import wrap from '../middlewares/wrap'
 import { isObjectId } from '../middlewares/validators'

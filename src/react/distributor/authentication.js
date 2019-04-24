@@ -2,32 +2,32 @@ import React, { useState, useContext } from 'react'
 import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import { withAlert } from 'react-alert'
+import { Button } from 'react-bootstrap'
 
 import { BASE_URL, REPRESENTATIVE, CUSTOMER, CONSULTANT, POST, AUTHENTICATE } from '../../config/routes'
 import globalContext from '../tools/state/context/global-context'
 
-import CompanyLoginComponent from '../Components/Company/Login'
-import ConsultantLoginComponent from '../Components/Consultant/Login'
-import CustomerLoginComponent from '../Components/Customer/Login'
+// currently login component is the same for all roles
+import LoginComponent from '../Components/Login'
 
 import ConsultantRegisterComponent from '../Components/Consultant/Register'
 import CompanyRegisterComponent from '../Components/Company/Register'
 import CustomerRegisterComponent from '../Components/Customer/Register'
 
 
-const LOGIN_ACTION = 'login'
-const REGISTER_ACTION = 'registration'
+const LOGIN_ACTION = 'LOGIN'
+const REGISTER_ACTION = 'REGISTRATION'
 
 const components = {
-    [LOGIN_ACTION]: {
-        customer: CustomerLoginComponent,
-        consultant: ConsultantLoginComponent,
-        company: CompanyLoginComponent
-    },
     [REGISTER_ACTION]: {
         customer: CustomerRegisterComponent,
         consultant: ConsultantRegisterComponent,
         company: CompanyRegisterComponent
+    },
+    [LOGIN_ACTION]: {
+        customer: LoginComponent,
+        consultant: LoginComponent,
+        company: LoginComponent
     }
 }
 
@@ -48,8 +48,11 @@ const paths = {
 const Authentication = ({ callbackUrl, entity, alert }) => {
     const [validated, setValidated] = useState(false)
     const [formData, setFormData] = useState({})
+
     const [action, setAction] = useState(LOGIN_ACTION)
+
     const [redirection, setRedirection] = useState(false)
+    const [redirectUrl, setRedictUrl] = useState(callbackUrl)
 
     const context = useContext(globalContext)
 
@@ -63,37 +66,47 @@ const Authentication = ({ callbackUrl, entity, alert }) => {
         if (form.checkValidity() === false) event.stopPropagation()
 
         setValidated({ validated: true })
-
         axios.post(paths[action][entity], { ...formData })
             .then(res => {
                 if (action === LOGIN_ACTION) {
                     context.authenticate(entity, res.data.data, res.data.token)
                     setRedirection(true)
                 } else {
-                    alert.info(`You are a ${entity === 'company' ? 'representative' : entity} now!`)
+                    alert.info('Successfully!')
                     toggleAction()
                 }
             })
             .catch(err => {
-                console.log(err.response)
-                alert.error(JSON.stringify(err.response.data.error))
+                console.log(err.response.data.error)
+                alert.error(JSON.stringify(err.response.status === 400 ? `Something wrong with data` : `Unexpected error on the server`))
             })
     }
 
     const toggleAction = () => setAction(action === LOGIN_ACTION ? REGISTER_ACTION : LOGIN_ACTION)
 
+    const back = () => {
+        setRedictUrl('/')
+        setRedirection(true)
+    }
+
     const Component = components[action][entity]
 
     return (
         redirection
-            ? <Redirect to={callbackUrl} />
-            : <Component
-                handleSubmit={handleSubmit}
-                handleUpdate={handleUpdate}
-                validated={validated}
-                data={formData}
-                toggleAction={toggleAction}
-            />
+            ? <Redirect to={redirectUrl} />
+            : (
+                <React.Fragment>
+                    <Button variant="primary" type="button" onClick={back}>Go back</Button>
+                    <Component
+                        handleSubmit={handleSubmit}
+                        handleUpdate={handleUpdate}
+                        validated={validated}
+                        data={formData}
+                        toggleAction={toggleAction}
+                    />
+                </React.Fragment>
+
+            )
     )
 }
 

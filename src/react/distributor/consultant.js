@@ -1,24 +1,35 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
+// pages
+import HomePage from '../pages/consultant/home'
+
+// componenents
 import NavigationComponent from '../Components/Consultant/Navigation'
-import homePage from '../pages/consultant/home'
 
 import withAuthentication from './withAuthentication'
+
+// tools
+import globalContext from '../tools/state/context/global-context';
 
 const entity = 'consultant'
 const callbackUrl = '/consultant'
 
 
-const Consultant = () => (
-    <React.Fragment>
-        <NavigationComponent />
+const Consultant = () => {
+    const context = useContext(globalContext)
 
-        <Switch>
-            <Route exact path="/consultant" component={homePage} />
-        </Switch>
-    </React.Fragment>
-)
+    return (
+        <React.Fragment>
+            <NavigationComponent context={context} entity={entity} />
+
+            <Switch>
+                <Route exact path="/consultant" render={(props) => <HomePage {...props} consultant={context.accounts.info[entity]} />} />
+            </Switch>
+        </React.Fragment>
+    )
+}
+
 
 
 export default withAuthentication(entity, callbackUrl, Consultant)

@@ -13,7 +13,7 @@ const RegisterForm = props => (
                 type="text"
                 placeholder="John Doe"
                 onChange={props.handleUpdate}
-                value={props.data.fullname}
+                value={props.data.fullname || ''}
                 required
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -25,7 +25,7 @@ const RegisterForm = props => (
                 type="email"
                 placeholder="email@example.com"
                 onChange={props.handleUpdate}
-                value={props.data.email}
+                value={props.data.email || ''}
                 required
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -37,7 +37,7 @@ const RegisterForm = props => (
                 type="password"
                 placeholder="Password123"
                 onChange={props.handleUpdate}
-                value={props.data.password}
+                value={props.data.password || ''}
                 required
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -49,7 +49,7 @@ const RegisterForm = props => (
                 type="text"
                 placeholder="(010)1011111 or 0101011111 or 010-101-11-11"
                 onChange={props.handleUpdate}
-                value={props.data.phone}
+                value={props.data.phone || ''}
                 required
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -61,7 +61,7 @@ const RegisterForm = props => (
                 type="text"
                 placeholder="Enter the secret provided by your company"
                 onChange={props.handleUpdate}
-                value={props.data.secret}
+                value={props.data.secret || ''}
                 required
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>

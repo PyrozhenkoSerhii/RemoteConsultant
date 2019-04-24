@@ -14,7 +14,7 @@ const LoginForm = props => (
                 type="email"
                 placeholder="email@example.com"
                 onChange={props.handleUpdate}
-                value={props.data.email}
+                value={props.data.email || ''}
                 required
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -26,7 +26,7 @@ const LoginForm = props => (
                 type="password"
                 placeholder="Password123"
                 onChange={props.handleUpdate}
-                value={props.data.password}
+                value={props.data.password || ''}
                 required
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
