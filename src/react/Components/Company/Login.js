@@ -33,7 +33,7 @@ const LoginForm = props => (
         </Form.Group>
 
         <Button variant="primary" type="submit">Submit</Button>
-        <Button variant="default" type="button" onClick={props.handleRegister}>Create an Account</Button>
+        <Button variant="default" type="button" onClick={props.toggleAction}>Create an Account</Button>
     </Form>
 )
 

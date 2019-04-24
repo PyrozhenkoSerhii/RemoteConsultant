@@ -11,34 +11,34 @@ const Navigation = ({ context, entity }) => {
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mr-auto">
-                {context.accounts.tokens[entity] && <li className="nav-item">
+                <li className="nav-item">
                     <Link className="nav-link" to="/company">Home</Link>
-                </li>}
-                {context.accounts.tokens[entity] && <li className="nav-item">
+                </li>
+                <li className="nav-item">
                     <Link className="nav-link" to="/company/certificates">Certificates</Link>
-                </li>}
-                {context.accounts.tokens[entity] && <li className="nav-item">
+                </li>
+                <li className="nav-item">
                     <Link className="nav-link" to="/company/consultants">Consultants</Link>
-                </li>}
-                {context.accounts.tokens[entity] && <li className="nav-item">
+                </li>
+                <li className="nav-item">
                     <Link className="nav-link" to="/company/products">Products</Link>
-                </li>}
-                {context.accounts.tokens[entity] && <li className="nav-item">
+                </li>
+                <li className="nav-item">
                     <Link className="nav-link" to="/company/products/import">Import</Link>
-                </li>}
-                {context.accounts.tokens[entity] && <li className="nav-item">
+                </li>
+                <li className="nav-item">
                     <Link className="nav-link" to="/company/representatives">Representatives</Link>
-                </li>}
-                {context.accounts.tokens[entity] && <li className="nav-item">
+                </li>
+                <li className="nav-item">
                     <Link className="nav-link" to="/company/requests">Requests</Link>
-                </li>}
+                </li>
 
-                {context.accounts.tokens[entity] && <li className="nav-item">
+                <li className="nav-item">
                     <Link className="nav-link" to="/">Back</Link>
-                </li>}
-                {context.accounts.tokens[entity] && <li className="nav-item">
+                </li>
+                <li className="nav-item">
                     <Link className="nav-link" to="/company" onClick={() => context.logout(entity)}>Logout</Link>
-                </li>}
+                </li>
 
             </ul>
         </div>

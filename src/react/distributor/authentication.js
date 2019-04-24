@@ -10,19 +10,48 @@ import CompanyLoginComponent from '../Components/Company/Login'
 import ConsultantLoginComponent from '../Components/Consultant/Login'
 import CustomerLoginComponent from '../Components/Customer/Login'
 
-import Registration from './registration'
+import ConsultantRegisterComponent from '../Components/Consultant/Register'
+import CompanyRegisterComponent from '../Components/Company/Register'
+import CustomerRegisterComponent from '../Components/Customer/Register'
+
+
+const LOGIN_ACTION = 'login'
+const REGISTER_ACTION = 'registration'
+
+const components = {
+    [LOGIN_ACTION]: {
+        customer: CustomerLoginComponent,
+        consultant: ConsultantLoginComponent,
+        company: CompanyLoginComponent
+    },
+    [REGISTER_ACTION]: {
+        customer: CustomerRegisterComponent,
+        consultant: ConsultantRegisterComponent,
+        company: CompanyRegisterComponent
+    }
+}
+
+const paths = {
+    [LOGIN_ACTION]: {
+        customer: BASE_URL + CUSTOMER + POST + AUTHENTICATE,
+        consultant: BASE_URL + CONSULTANT + POST + AUTHENTICATE,
+        company: BASE_URL + REPRESENTATIVE + POST + AUTHENTICATE
+    },
+    [REGISTER_ACTION]: {
+        customer: BASE_URL + CUSTOMER + POST,
+        consultant: BASE_URL + CONSULTANT + POST,
+        company: BASE_URL + REPRESENTATIVE + POST
+    }
+}
 
 
 const Authentication = ({ callbackUrl, entity, alert }) => {
     const [validated, setValidated] = useState(false)
     const [formData, setFormData] = useState({})
-    const [completedRedirection, setCompletedRedirection] = useState(false)
-    const [registerRedirection, setRegisterRedirection] = useState(false)
+    const [action, setAction] = useState(LOGIN_ACTION)
+    const [redirection, setRedirection] = useState(false)
 
     const context = useContext(globalContext)
-
-    const controller = entity === 'customer' ? CUSTOMER : entity === 'consultant' ? CONSULTANT : REPRESENTATIVE
-    const Component = entity === 'company' ? CompanyLoginComponent : entity === 'customer' ? CustomerLoginComponent : ConsultantLoginComponent
 
     const handleUpdate = ({ target: { id: field, value } }) => setFormData({ ...formData, [field]: value })
 
@@ -35,10 +64,15 @@ const Authentication = ({ callbackUrl, entity, alert }) => {
 
         setValidated({ validated: true })
 
-        axios.post(BASE_URL + controller + POST + AUTHENTICATE, { ...formData })
+        axios.post(paths[action][entity], { ...formData })
             .then(res => {
-                context.authenticate(entity, res.data.data, res.data.token)
-                setCompletedRedirection(true)
+                if (action === LOGIN_ACTION) {
+                    context.authenticate(entity, res.data.data, res.data.token)
+                    setRedirection(true)
+                } else {
+                    alert.info(`You are a ${entity === 'company' ? 'representative' : entity} now!`)
+                    toggleAction()
+                }
             })
             .catch(err => {
                 console.log(err.response)
@@ -46,25 +80,22 @@ const Authentication = ({ callbackUrl, entity, alert }) => {
             })
     }
 
-    const handleRegister = () => setRegisterRedirection(true)
+    const toggleAction = () => setAction(action === LOGIN_ACTION ? REGISTER_ACTION : LOGIN_ACTION)
 
-
-    if (registerRedirection) return <Registration entity={entity} callbackUrl={callbackUrl} />
-    if (completedRedirection) return <Redirect to={callbackUrl} />
+    const Component = components[action][entity]
 
     return (
-        <Component
-            handleSubmit={handleSubmit}
-            handleUpdate={handleUpdate}
-            validated={validated}
-            data={formData}
-            handleRegister={handleRegister}
-        />
+        redirection
+            ? <Redirect to={callbackUrl} />
+            : <Component
+                handleSubmit={handleSubmit}
+                handleUpdate={handleUpdate}
+                validated={validated}
+                data={formData}
+                toggleAction={toggleAction}
+            />
     )
 }
-
-
-
 
 
 export default withAlert()(Authentication)

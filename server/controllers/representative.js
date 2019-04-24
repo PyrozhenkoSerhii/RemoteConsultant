@@ -32,9 +32,9 @@ router.get('/representative/list/:id', isObjectId, wrap(async (req, res) => {
  * @param {object} representative Representative object you want to save
  */
 router.post('/representative/', wrap(async (req, res) => {
-    const { secret, data } = req.body
+    const {secret, ...info} = req.body
 
-    if (!secret || !data) return res.status(400).send({ error: `Secret and personal info are required!` })
+    if (!secret) return res.status(400).send({ error: `Secret is required!` })
 
     const companies = await Company.find({}).select('+secret').exec()
     let match = null
@@ -45,10 +45,10 @@ router.post('/representative/', wrap(async (req, res) => {
         }
     })
     if (!match) return res.status(400).send({ error: `Secret doesn't match any company` })
-    data.company = match._id
+    info.company = match._id
 
 
-    const representative = new Representative({ ...data })
+    const representative = new Representative({ ...info })
 
     const validationError = representative.validateSync()
     if (validationError) return res.status(400).send({ error: validationError.errors })

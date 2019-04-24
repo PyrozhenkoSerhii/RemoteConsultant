@@ -2,16 +2,15 @@ import React, { useContext } from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 // pages
-import certificatesPage from '../pages/company/certificates'
-import consultantsPage from '../pages/company/consultants'
-import homePage from '../pages/company/home'
-import productsPage from '../pages/company/products'
-import representativesPage from '../pages/company/representatives'
-import requestsPage from '../pages/company/requests'
-import importPage from '../pages/company/import/import'
+import CertificatesPage from '../pages/company/certificates'
+import ConsultantsPage from '../pages/company/consultants'
+import HomePage from '../pages/company/home'
+import ProductsPage from '../pages/company/products'
+import RepresentativesPage from '../pages/company/representatives'
+import RequestsPage from '../pages/company/requests'
+import ImportPage from '../pages/company/import/import'
 
-// HOCs
-import WithAuthenticate from '../HOCs/WithAuthenticate'
+import withAuthentication from './withAuthentication'
 
 // components
 import NavigationComponent from '../Components/Company/Navigation'
@@ -24,6 +23,7 @@ import { BASE_URL, COMPANY, GET } from '../../config/routes'
 import { buildUrl } from '../tools/functions/query'
 import { useHTTP } from '../tools/hooks/http'
 
+// are used inside authentication to generalize its logic for different roles
 const entity = 'company'
 const callbackUrl = '/company'
 
@@ -40,13 +40,13 @@ const Company = () => {
             {loading ? <Loading /> :
                 !company ? <Error error={error} /> :
                     <Switch>
-                        <Route exact path="/company" component={homePage} company={company} />
-                        <Route path='/company/certificates' component={certificatesPage} company={company} />
-                        <Route exact path="/company/products" component={productsPage} company={company} />
-                        <Route path="/company/products/import" component={importPage} company={company} />
-                        <Route path="/company/requests" component={requestsPage} company={company} />
-                        <Route path="/company/consultants" component={consultantsPage} company={company} />
-                        <Route path="/company/representatives" component={representativesPage} company={company} />
+                        <Route exact path="/company" render={(props) => <HomePage {...props} company={company} />} />
+                        <Route path='/company/certificates' render={(props) => <CertificatesPage {...props} company={company} />} />
+                        <Route exact path='/company/products' render={(props) => <ProductsPage {...props} company={company} />} />
+                        <Route path='/company/products/import' render={(props) => <ImportPage {...props} company={company} />} />
+                        <Route path='/company/requests' render={(props) => <RequestsPage {...props} company={company} />} />
+                        <Route path='/company/consultants' render={(props) => <ConsultantsPage {...props} company={company} />} />
+                        <Route path='/company/representatives' render={(props) => <RepresentativesPage {...props} company={company} />} />
                     </Switch>
             }
         </React.Fragment>
@@ -54,4 +54,4 @@ const Company = () => {
 }
 
 
-export default WithAuthenticate(entity, callbackUrl, Company)
+export default withAuthentication(entity, callbackUrl, Company)

@@ -1,11 +1,11 @@
 import React from 'react'
 
 
-const Login = () => {
+const Login = () => (
     <React.Fragment>
         <p>Customer Login page</p>
     </React.Fragment>
-}
+)
 
 
 export default Login

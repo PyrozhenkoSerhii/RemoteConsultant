@@ -2,9 +2,12 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import NavigationComponent from '../Components/Consultant/Navigation'
-import loginPage from '../pages/consultant/login'
-import registerPage from '../pages/consultant/register'
 import homePage from '../pages/consultant/home'
+
+import withAuthentication from './withAuthentication'
+
+const entity = 'consultant'
+const callbackUrl = '/consultant'
 
 
 const Consultant = () => (
@@ -13,11 +16,9 @@ const Consultant = () => (
 
         <Switch>
             <Route exact path="/consultant" component={homePage} />
-            <Route path='/consultant/login' component={loginPage} />
-            <Route path='/consultant/register' component={registerPage} />
         </Switch>
     </React.Fragment>
 )
 
 
-export default Consultant
+export default withAuthentication(entity, callbackUrl, Consultant)

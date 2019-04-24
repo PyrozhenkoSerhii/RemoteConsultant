@@ -68,7 +68,7 @@ const RegisterForm = props => (
         </Form.Group>
 
         <Button variant="primary" type="submit">Submit</Button>
-        <Button variant="default" type="button" onClick={props.handleAuthenticate}>Log in</Button>
+        <Button variant="default" type="button" onClick={props.toggleAction}>Log in</Button>
     </Form >
 )
 
