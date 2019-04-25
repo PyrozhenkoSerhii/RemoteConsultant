@@ -16,6 +16,12 @@ module.exports = Object.freeze({
             'buy', 'uncertain', 'not_buy'
         ],
     },
+    mode: {
+        enum: [
+            'FILE_MODE', 'API_MODE'
+        ],
+        default: 'API_MODE'
+    },
     images: {
         consultant: 'https://pngimage.net/wp-content/uploads/2018/05/consultant-png-3.png',
         customer: 'https://pngimage.net/wp-content/uploads/2018/06/profile-png-5.png',

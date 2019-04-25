@@ -3,6 +3,7 @@ import timestamps from 'mongoose-timestamp'
 
 import regex from '../utils/validation/regex'
 import messages from '../utils/validation/messages'
+import defaults from '../utils/validation/defaults'
 import { images } from '../utils/validation/defaults'
 import { title, url, secret, info } from '../utils/validation/range'
 import logger from '../utils/logger'
@@ -69,7 +70,22 @@ const CompanySchema = new Schema({
     products: [{
         type: Schema.Types.ObjectId,
         ref: 'Product'
-    }]
+    }],
+    import: {
+        mode: {
+            type: String,
+            enum: [defaults.mode.enum],
+            default: [defaults.mode.default]
+        },
+        url: {
+            type: String,
+            match: [regex.url, messages.match.url],
+            minlength: [url.min, messages.restrictions.url],
+            maxlength: [url.max, messages.restrictions.url]
+        },
+        interval: Number,
+        structure: Object
+    }
 })
 
 CompanySchema.plugin(timestamps)
