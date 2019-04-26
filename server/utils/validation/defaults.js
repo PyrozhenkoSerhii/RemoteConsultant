@@ -20,7 +20,7 @@ module.exports = Object.freeze({
         enum: [
             'FILE_MODE', 'API_MODE'
         ],
-        default: 'API_MODE'
+        default: 'FILE_MODE'
     },
     images: {
         consultant: 'https://pngimage.net/wp-content/uploads/2018/05/consultant-png-3.png',

@@ -1,76 +1,73 @@
-import React, { useMemo, useState } from 'react'
-import { withAlert } from 'react-alert'
-import { useDropzone } from 'react-dropzone'
-import BSON from 'bson'
-import _forEach from 'lodash/forEach'
-import _pull from 'lodash/pull'
+import React, { useState } from 'react'
 
-import DropZoneComponent from '../../../Components/Company/Import/DropZone'
-import graph from './graph'
+import Settings from './settings'
+import FileLoader from './file-loader'
+import ApiLoader from './api-loader'
+import Graph from './graph'
+import Adapter from './adapter'
 
-const reader = new FileReader()
-const MAX_DOCS_TO_READ = 1000
+const API_MODE = 'API_MODE'
+const FILE_MODE = 'FILE_MODE'
 
 
 const Import = ({ company }) => {
-    const {
-        acceptedFiles,
-        getRootProps,
-        getInputProps,
-        isDragActive,
-        isDragAccept,
-        isDragReject
-    } = useDropzone({ accept: '.json, .bson' })
+    const [settings, setSettings] = useState(company.import)
+    const [mode, setMode] = useState(settings.mode)
 
+    // structures
+    const [importedStructure, setImportedStructure] = useState(null)
     const requiredStructure = ['title', 'category', 'price', 'quantity']
     const optionalStructure = ['image', 'description', 'specification']
 
-    const [importedStructure, setImportedStructure] = useState(null)
+    // data
+    const [rawData, setRawData] = useState(null)
     const [products, setProducts] = useState(null)
+    const [uploadableProducts, setUploadableProducts] = useState(null)
 
-    const confirmUpload = () => acceptedFiles.length > 0 && reader.readAsArrayBuffer(acceptedFiles[0])
-
-    reader.onload = () => {
-        const bufferFile = reader.result
-        const parsed = []
-
-        try {
-            BSON.deserializeStream(new Uint8Array(bufferFile), 0, MAX_DOCS_TO_READ, parsed, 0)
-        }
-        catch (err) {
-            /**
-             * Since we don't know the exact quantity of documents, we will bump into error with empty bson obj
-             * For now we can safely swallow it and get all available documents (not more than MAX_DOCS_TO_READ)
-             */
-        }
-        finally {
-            setProducts(parsed)
-            let keys = Object.keys(parsed[0])
-            _forEach(keys)
-            setImportedStructure(Object.keys(parsed[0]))
-        }
+    const rawData1 = {
+        dummy1: {
+            dummyNested11: {
+                field11: 'field1-1-1',
+                field12: 'field1-1-2',
+                field13: 'field1-1-3',
+                dummyNested111: {
+                    field111: 'field1-1-1-1'
+                }
+            },
+            dummyNested12: {
+                field21: 'field1-2-1',
+                field22: 'field1-2-2',
+                field23: 'field1-2-3'
+            }
+        },
+        dummy2: {
+            dummyNested21: {
+                field: 'field2-1'
+            }
+        },
+        dummy3: 'field3'
     }
-
-    const dropDownClass = useMemo(() => {
-        let className = 'baseStyle'
-        className += isDragActive ? ' activeStyle ' : ''
-        className += isDragAccept ? ' acceptStyle ' : ''
-        className += isDragActive ? ' acceptStyle ' : ''
-        return className
-    }, [isDragAccept, isDragActive, isDragReject]);
-
-
 
     return (
         <React.Fragment>
-            <DropZoneComponent
-                files={acceptedFiles}
-                rootProps={getRootProps}
-                inputProps={getInputProps}
-                confirmUpload={confirmUpload}
-                dropDownClass={dropDownClass}
+            <Settings
+                settings={settings}
+                setSettings={setSettings}
+                setMode={setMode}
+                mode={mode}
+                apiMode={API_MODE}
+                fileMode={FILE_MODE}
             />
-            {importedStructure && <graph
+            {mode === FILE_MODE
+                ? <FileLoader setRawData={setRawData} />
+                : <ApiLoader setRawData={setRawData} url={settings.url} />
+            }
+            {rawData1 && <Adapter
+                rawData={rawData1}
+                setImportedStructure={setImportedStructure}
+                setProducts={setProducts}
+            />}
+            {importedStructure && products && <Graph
                 products={products}
                 importedStructure={importedStructure}
                 requiredStructure={requiredStructure}
