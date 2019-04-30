@@ -5,6 +5,10 @@ const Settings = ({ settings, setSettings, mode, setMode, apiMode, fileMode }) =
 
     const handleMode = mode => setMode(mode)
 
+    const handleSettingsUpdate = () => {
+
+    }
+
     return (
         <React.Fragment>
 
@@ -15,8 +19,8 @@ const Settings = ({ settings, setSettings, mode, setMode, apiMode, fileMode }) =
 
             {mode === apiMode &&
                 <div>
-                    <p>URL:{settings.url || 'Not specified'}</p>
-                    <p>Fetch interval:{settings.interval || 'None'}</p>
+                    <input type="text" onChange={handleSettingsUpdate} value={settings['url'] || ''} placeholder="Please, enter the API url" />
+                    <input type="text" onChange={handleSettingsUpdate} value={settings['interval'] || ''} placeholder="Please, enter the Interval in hours" />
                 </div>
 
             }

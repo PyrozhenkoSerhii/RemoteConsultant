@@ -1,4 +1,11 @@
 import React, { useState } from 'react'
+import _forEach from 'lodash/forEach'
+import _find from 'lodash/find'
+import _isArray from 'lodash/isArray'
+import axios from 'axios'
+import { withAlert } from 'react-alert'
+
+import { BASE_URL, PRODUCT, POST, IMPORT } from '../../../../config/routes'
 
 import Settings from './settings'
 import FileLoader from './file-loader'
@@ -10,43 +17,112 @@ const API_MODE = 'API_MODE'
 const FILE_MODE = 'FILE_MODE'
 
 
-const Import = ({ company }) => {
+const testData = {
+    data: {
+        products: [{
+            main: {
+                name: 'LG',
+                type: 'tv',
+                cost: 1000,
+                number: 1000,
+            },
+            image: 'http:...',
+            additional: {
+                size: '24inch',
+                resolution: '1920',
+                warranty: '24 months'
+            }
+        },
+        {
+            main: {
+                name: 'Pixel',
+                type: 'phone',
+                cost: 1500,
+                number: 1000,
+            },
+            image: 'http:...',
+            additional: {
+                size: '5inch',
+                resolution: '1920',
+                warranty: '24 months'
+            }
+        }],
+        dummyObj: {
+            test1: 'test1',
+            test2: 'test2',
+            test3: 'test3'
+        }
+    },
+    header: {
+        header1: {
+            reqType: 'application/json'
+        }
+    },
+    status: 200
+}
+
+
+const Import = ({ company, alert }) => {
     const [settings, setSettings] = useState(company.import)
     const [mode, setMode] = useState(settings.mode)
+    const [saveAsPattern, setSaveAsPattern] = useState(false)
 
     // structures
-    const [importedStructure, setImportedStructure] = useState(null)
     const requiredStructure = ['title', 'category', 'price', 'quantity']
     const optionalStructure = ['image', 'description', 'specification']
 
+    const [importedStructure, setImportedStructure] = useState(null)
+    const [connections, setConnections] = useState(null)
+    const [fieldsPathMap, setFieldsPathMap] = useState(null)
+    const [startPath, setStartPath] = useState(null)
+
     // data
     const [rawData, setRawData] = useState(null)
-    const [products, setProducts] = useState(null)
     const [uploadableProducts, setUploadableProducts] = useState(null)
 
-    const rawData1 = {
-        dummy1: {
-            dummyNested11: {
-                field11: 'field1-1-1',
-                field12: 'field1-1-2',
-                field13: 'field1-1-3',
-                dummyNested111: {
-                    field111: 'field1-1-1-1'
+
+
+
+    const restructure = () => {
+        let startObject = rawData;
+        _forEach(startPath.split('.'), part => startObject = startObject[part])
+
+        if (!_isArray(startObject)) return alert('Wrong import data! Only <arrays> are supported!')
+
+        const resultProducts = []
+        _forEach(startObject, rawProduct => {
+            const newProduct = {}
+            _forEach(connections, connection => {
+                const realPath = fieldsPathMap[connection.from]
+
+                let data = rawProduct
+                _forEach(realPath.split('.'), part => data = data[part])
+
+                if (connection.to === 'specification') {
+                    if (!newProduct.specification) newProduct.specification = {}
+                    newProduct.specification[connection.from] = data
+                } else {
+                    newProduct[connection.to] = data
                 }
-            },
-            dummyNested12: {
-                field21: 'field1-2-1',
-                field22: 'field1-2-2',
-                field23: 'field1-2-3'
-            }
-        },
-        dummy2: {
-            dummyNested21: {
-                field: 'field2-1'
-            }
-        },
-        dummy3: 'field3'
+            })
+
+            newProduct['company'] = company._id
+            resultProducts.push(newProduct)
+        })
+
+        if (saveAsPattern) setSettings({ ...settings, fieldsPathMap, connections, startPath })
+
+        setUploadableProducts(resultProducts)
     }
+
+    const handleSaveAsPattern = ({ target }) => setSaveAsPattern(target.checked)
+
+    const uploadProducts = () => {
+        axios.post(BASE_URL + PRODUCT + POST + IMPORT, { products: uploadableProducts })
+            .then(response => console.log(response.data.data))
+            .catch(err => console.log(err.response.data.error))
+    }
+
 
     return (
         <React.Fragment>
@@ -62,21 +138,28 @@ const Import = ({ company }) => {
                 ? <FileLoader setRawData={setRawData} />
                 : <ApiLoader setRawData={setRawData} url={settings.url} />
             }
-            {rawData1 && <Adapter
-                rawData={rawData1}
+            {rawData && <Adapter
+                rawData={rawData}
                 setImportedStructure={setImportedStructure}
-                setProducts={setProducts}
+                setFieldsPathMap={setFieldsPathMap}
+                setStartPath={setStartPath}
             />}
-            {importedStructure && products && <Graph
-                products={products}
+            {importedStructure && <Graph
                 importedStructure={importedStructure}
                 requiredStructure={requiredStructure}
                 optionalStructure={optionalStructure}
-                company={company}
+                setConnections={setConnections}
             />}
+            {connections &&
+                <div>
+                    <input type="checkbox" onClick={handleSaveAsPattern}/>Save as this structure as a pattern
+                    <button onClick={restructure}>Restructure</button>
+                    <button onClick={uploadProducts}>Upload</button>
+                </div>
+            }
         </React.Fragment>
     )
 }
 
 
-export default Import
+export default withAlert()(Import)

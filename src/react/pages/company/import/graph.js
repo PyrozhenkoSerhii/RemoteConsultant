@@ -7,10 +7,7 @@ import _pull from 'lodash/pull'
 import _some from 'lodash/some'
 import _mapKeys from 'lodash/mapKeys'
 
-import axios from 'axios'
-import { withAlert } from 'react-alert'
 
-import { BASE_URL, PRODUCT, POST, IMPORT } from '../../../../config/routes'
 
 cytoscape.use(edgehandles)
 
@@ -91,7 +88,7 @@ const style = [
  *       [] checks
  *       [] reset
  */
-const Graph = ({ requiredStructure, importedStructure, optionalStructure, products, company, alert }) => {
+const Graph = ({ requiredStructure, importedStructure, optionalStructure, setConnections }) => {
   const [connection, setConnection] = useState(null)
   const [verified, setVerified] = useState(null)
 
@@ -153,29 +150,7 @@ const Graph = ({ requiredStructure, importedStructure, optionalStructure, produc
     }
   }
 
-  const importProducts = () => {
-    const resultProducts = []
-    _forEach(products, product => {
-      const newProduct = {}
-      _forEach(connections, connection => {
-        if (connection.to === 'specification') {
-          if (!newProduct.specification) newProduct.specification = {}
-          newProduct.specification[connection.from] = product[connection.from]
-        } else {
-          newProduct[connection.to] = product[connection.from]
-        }
-      })
-      newProduct['company'] = company._id
-      resultProducts.push(newProduct)
-    })
-
-    console.log(resultProducts)
-
-    axios.post(BASE_URL + PRODUCT + POST + IMPORT, { products: resultProducts })
-      .then(response => console.log(response.data.data))
-      .catch(err => console.log(err.response.data.error))
-  }
-
+  const confirmStructure = () => setConnections(connections)
 
   return (
     <div className="container">
@@ -184,10 +159,10 @@ const Graph = ({ requiredStructure, importedStructure, optionalStructure, produc
       <div id="graph" ></div>
       {!verified && <button onClick={checkRequired}>Check</button>}
       {verified === false && <em>Please, connect all required fields...</em>}
-      {verified && <button onClick={importProducts}>Restructure and import</button>}
+      {verified && <button onClick={confirmStructure}>Confirm</button>}
     </div >
   );
 }
 
 
-export default React.memo(withAlert()(Graph))
+export default React.memo(Graph)
