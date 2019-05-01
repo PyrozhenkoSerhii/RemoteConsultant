@@ -14,5 +14,6 @@ module.exports = {
     POST: '',
     DELETE: 'list/',
     AUTHENTICATE: 'authenticate',
-    IMPORT: 'import/'
+    IMPORT: 'import/',
+    IMPORT_CONFIG:'importConfig/'
 }

@@ -23,6 +23,8 @@ import order from './controllers/order'
 import certificate from './controllers/certificate'
 
 
+
+
 const api = express()
 const limiter = requestLimiter({
     windowsMs: 15 * 60 * 1000,
@@ -36,6 +38,10 @@ blacklist.configure({
     }
 })
 
+api.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
 
 const enviroment = process.env.NODE_ENV || 'dev'
 if (enviroment === 'dev') api.enable('trust proxy')

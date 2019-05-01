@@ -10,6 +10,9 @@ const errorHandler = (err, req, res, next) => {
         return res.status(400).send({ error: `This ${field} already exists` })
     } else if (err.stack.includes('Cast to ObjectId failed')) {
         return res.status(400).send({ error: `Wrong id provided` })
+    } else if (err.name === 'ValidationError') {
+        // TODO: handle mongoose validation errors here
+        return res.status(400).send({ error: err.errors })
     } else {
         logger.error(err.stack);
         return res.status(500).send({ error: `Error occured on the server. If you are owner, check the logs of the server` });

@@ -106,6 +106,21 @@ router.patch('/company/list/:id/request', isObjectId, wrap(async (req, res) => {
 }))
 
 
+router.patch('/company/list/:id/importConfig', isObjectId, wrap(async (req, res) => {
+
+    const company = await Company.findById(req.params.id)
+    if (!company) return res.status(400).send({ error: `Company Not Found` })
+
+    company.importConfig = req.body.importConfig
+
+    const validationError = company.importConfig.validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
+
+    const saved = await company.save()
+    return res.status(200).send({ data: saved })
+}))
+
+
 router.delete('/company/list/:id', isObjectId, wrap(async (req, res) => {
     const company = await Company.findById(req.params.id)
     if (!company) return res.status(400).send({ error: `Company Not Found` })

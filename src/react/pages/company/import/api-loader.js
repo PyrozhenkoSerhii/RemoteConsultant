@@ -12,7 +12,7 @@ const ApiLoader = ({ url, setRawData, alert }) => {
                 setRawData(data)
 
             })
-            .catch(err => alert('Something went wrong while fetching'))
+            .catch(err => alert.error('Something went wrong while fetching'))
     }
 
     return url

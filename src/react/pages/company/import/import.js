@@ -63,8 +63,7 @@ const testData = {
 
 
 const Import = ({ company, alert }) => {
-    const [settings, setSettings] = useState(company.import)
-    const [mode, setMode] = useState(settings.mode)
+    const [settings, setSettings] = useState(company.importConfig)
     const [saveAsPattern, setSaveAsPattern] = useState(false)
 
     // structures
@@ -127,14 +126,13 @@ const Import = ({ company, alert }) => {
     return (
         <React.Fragment>
             <Settings
+                company={company}
                 settings={settings}
                 setSettings={setSettings}
-                setMode={setMode}
-                mode={mode}
                 apiMode={API_MODE}
                 fileMode={FILE_MODE}
             />
-            {mode === FILE_MODE
+            {settings.mode === FILE_MODE
                 ? <FileLoader setRawData={setRawData} />
                 : <ApiLoader setRawData={setRawData} url={settings.url} />
             }
@@ -152,7 +150,7 @@ const Import = ({ company, alert }) => {
             />}
             {connections &&
                 <div>
-                    <input type="checkbox" onClick={handleSaveAsPattern}/>Save as this structure as a pattern
+                    <input type="checkbox" onClick={handleSaveAsPattern} />Save as this structure as a pattern
                     <button onClick={restructure}>Restructure</button>
                     <button onClick={uploadProducts}>Upload</button>
                 </div>

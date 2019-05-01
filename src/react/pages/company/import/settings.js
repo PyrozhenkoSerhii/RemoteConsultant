@@ -1,32 +1,54 @@
-import React from 'react'
-import { DropdownButton, Dropdown } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { withAlert } from 'react-alert'
+import axios from 'axios'
 
-const Settings = ({ settings, setSettings, mode, setMode, apiMode, fileMode }) => {
+import SettingsComponent from '../../../Components/Company/Import/Settings'
+import { BASE_URL, COMPANY, PATCH, IMPORT_CONFIG } from '../../../../config/routes'
 
-    const handleMode = mode => setMode(mode)
 
-    const handleSettingsUpdate = () => {
+const Settings = ({ company, settings, setSettings, apiMode, fileMode, alert }) => {
+    const [timer, setTimer] = useState(null)
+    const [formData, setFormData] = useState(settings)
 
+    const handleSettingsUpdate = ({ target: { id: field, value } }) => {
+        const data = { ...formData, [field]: value }
+        setFormData(data)
+        sendRequest(data, 1000)
     }
 
+    const handleModeUpdate = mode => {
+        const data = { ...formData, mode }
+        setFormData(data)
+        sendRequest(data, 0)
+    }
+
+    const sendRequest = (data, delay) => {
+        if (timer) clearTimeout(timer)
+
+        setTimer(setTimeout(() => {
+            axios.patch(BASE_URL + COMPANY + PATCH + `${company._id}/` + IMPORT_CONFIG, { importConfig: data })
+                .then(res => {
+                    setSettings(res.data.data.importConfig)
+                    alert.info('Changes saved!')
+                })
+                .catch(err => {
+                    console.log(err.response.data.error)
+                    alert.error('Something went wrong :(')
+                })
+        }, delay))
+    }
+
+
     return (
-        <React.Fragment>
-
-            <DropdownButton title={mode === fileMode ? 'File mode' : 'API mode'} onSelect={handleMode}>
-                <Dropdown.Item eventKey={apiMode} active={mode === apiMode}>API mode</Dropdown.Item>
-                <Dropdown.Item eventKey={fileMode} active={mode === fileMode}>File mode</Dropdown.Item>
-            </DropdownButton>
-
-            {mode === apiMode &&
-                <div>
-                    <input type="text" onChange={handleSettingsUpdate} value={settings['url'] || ''} placeholder="Please, enter the API url" />
-                    <input type="text" onChange={handleSettingsUpdate} value={settings['interval'] || ''} placeholder="Please, enter the Interval in hours" />
-                </div>
-
-            }
-        </React.Fragment>
+        <SettingsComponent
+            apiMode={apiMode}
+            fileMode={fileMode}
+            formData={formData}
+            handleModeUpdate={handleModeUpdate}
+            handleSettingsUpdate={handleSettingsUpdate}
+        />
     )
 }
 
 
-export default Settings
+export default withAlert()(Settings)
