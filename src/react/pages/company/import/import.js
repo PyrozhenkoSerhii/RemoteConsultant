@@ -4,6 +4,7 @@ import _find from 'lodash/find'
 import _isArray from 'lodash/isArray'
 import axios from 'axios'
 import { withAlert } from 'react-alert'
+import { Button } from 'react-bootstrap'
 
 import { BASE_URL, PRODUCT, POST, IMPORT } from '../../../../config/routes'
 
@@ -12,6 +13,7 @@ import FileLoader from './file-loader'
 import ApiLoader from './api-loader'
 import Graph from './graph'
 import Adapter from './adapter'
+import Stepper from './stepper'
 
 const API_MODE = 'API_MODE'
 const FILE_MODE = 'FILE_MODE'
@@ -63,6 +65,9 @@ const testData = {
 
 
 const Import = ({ company, alert }) => {
+    const [step, setStep] = useState(1)
+
+    // company settings
     const [settings, setSettings] = useState(company.importConfig)
     const [saveAsPattern, setSaveAsPattern] = useState(false)
 
@@ -117,44 +122,53 @@ const Import = ({ company, alert }) => {
     const handleSaveAsPattern = ({ target }) => setSaveAsPattern(target.checked)
 
     const uploadProducts = () => {
-        axios.post(BASE_URL + PRODUCT + POST + IMPORT, { products: uploadableProducts })
-            .then(response => console.log(response.data.data))
-            .catch(err => console.log(err.response.data.error))
+        console.log(uploadableProducts)
+        // axios.post(BASE_URL + PRODUCT + POST + IMPORT, { products: uploadableProducts })
+        //     .then(response => console.log(response.data.data))
+        //     .catch(err => console.log(err.response.data.error))
     }
 
 
     return (
         <React.Fragment>
-            <Settings
-                company={company}
-                settings={settings}
-                setSettings={setSettings}
-                apiMode={API_MODE}
-                fileMode={FILE_MODE}
-            />
-            {settings.mode === FILE_MODE
-                ? <FileLoader setRawData={setRawData} />
-                : <ApiLoader setRawData={setRawData} url={settings.url} />
-            }
-            {rawData && <Adapter
+            <Stepper
+                step={step}
+                setStep={setStep}
                 rawData={rawData}
-                setImportedStructure={setImportedStructure}
-                setFieldsPathMap={setFieldsPathMap}
-                setStartPath={setStartPath}
-            />}
-            {importedStructure && <Graph
                 importedStructure={importedStructure}
-                requiredStructure={requiredStructure}
-                optionalStructure={optionalStructure}
-                setConnections={setConnections}
-            />}
-            {connections &&
-                <div>
+                connections={connections}
+                url={settings.url}
+                mode={settings.mode}
+                apiMode={API_MODE}
+            >
+                {step === 1 && <Settings
+                    company={company}
+                    settings={settings}
+                    setSettings={setSettings}
+                    apiMode={API_MODE}
+                    fileMode={FILE_MODE}
+                />}
+                {step === 2 && settings.mode === FILE_MODE && <FileLoader setRawData={setRawData} />}
+                {step === 2 && settings.mode === API_MODE && <ApiLoader setRawData={setRawData} url={settings.url} />}
+                {step === 3 && <Adapter
+                    rawData={rawData}
+                    setImportedStructure={setImportedStructure}
+                    setFieldsPathMap={setFieldsPathMap}
+                    setStartPath={setStartPath}
+                />}
+                {step === 4 && <Graph
+                    importedStructure={importedStructure}
+                    requiredStructure={requiredStructure}
+                    optionalStructure={optionalStructure}
+                    setConnections={setConnections}
+                />}
+                {step === 5 && <div>
                     <input type="checkbox" onClick={handleSaveAsPattern} />Save as this structure as a pattern
-                    <button onClick={restructure}>Restructure</button>
-                    <button onClick={uploadProducts}>Upload</button>
-                </div>
-            }
+                    <Button variant="warning" onClick={restructure}>Restructure</Button>
+                    <Button variant="success" onClick={uploadProducts}>Upload</Button>
+                </div>}
+            </Stepper>
+
         </React.Fragment>
     )
 }

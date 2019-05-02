@@ -8,7 +8,6 @@ import _isObject from 'lodash/isObjectLike'
 import { Button } from 'react-bootstrap'
 
 
-
 const Adapter = ({ rawData, setImportedStructure, setFieldsPathMap, setStartPath }) => {
     let selectedFieldsGenerator = {}
 

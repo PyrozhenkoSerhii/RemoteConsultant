@@ -1,0 +1,63 @@
+// stepper
+.stepper-wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+}
+
+.stepper-content-wrapper {
+    padding-top: 4vh;
+    margin: 0 15%;
+
+    Form {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.stepper-error-wrapper {
+    height: 70px;
+    display: table;
+    margin: 10px 0;
+    width: 100%;
+    background-color: rgb(240, 168, 168);
+
+    .error {
+        color: white;
+        text-align:center; 
+        vertical-align: middle;
+        display: table-cell;   
+    }
+}
+
+.stepper-bottom-wrapper {
+    padding-top: 15px;
+    margin: 0 15%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    padding-bottom: 5vw;
+}
+
+// adapter 
+.chain-default {
+    cursor: pointer;
+}
+
+.chain-current {
+    cursor: pointer;
+    font-weight: 600;
+    color: rgb(9, 172, 71);
+}
+
+.chain-element {
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 5px 0px 5px 15px;
+}
+
+.type-identifier {
+    font-style: italic;
+    color: rgb(49, 44, 44);
+    font-size: 15px;
+}

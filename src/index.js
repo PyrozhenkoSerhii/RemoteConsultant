@@ -10,8 +10,8 @@ import Distributor from './react/distributor/distributor'
 
 
 const alertOptions = {
-    offset: '50px',
-    timeout: 3000,
+    offset: '60px',
+    timeout: 2500,
     position: positions.TOP_CENTER,
     transition: transitions.SCALE
 }

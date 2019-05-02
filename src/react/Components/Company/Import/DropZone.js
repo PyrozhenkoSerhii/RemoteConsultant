@@ -1,8 +1,8 @@
 import React from 'react'
-
+import { Button } from 'react-bootstrap'
 
 const DropZone = ({ rootProps, inputProps, files, confirmUpload, dropDownClass }) => (
-    <div className="container">
+    <React.Fragment>
         <div {...rootProps({ className: dropDownClass })}>
             <input {...inputProps()} />
             <p>Drag&drop or click to select file.</p>
@@ -13,8 +13,8 @@ const DropZone = ({ rootProps, inputProps, files, confirmUpload, dropDownClass }
                 {file.path}
             </div>
         ))}
-        <button onClick={confirmUpload}>Confirm</button>
-    </div>
+        <Button variant="info" onClick={confirmUpload}>Confirm</Button>
+    </React.Fragment>
 )
 
 

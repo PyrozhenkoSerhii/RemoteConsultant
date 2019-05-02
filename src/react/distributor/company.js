@@ -35,7 +35,7 @@ const Company = () => {
 
     return (
         <React.Fragment>
-            <NavigationComponent context={context} entity={entity} />
+            <NavigationComponent context={context} entity={entity} title={company && company.title}/>
 
             {loading ? <Loading /> :
                 !company ? <Error error={error} /> :
