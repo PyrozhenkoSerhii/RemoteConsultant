@@ -93,13 +93,16 @@ const Adapter = ({ rawData, setImportedStructure, setFieldsPathMap, setStartPath
     }
 
     return (
-        <React.Fragment>
-            {renderChain(rawData)}
-            <Button variant='primary' onClick={() => handleObjectSelection(null, rawData)}>Select All</Button>
-
-            {selected && renderSelected()}
-            {selected && <Button variant='success' onClick={handleApprove}>Approve</Button>}
-        </React.Fragment>
+        <div className='adapter-wrapper'>
+            <div className='adapter-objects'>
+                {renderChain(rawData)}
+                <Button variant='primary' onClick={() => handleObjectSelection(null, rawData)}>Select All</Button>
+            </div>
+            <div className='adapter-props'>
+                {selected && renderSelected()}
+                {selected && <Button variant='success' onClick={handleApprove}>Approve</Button>}
+            </div>
+        </div>
     )
 }
 

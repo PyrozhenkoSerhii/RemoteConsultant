@@ -1,17 +1,22 @@
 import React from 'react'
+import { Card, Button, CardGroup } from 'react-bootstrap'
 
 
-const Representative = props => (
-    <React.Fragment>
-        <p>Company Representative component</p>
-        {props.representatives.map(el => (
-            <div className='representative' key={el._id}>
-                <p>{el.fullname}</p>
-                <button onClick={() => props.remove(el._id)}>Remove</button>
-            </div>
-
-        ))}
-    </React.Fragment>
+const Representative = ({ representatives, remove }) => (
+    <div className='representatives-wrapper'>
+        <CardGroup>
+            {representatives.map(representative => (
+                <Card className='representatives-card' key={representative._id} style={{ width: '18rem' }}>
+                    <Card.Img className='representatives-image' variant='top' src={representative.image} />
+                    <Card.Body>
+                        <Card.Title className='representatives-title'>{representative.fullname}</Card.Title>
+                        <Card.Text className='representatives-text'>{representative.note}</Card.Text>
+                        <Button onClick={() => remove(representative._id)} variant='danger'>Remove</Button>
+                    </Card.Body>
+                </Card>
+            ))}
+        </CardGroup>
+    </div>
 )
 
 

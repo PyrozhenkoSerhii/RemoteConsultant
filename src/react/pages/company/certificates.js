@@ -26,7 +26,7 @@ const Certificate = ({ company, alert }) => {
                     setCompanyCertificates(response.data.data.certificates)
                 }
             })
-            .catch(err => alert(err.response.data.error))
+            .catch(err => alert.error(err.response.data.error))
     }
 
 

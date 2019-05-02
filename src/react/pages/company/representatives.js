@@ -18,7 +18,7 @@ const Representative = ({ company, alert }) => {
     const removeRepresentative = id => {
         axios.delete(buildUrl(BASE_URL + REPRESENTATIVE + DELETE, id))
             .then(setModified(id))
-            .catch(error => alert(error.response.data.error))
+            .catch(error => alert.error(error.response.data.error))
     }
 
     return (
