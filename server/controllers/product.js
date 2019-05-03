@@ -3,6 +3,7 @@ import _assignIn from 'lodash/assignIn'
 import _find from 'lodash/find'
 import _isUndefined from 'lodash/isUndefined'
 import _forEach from 'lodash/forEach'
+import _isArray from 'lodash/isArray'
 
 import Product from '../models/Product'
 import wrap from '../middlewares/wrap'
@@ -121,7 +122,19 @@ router.delete('/product/list/:id', isObjectId, wrap(async (req, res) => {
     if (!product) return res.status(400).send({ error: `Product Not Found` })
 
     await product.remove()
-    res.status(200).send({ message: `Product deleted` })
+    res.status(200).send({ message: `Product was deleted` })
+}))
+
+
+router.post('/product/batchDelete', wrap(async (req, res) => {
+    if (!_isArray(req.body)) return res.status(400).send({ error: `Body must be an array` })
+
+    const deleted = await Product.deleteMany({ _id: { $in: req.body } })
+    if (deleted.deletedCount === req.body.length) {
+        res.status(200).send({ message: `Products were deleted` })
+    } else {
+        res.status(500).send({ message: `Something went wrong while deleting` })
+    }
 }))
 
 

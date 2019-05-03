@@ -15,5 +15,6 @@ module.exports = {
     DELETE: 'list/',
     AUTHENTICATE: 'authenticate',
     IMPORT: 'import/',
-    IMPORT_CONFIG:'importConfig/'
+    IMPORT_CONFIG: 'importConfig/',
+    BATCH_DELETE: 'batchDelete/'
 }

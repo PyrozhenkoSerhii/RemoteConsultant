@@ -13,7 +13,7 @@ const DropZone = ({ rootProps, inputProps, files, confirmUpload, dropDownClass }
                 {file.path}
             </div>
         ))}
-        <Button variant="info" onClick={confirmUpload}>Confirm</Button>
+        <Button variant="primary" onClick={confirmUpload}>Confirm</Button>
     </React.Fragment>
 )
 

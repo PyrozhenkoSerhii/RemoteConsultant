@@ -4,46 +4,59 @@ import { withAlert } from 'react-alert'
 
 import Loading from '../../Components/Loading'
 import Error from '../../Components/Error'
-import ProductComponent from '../../Components/Company/Products'
+
+import CustomTable from '../../Components/Table/Table'
+
 
 import { useHTTP } from '../../tools/hooks/http'
-import { BASE_URL, PRODUCT, GET, DELETE, PUT } from '../../../config/routes'
+import { BASE_URL, PRODUCT, GET, DELETE, PUT, BATCH_DELETE } from '../../../config/routes'
 import { buildUrl } from '../../tools/functions/query'
 
 
 const Product = ({ company, alert }) => {
-    const [modified, setModified] = useState('')
+    const [modifiedProduct, setModifiedProduct] = useState(null)
 
-    // _id of product which is editable now
-    const [editMode, setEditMode] = useState(null)
+    const [loading, products, error] = useHTTP(buildUrl(BASE_URL + PRODUCT + GET, null, { company: company._id }), [modifiedProduct])
 
-    const [loading, products, error] = useHTTP(buildUrl(BASE_URL + PRODUCT + GET, null, { company: company._id }), [modified])
-
-    const editProduct = (id, product) => {
-        axios.put(buildUrl(BASE_URL + PRODUCT + PUT, id), product)
-            .then(setModified(id))
-            .catch(err => alert(err.response.data.error))
-            .finally(setEditMode(null))
+    const handleDelete = (products) => {
+        if (products.length === 1) {
+            axios.delete(buildUrl(BASE_URL + PRODUCT + DELETE, products[0]))
+                .then(res => {
+                    alert.info(res.data.message)
+                    setModifiedProduct(products[0])
+                })
+                .catch(err => alert.error(err.response.data.error))
+        } else {
+            axios.post(buildUrl(BASE_URL + PRODUCT + BATCH_DELETE), products)
+                .then(res => {
+                    alert.info(res.data.message)
+                    setModifiedProduct(products[0])
+                })
+                .catch(err => alert.error(err.response.data.error))
+        }
     }
 
-    const deleteProduct = id => {
-        axios.delete(buildUrl(BASE_URL + PRODUCT + DELETE, id))
-            .then(setModified(id))
-            .error(err => alert(err.response.data.error))
+    const handleView = (product) => {
+
     }
 
+    const columns = [
+        { id: 'title', numeric: false, disablePadding: true, label: 'Title' },
+        { id: 'category', numeric: true, disablePadding: false, label: 'Category' },
+        { id: 'price', numeric: true, disablePadding: false, label: 'Price ($)' },
+        { id: 'quantity', numeric: true, disablePadding: false, label: 'Quantity' },
+        { id: 'description', numeric: true, disablePadding: false, label: 'Description' },
+    ]
 
     return (
         loading ? <Loading /> :
             !products ? <Error error={error} /> :
-                <ProductComponent
-                    products={products}
-                    editMode={editMode}
-                    setEditMode={setEditMode}
-                    delete={deleteProduct}
-                    edit={editProduct}
+                <CustomTable
+                    data={products}
+                    handleDelete={handleDelete}
+                    handleView={handleView}
+                    columns={columns}
                 />
-
     )
 }
 
