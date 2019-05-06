@@ -7,13 +7,15 @@ import _pull from 'lodash/pull'
 import _some from 'lodash/some'
 import _mapKeys from 'lodash/mapKeys'
 
+import { Button, Spinner } from 'react-bootstrap'
+
 
 
 cytoscape.use(edgehandles)
 
 
 const prepareData = (data, row, startColumn, xSpace, idModifier, nameModifier = '') => {
-  const padding = { x: 30, y: 50 }
+  const padding = { x: 50, y: 50 }
   return _map(data, (value, index) => ({
     data: { id: idModifier + value, name: nameModifier + value },
     position: { "x": (index + startColumn) * xSpace + padding.x, "y": row * 150 + padding.y }
@@ -145,21 +147,22 @@ const Graph = ({ requiredStructure, importedStructure, optionalStructure, setCon
     })
     if (required.length === 0) {
       setVerified(true)
+      setConnections(connections)
     } else {
       setVerified(false)
     }
   }
 
-  const confirmStructure = () => setConnections(connections)
-
   return (
-    <div className="container">
-      <h5>Please connect fields from your file with fields, required by platform.</h5>
-      <em>Fields with * are required</em>
+    <div className="graph-wrapper animated-slide-down">
+      <p className='header'>Connections</p>
+      <p className='description'>Please connect fields from your file with fields, required by platform. Fields with * are required</p>
+
       <div id="graph" ></div>
-      {!verified && <button onClick={checkRequired}>Check</button>}
-      {verified === false && <em>Please, connect all required fields...</em>}
-      {verified && <button onClick={confirmStructure}>Confirm</button>}
+      <Button variant={verified ? 'success' : 'primary'} onClick={checkRequired}>{verified === true ? 'Connections was set up' : 'Check'}</Button>
+      {verified === false && <div className='stepper-error-wrapper'>
+        <p className='error'>Please, connect all required fields</p>
+      </div>}
     </div >
   );
 }

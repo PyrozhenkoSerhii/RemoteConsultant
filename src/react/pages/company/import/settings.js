@@ -40,7 +40,7 @@ const Settings = ({ company, settings, setSettings, apiMode, fileMode, alert }) 
 
 
     return (
-        <SettingsComponent
+        <SettingsComponent 
             apiMode={apiMode}
             fileMode={fileMode}
             formData={formData}

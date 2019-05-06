@@ -3,7 +3,7 @@ import { DropdownButton, Dropdown, Form } from 'react-bootstrap'
 
 
 const Settings = ({ apiMode, fileMode, formData, handleModeUpdate, handleSettingsUpdate }) => (
-    <React.Fragment>
+    <div className='animated-slide-down'>
         <p className='header'>Settings setup</p>
         <p className='sub-header'>You can change import settings or go to the next step</p>
         <p className='description'>All the data you change will be automatically saved to database after small delay. If you want to import data from API, please specify url first.</p>
@@ -40,7 +40,7 @@ const Settings = ({ apiMode, fileMode, formData, handleModeUpdate, handleSetting
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
         </Form>
-    </React.Fragment>
+    </div>
 )
 
 

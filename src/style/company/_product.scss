@@ -1,0 +1,26 @@
+.product-card {
+    max-width: 350px;
+        
+    .product-image {
+        padding: 10px;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .product-title, .product-category {
+        text-align: center;
+    }
+
+    .product-spec {
+        font-size: 16px;
+        font-style: italic;
+    }
+
+    .product-price-quantity-wrapper, .product-actions-wrapper{
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+    }
+    
+
+}

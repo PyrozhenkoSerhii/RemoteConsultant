@@ -110,6 +110,7 @@
     "jquery": "^3.4.0",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
+    "mdbreact": "^4.13.0",
     "mongoose": "^5.4.10",
     "mongoose-bcrypt": "^1.6.0",
     "mongoose-string-query": "^0.2.7",

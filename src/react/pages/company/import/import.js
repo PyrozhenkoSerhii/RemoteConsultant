@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import _forEach from 'lodash/forEach'
 import _find from 'lodash/find'
 import _isArray from 'lodash/isArray'
-import axios from 'axios'
+import _map from 'lodash/map'
 import { withAlert } from 'react-alert'
-import { Button } from 'react-bootstrap'
 
+import axios from 'axios'
 import { BASE_URL, PRODUCT, POST, IMPORT } from '../../../../config/routes'
 
 import Settings from './settings'
@@ -14,54 +14,11 @@ import ApiLoader from './api-loader'
 import Graph from './graph'
 import Adapter from './adapter'
 import Stepper from './stepper'
+import UploadComponent from '../../../Components/Company/Import/Upload'
+
 
 const API_MODE = 'API_MODE'
 const FILE_MODE = 'FILE_MODE'
-
-
-const testData = {
-    data: {
-        products: [{
-            main: {
-                name: 'LG',
-                type: 'tv',
-                cost: 1000,
-                number: 1000,
-            },
-            image: 'http:...',
-            additional: {
-                size: '24inch',
-                resolution: '1920',
-                warranty: '24 months'
-            }
-        },
-        {
-            main: {
-                name: 'Pixel',
-                type: 'phone',
-                cost: 1500,
-                number: 1000,
-            },
-            image: 'http:...',
-            additional: {
-                size: '5inch',
-                resolution: '1920',
-                warranty: '24 months'
-            }
-        }],
-        dummyObj: {
-            test1: 'test1',
-            test2: 'test2',
-            test3: 'test3'
-        }
-    },
-    header: {
-        header1: {
-            reqType: 'application/json'
-        }
-    },
-    status: 200
-}
 
 
 const Import = ({ company, alert }) => {
@@ -85,7 +42,7 @@ const Import = ({ company, alert }) => {
     const [uploadableProducts, setUploadableProducts] = useState(null)
 
 
-
+    const [switchState, setSwitchState] = useState(false)
 
     const restructure = () => {
         let startObject = rawData;
@@ -119,15 +76,18 @@ const Import = ({ company, alert }) => {
         setUploadableProducts(resultProducts)
     }
 
-    const handleSaveAsPattern = ({ target }) => setSaveAsPattern(target.checked)
-
     const uploadProducts = () => {
-        console.log(uploadableProducts)
-        // axios.post(BASE_URL + PRODUCT + POST + IMPORT, { products: uploadableProducts })
-        //     .then(response => console.log(response.data.data))
-        //     .catch(err => console.log(err.response.data.error))
+        if(switchState) {
+            //saving settings for future use
+        }
+        axios.post(BASE_URL + PRODUCT + POST + IMPORT, { products: uploadableProducts })
+            .then(response => alert.info('Gracefully imported'))
+            .catch(err => console.log(err.response.data.error))
     }
 
+    const handleSwitchState = (event, checked) => setSwitchState(checked)
+
+    if (step === 5 && !uploadableProducts) restructure()
 
     return (
         <React.Fragment>
@@ -162,11 +122,12 @@ const Import = ({ company, alert }) => {
                     optionalStructure={optionalStructure}
                     setConnections={setConnections}
                 />}
-                {step === 5 && <div>
-                    <input type="checkbox" onClick={handleSaveAsPattern} />Save as this structure as a pattern
-                    <Button variant="warning" onClick={restructure}>Restructure</Button>
-                    <Button variant="success" onClick={uploadProducts}>Upload</Button>
-                </div>}
+                {step === 5 && uploadableProducts && <UploadComponent
+                    uploadableProducts={uploadableProducts}
+                    switchState={switchState}
+                    handleSwitchState={handleSwitchState}
+                    uploadProducts={uploadProducts}
+                />}
             </Stepper>
 
         </React.Fragment>

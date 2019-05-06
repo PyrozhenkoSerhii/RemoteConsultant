@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import BSON from 'bson'
 import { useDropzone } from 'react-dropzone'
 import _forEach from 'lodash/forEach'
@@ -21,8 +21,9 @@ const FileLoader = ({ setRawData }) => {
         isDragReject
     } = useDropzone({ accept: '.json, .bson' })
 
-    let type = null
+    const [verified, setVerified] = useState(false)
 
+    let type = null
     const confirmUpload = () => {
         if (acceptedFiles.length > 0) {
             type = acceptedFiles[0].name.split('.').pop()
@@ -59,11 +60,12 @@ const FileLoader = ({ setRawData }) => {
                  */
             }
         }
-        
+
         _map(parsed, value => {
             return clean(value)
         })
 
+        setVerified(true)
         setRawData({ data: parsed, file: { type: type, count: parsed.length } })
     }
 
@@ -95,6 +97,7 @@ const FileLoader = ({ setRawData }) => {
             inputProps={getInputProps}
             confirmUpload={confirmUpload}
             dropDownClass={dropDownClass}
+            verified={verified}
         />
     )
 }

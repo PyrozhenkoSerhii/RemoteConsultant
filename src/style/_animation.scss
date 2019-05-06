@@ -9,6 +9,22 @@
     }
 }
 
+
+@keyframes slide-right {
+    0% {
+        opacity: 0;
+        transform: translateX(200px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .animated-slide-up {
     animation: slide-up 1s ease;
+}
+
+.animated-slide-right {
+    animation: slide-right 0.7s ease;
 }

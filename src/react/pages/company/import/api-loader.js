@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { withAlert } from 'react-alert'
 import { Button } from 'react-bootstrap'
-// import Spinner from 'react-bootstrap/Spinner'
+import { Spinner } from 'react-bootstrap'
 import _forEach from 'lodash/forEach'
 import _map from 'lodash/map'
 import _isObject from 'lodash/isObjectLike'
@@ -21,6 +21,7 @@ const ApiLoader = ({ url, setRawData, alert }) => {
             .then(res => {
                 setRawData(deepCleen(res))
                 setLoading(false)
+                setLoaded(true)
             })
             .catch(err => alert.error('Something went wrong while fetching'))
     }
@@ -39,13 +40,13 @@ const ApiLoader = ({ url, setRawData, alert }) => {
     }
 
     return (
-        <React.Fragment>
+        <div className='animated-slide-down'>
             <p className='header'>Data Import</p>
             <p className='sub-header'>Click Button to load the data from {url}</p>
-            {loading && <Spinner animation="grow" variant="primary" />}
-            {!loaded && <Button onClick={makeImport}>Import products</Button>}
-            {loaded && <em>Data was imported</em>}
-        </React.Fragment>
+            {!loading && !loaded && <Button variant={loaded ? 'success' : 'primary'} onClick={makeImport}>Import products</Button>}
+            {!loading && loaded &&  <p className='info-success'>Sucessfully loaded. You can switch over to the next step</p>}
+            {loading && <Spinner animation="border" variant="primary" />}
+        </div>
     )
 }
 

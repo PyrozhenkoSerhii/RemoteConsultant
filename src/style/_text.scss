@@ -18,3 +18,22 @@
     padding-left: 32px;
     font-style: italic;
 }
+
+
+.text, .text-center {
+    font-size: 17px;
+    font-weight: 350;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.text-center {
+    text-align: center
+}
+
+
+.info-success {
+    color: rgb(25, 145, 25);
+    text-align: center;
+    font-style: italic;
+}

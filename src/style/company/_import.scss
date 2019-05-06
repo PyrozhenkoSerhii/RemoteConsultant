@@ -41,38 +41,83 @@
 }
 
 // adapter 
-.chain-default {
-    cursor: pointer;
-}
 
-.chain-current {
-    cursor: pointer;
-    font-weight: 600;
-    color: rgb(9, 172, 71);
-}
-
-.chain-element {
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 5px 0px 5px 15px;
-}
-
-.type-identifier {
-    font-style: italic;
-    color: rgb(49, 44, 44);
-    font-size: 15px;
-}
 
 .adapter-wrapper {
     display: flex;
     flex-flow: row nowrap;
+    justify-content: space-between;
+    justify-items: center;
+    align-items: center;
 
     .adapter-objects {
-        padding: 0 30px;
         min-width: 40%;
+
+        .chain-default {
+            cursor: pointer;
+            font-weight: 350;
+        }
+        
+        .chain-current {
+            cursor: pointer;
+            font-weight: 500;
+            color: rgb(9, 172, 71);
+        }
+        
+        .chain-element {
+            border: 2px solid rgb(80, 80, 206);
+            border-radius: 10px;
+            padding: 3px 0px 3px 15px;
+            background-color: rgb(247, 247, 247);
+        }
+
+        .chain-element:hover {
+            background-color: rgb(226, 221, 221);
+        }
+        
+        .type-identifier {
+            font-style: italic;
+            color: rgb(49, 44, 44);
+            
+            font-size: 15px;
+            
+        }
     }
 
     .adapter-props {
-        padding: 0 30px;
+        .chain-selected-field {
+            margin: 10px;
+            font-weight: 350;
+            padding: 3px 20px 3px 20px;
+            border: 2px solid rgb(206, 204, 80);
+            border-radius: 10px;
+            background-color: rgb(247, 247, 247);
+        }
     }
+}
+
+
+.graph-wrapper {}
+
+
+.upload-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+
+    .upload-info-wrapper {
+        padding: 0 0 0 30px;
+        flex-grow: 2;
+
+        .upload-actions-wrapper {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-around;
+        }
+
+    }
+
+
 }

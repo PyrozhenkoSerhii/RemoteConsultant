@@ -5,13 +5,14 @@ import _forEach from 'lodash/forEach'
 import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObjectLike'
 
-import { Button } from 'react-bootstrap'
+import AdapterComponent from '../../../Components/Company/Import/Adapter'
 
 
 const Adapter = ({ rawData, setImportedStructure, setFieldsPathMap, setStartPath }) => {
     let selectedFieldsGenerator = {}
 
     const [selected, setSelected] = useState(null)
+    const [approved, setApproved] = useState(false)
 
 
     const isSelected = element => selected && element === selected.element ? 'chain-current' : 'chain-default'
@@ -53,7 +54,7 @@ const Adapter = ({ rawData, setImportedStructure, setFieldsPathMap, setStartPath
 
             if (_isObject(element)) {
                 return (
-                    <div key={field} className={isSelected(element)} style={{ paddingLeft: currentDepth * 15 }}>
+                    <div key={field} className={isSelected(element)} style={{ paddingLeft: currentDepth * 20 }}>
                         <p className='chain-element' onClick={() => handleObjectSelection(currentPath, element)}>
                             <span>{field}</span>
                             <span className="type-identifier">{dataType}</span>
@@ -69,10 +70,10 @@ const Adapter = ({ rawData, setImportedStructure, setFieldsPathMap, setStartPath
         return _map(selected.fields, (value, path) => {
             const selectedField = path.split('.').pop()
             return (
-                <p key={selectedField}>
+                <div key={selectedField} className='chain-selected-field animated-slide-right'>
                     <span>{selectedField}</span>
                     <span className="type-identifier">{buildIdentifier(typeof value)}</span>
-                </p>
+                </div>
             )
         })
     }
@@ -87,22 +88,21 @@ const Adapter = ({ rawData, setImportedStructure, setFieldsPathMap, setStartPath
             fieldsPathMap[field] = path.replace(`${selected.start}.`, '')
         })
 
+        setApproved(true)
         setImportedStructure(fields)
         setFieldsPathMap(fieldsPathMap)
         setStartPath(selected.start)
     }
 
     return (
-        <div className='adapter-wrapper'>
-            <div className='adapter-objects'>
-                {renderChain(rawData)}
-                <Button variant='primary' onClick={() => handleObjectSelection(null, rawData)}>Select All</Button>
-            </div>
-            <div className='adapter-props'>
-                {selected && renderSelected()}
-                {selected && <Button variant='success' onClick={handleApprove}>Approve</Button>}
-            </div>
-        </div>
+        <AdapterComponent
+            renderChain={renderChain}
+            renderSelected={renderSelected}
+            rawData={rawData}
+            selected={selected}
+            approved={approved}
+            handleApprove={handleApprove}
+        />
     )
 }
 
