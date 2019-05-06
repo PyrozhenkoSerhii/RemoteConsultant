@@ -18,9 +18,9 @@ import CustomToolbar from './Toolbar'
 
 
 
-const CustomTable = ({ data, columns, handleDelete, handleView }) => {
+const CustomTable = ({ data, columns, handleDelete, handleView, title }) => {
     const [order, setOrder] = useState('asc')
-    const [orderBy, setOrderBy] = useState('title')
+    const [orderBy, setOrderBy] = useState(columns[0].id)
     const [selected, setSelected] = useState([])
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -105,10 +105,15 @@ const CustomTable = ({ data, columns, handleDelete, handleView }) => {
     const isSelected = id => selected.indexOf(id) !== -1
 
     return (
-        <Paper>
-            <CustomToolbar numSelected={selected.length} handleDelete={deleteInterception} handleView={viewInterception} />
+        <Paper className='animated-slide-up'>
+            <CustomToolbar
+                numSelected={selected.length}
+                handleDelete={deleteInterception}
+                handleView={viewInterception}
+                title={title}
+            />
             <div>
-                <Table aria-labelledby="tableTitle">
+                <Table aria-labelledby="tableTitle" className='animated-slide-up'>
                     <CustomHeader
                         numSelected={selected.length}
                         order={order}
@@ -117,8 +122,9 @@ const CustomTable = ({ data, columns, handleDelete, handleView }) => {
                         onRequestSort={handleRequestSort}
                         rowCount={data.length}
                         columns={columns}
+                        className='animated-slide-up'
                     />
-                    <TableBody>
+                    <TableBody className='animated-slide-up'>
                         {stableSort(data, getSorting(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map(element => {
@@ -132,7 +138,7 @@ const CustomTable = ({ data, columns, handleDelete, handleView }) => {
                                         tabIndex={-1}
                                         key={element._id}
                                         selected={isItemSelected}
-                                        className='product-row'
+                                        className='animated-slide-up'
                                     >
                                         <TableCell padding="checkbox"><Checkbox checked={isItemSelected} /></TableCell>
 

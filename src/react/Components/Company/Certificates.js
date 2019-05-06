@@ -3,19 +3,19 @@ import { Card, Button, CardGroup } from 'react-bootstrap'
 
 
 const Certificate = ({ company, move, all }) => (
-    <div className='certificates-wrapper'>
+    <div className='certificates-wrapper animated-slide-up'>
 
         <div className='certificates-company'>
             <p className='header'>Your trusted certificates</p>
             <CardGroup>
                 {!company.length && (
-                    <div className='certificates-empty'>
+                    <div className='certificates-empty animated-slide-up'>
                         <p className='description'>You can add some certificates that you approve as a trusted resource.</p>
                         <p className='description'>It means that consultants with this certificate have an opportunity to be hired by your company</p>
                     </div>
                 )}
                 {company.length > 0 && company.map(certificate => (
-                    <Card className='certificates-card' key={certificate._id} style={{ width: '18rem' }}>
+                    <Card className='certificates-card animated-slide-up' key={certificate._id} style={{ width: '18rem' }}>
                         <Card.Img className='certificates-image' variant='top' src={certificate.image} />
                         <Card.Body>
                             <Card.Title className='certificates-title'>{certificate.title}</Card.Title>
@@ -31,13 +31,13 @@ const Certificate = ({ company, move, all }) => (
             <p className='header'>All available certificates</p>
             <CardGroup>
                 {!all.length && (
-                    <div className='certificates-empty'>
+                    <div className='certificates-empty animated-slide-up'>
                         <p className='description'>There is no awailable certificates. </p>
                         <p className='description'>If You haven't found the one you needed, please, contact our support group.</p>
                     </div>
                 )}
                 {all.length > 0 && all.map(certificate => (
-                    <Card className='certificates-card' key={certificate._id} style={{ width: '18rem' }}>
+                    <Card className='certificates-card animated-slide-up' key={certificate._id} style={{ width: '18rem' }}>
                         <Card.Img className='certificates-image' variant='top' src={certificate.image} />
                         <Card.Body>
                             <Card.Title className='certificates-title'>{certificate.title}</Card.Title>

@@ -34,12 +34,12 @@ const toolbarStyles = theme => ({
 });
 
 
-let CustomToolbar = ({ numSelected, handleDelete, classes, handleView }) => (
+let CustomToolbar = ({ numSelected, handleDelete, classes, handleView, title }) => (
     <Toolbar className={classNames(classes.root, { [classes.highlight]: numSelected > 0 })}>
         <div className={classes.title}>
             {numSelected > 0
                 ? <Typography color='inherit' variant='subtitle1'>{numSelected} selected</Typography>
-                : <Typography variant='h6' id='tableTitle'>Products</Typography>
+                : <Typography variant='h6' id='tableTitle'>{title}</Typography>
             }
         </div>
         <div className={classes.actions}>

@@ -5,11 +5,12 @@ import { withAlert } from 'react-alert'
 
 import Loading from '../../Components/Loading'
 import Error from '../../Components/Error'
-import ConsultantComponent from '../../Components/Company/Consultants'
+import CustomTable from '../../Components/Table/Table'
 
 import { useHTTP } from '../../tools/hooks/http'
 import { BASE_URL, CONSULTANT, GET, PATCH } from '../../../config/routes'
 import { buildUrl } from '../../tools/functions/query'
+
 
 const Consultant = ({ company, alert }) => {
     const [modified, setModified] = useState('')
@@ -21,12 +22,22 @@ const Consultant = ({ company, alert }) => {
             .catch(err => alert(err.pesponse.data.error))
     }
 
+    const columns = [
+        { id: 'username', numeric: false, disablePadding: true, label: 'Username' },
+        { id: 'email', numeric: true, disablePadding: false, label: 'Email' },
+        { id: 'rating', numeric: true, disablePadding: false, label: 'Rating (0-100)' },
+        { id: 'phone', numeric: true, disablePadding: false, label: 'Phone' },
+        { id: 'online', numeric: true, disablePadding: false, label: 'Online now' },
+    ]
+
     return (
         loading ? <Loading /> :
-            !consultants ? <Error error={error} /> :
-                < ConsultantComponent
-                    consultants={consultants}
-                    dismiss={dismissConsultantant}
+            error ? <Error error={error} /> :
+                <CustomTable
+                    data={consultants}
+                    handleDelete={dismissConsultantant}
+                    columns={columns}
+                    title='Consultants'
                 />
     )
 }

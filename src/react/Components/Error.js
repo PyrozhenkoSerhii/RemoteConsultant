@@ -1,9 +1,9 @@
 import React from 'react'
 
 
-const Error = props => (
-    <div className="error">
-        <p>Error occurred: {props.error}</p>
+const Error = ({ error }) => (
+    <div className='stepper-error-wrapper'>
+        <p className='error'>{error}</p>
     </div>
 )
 

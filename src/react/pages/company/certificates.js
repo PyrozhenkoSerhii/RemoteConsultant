@@ -32,7 +32,7 @@ const Certificate = ({ company, alert }) => {
 
     return (
         loading ? <Loading /> :
-            !certificates ? <Error error={error} /> :
+            error ? <Error error={error} /> :
                 <CertificateComponent
                     company={companyCertificates}
                     all={_filter(certificates, value => !_some(companyCertificates, value))}

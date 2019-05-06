@@ -12,3 +12,12 @@ body {
 .form-control, .navbar-light .navbar-brand {
     color: rgb(138, 136, 136);
 }
+
+.loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    color: #afabab;
+}

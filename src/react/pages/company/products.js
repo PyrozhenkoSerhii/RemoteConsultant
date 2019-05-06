@@ -50,12 +50,13 @@ const Product = ({ company, alert }) => {
 
     return (
         loading ? <Loading /> :
-            !products ? <Error error={error} /> :
+            error ? <Error error={error} /> :
                 <CustomTable
                     data={products}
                     handleDelete={handleDelete}
                     handleView={handleView}
                     columns={columns}
+                    title='Products'
                 />
     )
 }

@@ -8,7 +8,7 @@ import axios from 'axios'
  * @returns {Array} [loading, data, error]
  */
 const useHTTP = (url, dependencies) => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [data, setData] = useState(null)
     const [error, setError] = useState(null)
 
@@ -20,9 +20,10 @@ const useHTTP = (url, dependencies) => {
             .then(response => {
                 console.log(`/${response.config.method}/ request done to ${url}`)
                 setData(response.data.data)
+                setLoading(false)
             })
             .catch(err => setError(err.response.data.error || 'Unknown error on the server'))
-            .finally(setLoading(false))
+            .finally()
     }, dependencies)
 
     return [loading, data, error]

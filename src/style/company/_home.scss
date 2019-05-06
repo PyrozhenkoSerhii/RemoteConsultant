@@ -1,0 +1,28 @@
+.company-home-wrapper {
+    
+    .company-content-wrapper {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+        align-items: center;
+        justify-items: center;
+        
+        .company-image-wrapper {
+            min-width: 400px;
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: space-around;
+            justify-items: center;
+
+
+            Image {
+                width: 100%;
+                transform: translate(-50%, -50%);
+            }
+        }
+        
+        .company-info-wrapper {
+            
+        }
+    }   
+}

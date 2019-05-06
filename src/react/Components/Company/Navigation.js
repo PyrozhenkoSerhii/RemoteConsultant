@@ -11,10 +11,10 @@ const Navigation = ({ context, entity, title }) => (
             <Nav className="mr-auto">
                 <Link className="nav-link" to="/company">Home</Link>
                 <Link className="nav-link" to="/company/certificates">Certificates</Link>
-                <Link className="nav-link" to="/company/consultants">Consultants</Link>
                 <Link className="nav-link" to="/company/products">Products</Link>
                 <Link className="nav-link" to="/company/products/import">Import</Link>
                 <Link className="nav-link" to="/company/representatives">Representatives</Link>
+                <Link className="nav-link" to="/company/consultants">Consultants</Link>
                 <Link className="nav-link" to="/company/requests">Requests</Link>
             </Nav>
             <Nav>
