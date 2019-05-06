@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
-import { withAlert } from 'react-alert'
-import axios from 'axios'
+import _filter from 'lodash/filter'
 
 import SettingsComponent from '../../../Components/Company/Import/Settings'
-import { BASE_URL, COMPANY, PATCH, IMPORT_CONFIG } from '../../../../config/routes'
 
 
-const Settings = ({ company, settings, setSettings, apiMode, fileMode, alert }) => {
+const Settings = ({ settings, apiMode, fileMode, updateSettings, pattern, handleSetPattern }) => {
     const [timer, setTimer] = useState(null)
     const [formData, setFormData] = useState(settings)
+
+    const sendRequest = (data, delay) => {
+        if (timer) clearTimeout(timer)
+
+        setTimer(setTimeout(() => updateSettings(data), delay))
+    }
 
     const handleSettingsUpdate = ({ target: { id: field, value } }) => {
         const data = { ...formData, [field]: value }
@@ -22,33 +26,25 @@ const Settings = ({ company, settings, setSettings, apiMode, fileMode, alert }) 
         sendRequest(data, 0)
     }
 
-    const sendRequest = (data, delay) => {
-        if (timer) clearTimeout(timer)
-
-        setTimer(setTimeout(() => {
-            axios.patch(BASE_URL + COMPANY + PATCH + `${company._id}/` + IMPORT_CONFIG, { importConfig: data })
-                .then(res => {
-                    setSettings(res.data.data.importConfig)
-                    alert.info('Changes saved!')
-                })
-                .catch(err => {
-                    console.log(err.response.data.error)
-                    alert.error('Something went wrong :(')
-                })
-        }, delay))
+    const handleDeletePattern = id => {
+        const newData = { ...formData, patterns: _filter(formData.patterns, pattern => pattern._id !== id) }
+        setFormData(newData)
+        sendRequest(newData, 0)
     }
 
-
     return (
-        <SettingsComponent 
+        <SettingsComponent
             apiMode={apiMode}
             fileMode={fileMode}
             formData={formData}
             handleModeUpdate={handleModeUpdate}
             handleSettingsUpdate={handleSettingsUpdate}
+            handleDeletePattern={handleDeletePattern}
+            currentPattern={pattern}
+            handleSetPattern={handleSetPattern}
         />
     )
 }
 
 
-export default withAlert()(Settings)
+export default Settings

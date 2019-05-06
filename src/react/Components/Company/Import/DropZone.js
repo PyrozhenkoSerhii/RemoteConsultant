@@ -14,7 +14,7 @@ const verifiedStyles = {
 }
 
 const DropZone = ({ rootProps, inputProps, files, confirmUpload, dropDownClass, verified }) => (
-    <div className='animated-slide-up'>
+    <React.Fragment>
         <p className='header'>Data Import</p>
 
         <div {...rootProps({ className: dropDownClass })}>
@@ -34,7 +34,7 @@ const DropZone = ({ rootProps, inputProps, files, confirmUpload, dropDownClass, 
             onClick={confirmUpload}>
             {verifiedStyles[verified].text}
         </Button>
-    </div>
+    </React.Fragment>
 )
 
 

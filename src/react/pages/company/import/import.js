@@ -6,7 +6,7 @@ import _map from 'lodash/map'
 import { withAlert } from 'react-alert'
 
 import axios from 'axios'
-import { BASE_URL, PRODUCT, POST, IMPORT } from '../../../../config/routes'
+import { BASE_URL, PRODUCT, COMPANY, POST, PATCH, IMPORT, IMPORT_CONFIG } from '../../../../config/routes'
 
 import Settings from './settings'
 import FileLoader from './file-loader'
@@ -22,16 +22,13 @@ const FILE_MODE = 'FILE_MODE'
 
 
 const Import = ({ company, alert }) => {
+    // component management
     const [step, setStep] = useState(1)
+    const [pattern, setPattern] = useState(null)
 
-    // company settings
-    const [settings, setSettings] = useState(company.importConfig)
-    const [saveAsPattern, setSaveAsPattern] = useState(false)
-
-    // structures
-    const requiredStructure = ['title', 'category', 'price', 'quantity']
-    const optionalStructure = ['image', 'description', 'specification']
-
+    // structure
+    const requiredStructure = ['title', 'category', 'price', 'quantity', 'image']
+    const optionalStructure = ['description', 'specification']
     const [importedStructure, setImportedStructure] = useState(null)
     const [connections, setConnections] = useState(null)
     const [fieldsPathMap, setFieldsPathMap] = useState(null)
@@ -41,8 +38,21 @@ const Import = ({ company, alert }) => {
     const [rawData, setRawData] = useState(null)
     const [uploadableProducts, setUploadableProducts] = useState(null)
 
-
+    //settings
+    const [settings, setSettings] = useState(company.importConfig)
     const [switchState, setSwitchState] = useState(false)
+    const updateSettings = config => {
+        axios.patch(BASE_URL + COMPANY + PATCH + `${company._id}/` + IMPORT_CONFIG, { importConfig: config })
+            .then(res => {
+                setSettings(res.data.data.importConfig)
+                alert.info('Configs were saved!')
+            })
+            .catch(err => {
+                console.log(err.response.data.error)
+                alert.error('Something went wrong :(')
+            })
+    }
+
 
     const restructure = () => {
         let startObject = rawData;
@@ -71,14 +81,14 @@ const Import = ({ company, alert }) => {
             resultProducts.push(newProduct)
         })
 
-        if (saveAsPattern) setSettings({ ...settings, fieldsPathMap, connections, startPath })
-
         setUploadableProducts(resultProducts)
     }
 
     const uploadProducts = () => {
-        if(switchState) {
-            //saving settings for future use
+        if (switchState) {
+            const newConfig = { ...settings, patterns: [...settings.patterns, { fieldsPathMap, connections, startPath }] }
+            updateSettings(newConfig)
+            setSettings(newConfig)
         }
         axios.post(BASE_URL + PRODUCT + POST + IMPORT, { products: uploadableProducts })
             .then(response => alert.info('Gracefully imported'))
@@ -86,6 +96,16 @@ const Import = ({ company, alert }) => {
     }
 
     const handleSwitchState = (event, checked) => setSwitchState(checked)
+
+    const handleSetPattern = id => {
+        const selectedPattern = _find(settings.patterns, { _id: id })
+
+        setStartPath(selectedPattern.startPath)
+        setFieldsPathMap(selectedPattern.fieldsPathMap)
+        setConnections(selectedPattern.connections)
+
+        setPattern(id)
+    }
 
     if (step === 5 && !uploadableProducts) restructure()
 
@@ -100,13 +120,15 @@ const Import = ({ company, alert }) => {
                 url={settings.url}
                 mode={settings.mode}
                 apiMode={API_MODE}
+                pattern={pattern}
             >
                 {step === 1 && <Settings
-                    company={company}
                     settings={settings}
-                    setSettings={setSettings}
                     apiMode={API_MODE}
                     fileMode={FILE_MODE}
+                    updateSettings={updateSettings}
+                    pattern={pattern}
+                    handleSetPattern={handleSetPattern}
                 />}
                 {step === 2 && settings.mode === FILE_MODE && <FileLoader setRawData={setRawData} />}
                 {step === 2 && settings.mode === API_MODE && <ApiLoader setRawData={setRawData} url={settings.url} />}

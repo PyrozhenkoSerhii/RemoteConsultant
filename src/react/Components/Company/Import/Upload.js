@@ -7,15 +7,15 @@ import { Switch, FormControlLabel } from "@material-ui/core";
 
 const Upload = ({ uploadableProducts, switchState, handleSwitchState, uploadProducts }) => (
     <div>
-        <div class='upload-wrapper'>
-            <div class='upload-example-wrapper'>
+        <div className='upload-wrapper'>
+            <div className='upload-example-wrapper'>
                 <p className='sub-header'>Example of result product:</p>
                 <ProductComponent
                     product={uploadableProducts[0]}
                     allowActions={false}
                 />
             </div>
-            <div class='upload-info-wrapper'>
+            <div className='upload-info-wrapper'>
                 <p className='sub-header'>Check your data</p>
                 <p className='text-center'>By clicking Upload button you are uploading {uploadableProducts.length} items </p>
                 <p className='text-center'>Since action can't be undone, check the example of resulting product first</p>

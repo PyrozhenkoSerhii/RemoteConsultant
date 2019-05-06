@@ -26,7 +26,7 @@ const steps = {
 }
 
 
-const Stepper = ({ step, setStep, rawData, importedStructure, connections, children, url, mode, apiMode }) => {
+const Stepper = ({ step, setStep, rawData, importedStructure, connections, children, url, mode, apiMode, pattern }) => {
     const [error, setError] = useState(null)
     const [progress, setProgress] = useState(steps[1].progress)
 
@@ -45,8 +45,13 @@ const Stepper = ({ step, setStep, rawData, importedStructure, connections, child
                 break;
             case 3:
                 if (rawData) {
-                    setProgress(steps[3].progress)
-                    setStep(nextStep)
+                    if (pattern) {
+                        setProgress(steps[5].progress)
+                        setStep(5)
+                    } else {
+                        setProgress(steps[3].progress)
+                        setStep(nextStep)
+                    }
                 }
                 else setError(steps[3].error)
                 break;
@@ -70,7 +75,13 @@ const Stepper = ({ step, setStep, rawData, importedStructure, connections, child
 
     const handlePrevStep = () => {
         setError(null)
-        const prevStep = --step
+        let prevStep 
+        if(step === 5 && pattern) {
+            prevStep = 2;
+        } else {
+            prevStep = --step
+        }
+        
         setProgress(steps[prevStep].progress)
         setStep(prevStep)
     }

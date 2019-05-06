@@ -21,3 +21,17 @@ body {
     z-index: 100;
     color: #afabab;
 }
+
+
+.right-top-btn {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    padding-top: 0px;
+    padding-bottom: 1px;
+    padding-right: 7px;
+    padding-left: 8px;
+    margin-top: -1px;
+    margin-right: -1px;
+    border-bottom-left-radius: 10px;
+}
