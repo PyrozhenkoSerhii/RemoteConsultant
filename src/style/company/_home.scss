@@ -1,5 +1,11 @@
 .company-home-wrapper {
-    
+    display: flex;
+    flex-flow: column nowrap;
+
+    .company-content-wrapper, .company-digest {
+        padding: 4% 10% 0 10%; 
+    }
+
     .company-content-wrapper {
         display: flex;
         flex-flow: row nowrap;
@@ -22,7 +28,19 @@
         }
         
         .company-info-wrapper {
-            
+            padding: 0 10%;
         }
-    }   
+    }
+
+    .company-digest {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-around;
+    
+        .company-digest-item {
+            Button {
+                width: 100%;
+            }
+        }
+    }
 }

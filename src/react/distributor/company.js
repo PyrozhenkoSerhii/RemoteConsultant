@@ -46,7 +46,7 @@ const Company = () => {
                         <Route path='/company/products/import' render={(props) => <ImportPage {...props} company={company} />} />
                         <Route path='/company/requests' render={(props) => <RequestsPage {...props} company={company} />} />
                         <Route path='/company/consultants' render={(props) => <ConsultantsPage {...props} company={company} />} />
-                        <Route path='/company/representatives' render={(props) => <RepresentativesPage {...props} company={company} />} />
+                        {/* <Route path='/company/representatives' render={(props) => <RepresentativesPage {...props} company={company} />} /> */}
                     </Switch>
             }
         </React.Fragment>

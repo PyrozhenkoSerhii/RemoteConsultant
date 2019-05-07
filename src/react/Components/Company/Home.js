@@ -1,15 +1,40 @@
 import React from 'react'
-import { Image } from 'react-bootstrap'
+import { Image, Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
-const Main = ({ company }) => (
+const Main = ({ company, itemsAvailable, onlineConsultants, newRequests }) => (
     <div className='company-home-wrapper'>
         <div className='company-content-wrapper'>
             <div className='company-image-wrapper'>
                 <Image src={company.image} rounded />
-                <p className='description'>{company.website}</p>
+                <a className='description' href={company.website}>{company.website}</a>
             </div>
             <div className='company-info-wrapper'>
                 <p className='sub-header'>{company.info}</p>
+            </div>
+        </div>
+
+        <div className='company-digest'>
+            <div class='company-digest-item'>
+                <p className='sub-header'>Consultants</p>
+                <p className='description'>{onlineConsultants} of your consultants is online now!</p>
+                <Link to='/company/consultants'>
+                    <Button variant='info'>Find out more</Button>
+                </Link>
+            </div>
+            <div class='company-digest-item'>
+                <p className='sub-header'>Requests</p>
+                <p className='description'>You have {newRequests} new requests!</p>
+                <Link to='/company/requests'>
+                    <Button variant='info'>Find out more</Button>
+                </Link>
+            </div>
+            <div class='company-digest-item'>
+                <p className='sub-header'>Products</p>
+                <p className='description'>{itemsAvailable} items are available now!</p>
+                <Link to='/company/products'>
+                    <Button variant='info'>Find out more</Button>
+                </Link>
             </div>
         </div>
     </div>
