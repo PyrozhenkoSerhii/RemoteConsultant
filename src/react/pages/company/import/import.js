@@ -149,6 +149,7 @@ const Import = ({ company, alert }) => {
                     switchState={switchState}
                     handleSwitchState={handleSwitchState}
                     uploadProducts={uploadProducts}
+                    pattern={pattern}
                 />}
             </Stepper>
 

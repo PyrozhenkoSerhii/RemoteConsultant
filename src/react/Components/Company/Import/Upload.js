@@ -5,7 +5,7 @@ import ProductComponent from '../Product'
 import { Switch, FormControlLabel } from "@material-ui/core";
 
 
-const Upload = ({ uploadableProducts, switchState, handleSwitchState, uploadProducts }) => (
+const Upload = ({ uploadableProducts, switchState, handleSwitchState, uploadProducts, pattern }) => (
     <div>
         <div className='upload-wrapper'>
             <div className='upload-example-wrapper'>
@@ -22,12 +22,12 @@ const Upload = ({ uploadableProducts, switchState, handleSwitchState, uploadProd
                 <p className='text-center'>You can save this connections and property set for future use</p>
 
                 <div className='upload-actions-wrapper'>
-                    <FormControlLabel
+                    {!pattern && <FormControlLabel
                         control={
                             <Switch checked={switchState} onChange={handleSwitchState} color='primary' />
                         }
                         label='You can save these settings as a pattern'
-                    />
+                    />}
                     <Button variant="success" onClick={uploadProducts}>Upload</Button>
                 </div>
             </div>

@@ -33,26 +33,10 @@ module.exports = {
                 loader: "style-loader!css-loader"
             },
             {
-                test: /\.(png|jpe?g|gif|svg)$/i,
-                use: [
-                    'file-loader',
-                    {
-                        loader: 'image-webpack-loader',
-                        options: {
-                            bypassOnBebug: true,
-                            disable: true
-                        }
-                    }
-                ]
-            },
-            {
                 test: /\.(jpe?g|png|gif)$/,
-                use: [{
-                    loader: 'url-loader',
-                    options: {
-                        limit: 10000
-                    }
-                }]
+                use: [
+                    'file-loader'
+                ]
             },
             {
                 test: /\.(eot|svg|ttf|woff2?|otf)$/,

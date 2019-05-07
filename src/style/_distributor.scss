@@ -1,0 +1,93 @@
+
+
+.distributor-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    height: 100vh;
+
+    .nav-link {
+        padding: 0px;
+        width: 100%;
+        position: relative;
+
+        .distributor-label {
+            position: absolute;
+            top: 0%;
+            left: 50%;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            min-width: 400px;
+            // transition: all 0.7s ease-in;
+
+            .distributor-header {
+                color: white;
+                font-weight: 550;
+                font-size: 32px;
+            }
+
+            .distributor-description {
+                color: white;
+                font-weight: 450;
+                font-size: 22px;
+            }
+
+            &:hover {
+                transition: all 0.7s ease-in;
+                opacity: 1;
+                top: 50%;
+            }
+        }
+
+        .distributor-mask {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            opacity: 0.8;
+            transition: opacity 1s ease-out;
+
+            &:hover {
+                opacity: 0.2;
+                transition: opacity .5s ease-out;
+
+                ~ .distributor-label {
+                    transition: all 0.7s ease-in;
+                    opacity: 1;
+                    top: 50%;
+                }
+            }
+        }
+
+        .company-mask {
+            background-color: rgb(14, 14, 119);
+
+        }
+
+        .customer-mask {
+            background-color: rgb(150, 163, 27);
+
+        }
+
+        .consultant-mask {
+            background-color: rgb(10, 85, 10);
+
+        }
+    }
+
+    .company-link {
+        background: url('../assets/company-image.jpg');
+        background-size: cover;
+    }
+
+    .customer-link {
+        background: url('../assets/customer-image.jpg');
+        background-size: cover;
+    }
+
+    .consultant-link {
+        background: url('../assets/consultant-image.jpeg');
+        background-size: cover;
+    } 
+}

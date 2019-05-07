@@ -88,7 +88,7 @@ const Stepper = ({ step, setStep, rawData, importedStructure, connections, child
 
     return (
         <div className='stepper-wrapper'>
-            <ProgressBar variant={progress.variant} now={progress.percentage} label={`${progress.name} ${step}/5`} />
+            <ProgressBar className='stepper-progress' variant={progress.variant} now={progress.percentage} label={`${progress.name} ${step}/5`} />
             <div className='stepper-content-wrapper'>
                 {children}
             </div>

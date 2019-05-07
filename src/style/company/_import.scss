@@ -15,6 +15,11 @@
     }
 }
 
+.stepper-progress {
+    position: fixed;
+    width: 100%;
+}
+
 .stepper-error-wrapper {
     height: 70px;
     display: table;
