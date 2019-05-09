@@ -59,11 +59,8 @@ const Authentication = ({ callbackUrl, entity, alert }) => {
     const handleUpdate = ({ target: { id: field, value } }) => setFormData({ ...formData, [field]: value })
 
     const handleSubmit = event => {
-        const form = event.currentTarget
-
         event.preventDefault()
-
-        if (form.checkValidity() === false) event.stopPropagation()
+        event.target.className += " was-validated";
 
         setValidated({ validated: true })
         axios.post(paths[action][entity], { ...formData })

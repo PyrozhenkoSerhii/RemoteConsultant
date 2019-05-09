@@ -15,21 +15,21 @@ const Main = ({ company, itemsAvailable, onlineConsultants, newRequests }) => (
         </div>
 
         <div className='company-digest'>
-            <div class='company-digest-item'>
+            <div className='company-digest-item'>
                 <p className='sub-header'>Consultants</p>
                 <p className='description'>{onlineConsultants} of your consultants is online now!</p>
                 <Link to='/company/consultants'>
                     <Button variant='info'>Find out more</Button>
                 </Link>
             </div>
-            <div class='company-digest-item'>
+            <div className='company-digest-item'>
                 <p className='sub-header'>Requests</p>
                 <p className='description'>You have {newRequests} new requests!</p>
                 <Link to='/company/requests'>
                     <Button variant='info'>Find out more</Button>
                 </Link>
             </div>
-            <div class='company-digest-item'>
+            <div className='company-digest-item'>
                 <p className='sub-header'>Products</p>
                 <p className='description'>{itemsAvailable} items are available now!</p>
                 <Link to='/company/products'>

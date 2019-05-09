@@ -1,6 +1,3 @@
-
-
-
 import React, { useState } from 'react'
 import _forIn from 'lodash/forIn'
 import _findIndex from 'lodash/findIndex'
@@ -144,7 +141,7 @@ const CustomTable = ({ data, columns, handleDelete, handleView, title }) => {
 
                                         {columns.map((column, index) => {
                                             return index === 0
-                                                ? <TableCell component="th" scope="row" padding="none">{element[column.id]}</TableCell>
+                                                ? <TableCell key={column.id} component="th" scope="row" padding="none">{element[column.id]}</TableCell>
                                                 : <TableCell key={column.id} align="right">{element[column.id]}</TableCell>
                                         })}
                                     </TableRow>

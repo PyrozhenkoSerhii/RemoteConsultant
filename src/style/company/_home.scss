@@ -1,6 +1,7 @@
 .company-home-wrapper {
     display: flex;
     flex-flow: column nowrap;
+    justify-content: space-between;
 
     .company-content-wrapper, .company-digest {
         padding: 4% 10% 0 10%; 
@@ -14,7 +15,6 @@
         justify-items: center;
         
         .company-image-wrapper {
-            min-width: 400px;
             display: flex;
             flex-flow: column nowrap;
             justify-content: space-around;
@@ -35,7 +35,7 @@
     .company-digest {
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-around;
+        justify-content: space-between;
     
         .company-digest-item {
             Button {
