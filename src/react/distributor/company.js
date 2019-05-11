@@ -6,7 +6,7 @@ import CertificatesPage from '../pages/company/certificates'
 import ConsultantsPage from '../pages/company/consultants'
 import HomePage from '../pages/company/home'
 import ProductsPage from '../pages/company/products'
-import RepresentativesPage from '../pages/company/representatives'
+// import RepresentativesPage from '../pages/company/representatives'
 import RequestsPage from '../pages/company/requests'
 import ImportPage from '../pages/company/import/import'
 
@@ -18,7 +18,7 @@ import Error from '../Components/Error'
 import withAuthentication from './withAuthentication'
 
 // tools
-import globalContext from '../tools/state/context/global-context';
+import globalContext from '../tools/state/context/global-context'
 import { BASE_URL, COMPANY, GET } from '../../config/routes'
 import { buildUrl } from '../tools/functions/query'
 import { useHTTP } from '../tools/hooks/http'

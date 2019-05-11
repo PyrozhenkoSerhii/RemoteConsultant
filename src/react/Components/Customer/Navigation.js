@@ -8,7 +8,7 @@ const Navigation = ({ context, entity }) => (
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
-                <Link className="nav-link" to="/customer">Home</Link>
+                <Link className="nav-link" to="/customer">Platform</Link>
             </Nav>
             <Nav>
                 <Link className="nav-link" to="/">Back</Link>
