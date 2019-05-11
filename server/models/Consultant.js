@@ -12,11 +12,7 @@ import logger from '../utils/logger'
 import { Language } from './submodels/Language'
 import Company from './Company'
 
-/**
- * Note: Fields [Age, Phone, Image, Gender] not required during registration
- *       They should be initialized by consultant from profile setting to
- *       set field {completed: true} and allow consultations
- */
+
 const ConsultantSchema = new Schema({
     email: {
         type: String,
@@ -103,6 +99,17 @@ const ConsultantSchema = new Schema({
     online: {
         type: Boolean,
         default: false
+    },
+    chat: {
+        id: String,
+        allowAudio: {
+            type: Boolean,
+            default: true
+        },
+        allowVideo: {
+            type: Boolean,
+            default: true
+        }
     },
     verified: {
         type: Boolean,

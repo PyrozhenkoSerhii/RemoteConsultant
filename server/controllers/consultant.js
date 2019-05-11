@@ -101,6 +101,20 @@ router.patch('/consultant/list/:id', isObjectId, wrap(async (req, res) => {
 }))
 
 
+router.patch('/consultant/list/:id/chat', isObjectId, wrap(async (req, res) => {
+    const consultant = await Consultant.findById(req.params.id)
+    if (!consultant) return res.status(400).send({ error: `Consultant Not Found` })
+
+    consultant.chat = req.body
+
+    const validationError = consultant.validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
+
+    const saved = await consultant.save()
+    res.status(200).send({ data: saved })
+}))
+
+
 router.delete('/consultant/list/:id', isObjectId, wrap(async (req, res) => {
     const consultant = await Consultant.findById(req.params.id)
     if (!consultant) return res.status(400).send({ error: `Consultant Not Found` })

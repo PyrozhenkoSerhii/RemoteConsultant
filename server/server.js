@@ -7,6 +7,8 @@ import blacklist from 'express-jwt-blacklist'
 import mongoose from 'mongoose'
 import requestLimiter from 'express-rate-limit'
 import helmet from 'helmet'
+import fs from 'fs'
+import peer from 'peer'
 
 import config from './config'
 import loggerMiddleware from './middlewares/logger'
@@ -21,8 +23,6 @@ import product from './controllers/product'
 import representative from './controllers/representative'
 import order from './controllers/order'
 import certificate from './controllers/certificate'
-
-
 
 
 const api = express()
@@ -97,7 +97,7 @@ enviroment === 'dev' && mongoose.set('debug', (coll, method) => {
 });
 
 
-api.listen(config.api.port, err => {
+const server = api.listen(config.api.port, err => {
     if (err) {
         logger.error(`[API] Error while launhing the server: ${err}`)
         process.exit(1)
@@ -107,4 +107,17 @@ api.listen(config.api.port, err => {
 })
 
 
+const ExpressPeerServer = peer.ExpressPeerServer
+const peerServer = ExpressPeerServer(server, {
+    ssl: {
+        key: fs.readFileSync('ssl/key.pem', 'utf8'),
+        cert: fs.readFileSync('ssl/cert.pem', 'utf8')
+    }
+})
+
+
+api.use('/p2p/', peerServer)
+
+
 exports.default = api
+exports.peerServer = peerServer

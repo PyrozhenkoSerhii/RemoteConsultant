@@ -9,6 +9,8 @@ const Navigation = ({ context, entity }) => (
         <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
                 <Link className="nav-link" to="/customer">Platform</Link>
+                <Link className="nav-link" to="/customer/chat">Chat</Link>
+                <Link className="nav-link" to="/customer/profile">Profile</Link>
             </Nav>
             <Nav>
                 <Link className="nav-link" to="/">Back</Link>
