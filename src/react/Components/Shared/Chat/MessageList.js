@@ -5,7 +5,7 @@ import Message from './Message'
 
 
 
-const Messages = ({ data, currentUser, currentConversation, message, handleMessageInput, sendMessage }) => {
+const Messages = ({ data, currentUser, currentConversation, message, handleMessageInput, sendMessage, startCall }) => {
 	const renderMessages = () => {
 		let i = 0
 		let messageCount = data.length
@@ -71,7 +71,7 @@ const Messages = ({ data, currentUser, currentConversation, message, handleMessa
 				<h1 className='toolbar-title'>{currentConversation.fullname}</h1>
 				<div className='right-items'>
 					<i className='toolbar-button fas fa-microphone' />
-					<i className='toolbar-button fas fa-video' />
+					<i className='toolbar-button fas fa-video' onClick={startCall} />
 				</div>
 			</div>
 

@@ -12,6 +12,7 @@ import { BASE_URL, CONSULTANT, PATCH, CHAT, CUSTOMER, GET } from '../../../confi
 
 
 const Chatroom = ({ consultant }) => {
+    const [peer, setPeer] = useState(null)
     const [peerSettings, setPeerSettings] = useState({
         allowAudio: true,
         allowVideo: true
@@ -49,9 +50,6 @@ const Chatroom = ({ consultant }) => {
                         messages: [...currentConversation.messages, _last(newData.messages)]
                     })
                 }
-
-
-
             }
         }
     }, [data])
@@ -59,6 +57,7 @@ const Chatroom = ({ consultant }) => {
     useEffect(() => {
         const peer = new Peer(consultant._id, { host: 'localhost', port: 8080, path: '/p2p' })
 
+        // chat setup
         peer.on('connection', conn => {
             console.log(`[p2p receiver - ${consultant._id}] Connection from ${conn.peer}`)
 
@@ -95,6 +94,27 @@ const Chatroom = ({ consultant }) => {
             })
         })
 
+        //video setup
+        if (peerSettings.allowAudio && peerSettings.allowVideo) {
+            navigator.getUserMedia = (
+                navigator.getUserMedia || navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia || navigator.msGetUserMedia
+            )
+
+            peer.on('call', call => {
+                navigator.getUserMedia({ audio: true, video: true },
+                    stream => call.answer(stream),
+                    error => console.log(error)
+                )
+
+                call.on('stream', stream => {
+                    var video = document.getElementById('peer-camera')
+                    video.srcObject = stream
+                    video.play()
+                })
+            })
+        }
+
         peer.on('error', console.log)
 
         axios.patch(BASE_URL + CONSULTANT + PATCH + `${consultant._id}/` + CHAT, {
@@ -104,7 +124,11 @@ const Chatroom = ({ consultant }) => {
             .then(res => console.log(res))
             .catch(err => console.log(err.response))
 
+        setPeer(peer)
+
+        return () => peer.disconnect()
     }, [peerSettings])
+
 
     const startChat = customer => {
         if (currentConversation && currentConversation.id === customer._id) return
@@ -122,6 +146,20 @@ const Chatroom = ({ consultant }) => {
 
         const conversation = _find(data, { id: customer._id })
         setCurrentConversation(conversation)
+    }
+
+
+    const startCall = () => {
+        navigator.getUserMedia({ audio: true, video: true },
+            stream => {
+                peer.call(currentConversation.id, stream)
+
+                const video = document.getElementById('my-camera')
+                video.srcObject = stream
+                video.play()
+            },
+            error => console.error(error)
+        )
     }
 
 
@@ -170,9 +208,23 @@ const Chatroom = ({ consultant }) => {
                         handleMessageInput={handleMessageInput}
                         message={message}
                         sendMessage={sendMessage}
+                        startCall={startCall}
                     />
                 }
             </div>
+
+            <div className='video-wrapper'>
+                <div className="text-center">
+                    <video id="my-camera" width="300" height="300" autoPlay="autoplay" muted={true} className="mx-auto d-block"></video>
+                    <span className="label label-info">You</span>
+                </div>
+
+                <div className="text-center">
+                    <video id="peer-camera" width="300" height="300" autoPlay="autoplay" className="mx-auto d-block"></video>
+                    <span className="label label-info" id="connected_peer"></span>
+                </div>
+            </div>
+
         </div>
     )
 }

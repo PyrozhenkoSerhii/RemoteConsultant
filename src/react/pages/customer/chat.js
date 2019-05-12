@@ -16,6 +16,8 @@ import Error from '../../Components/Error'
 const Chatroom = ({ customer, product }) => {
 	const [loading, consultants, error] = useHTTP(BASE_URL + CONSULTANT + GET, [product])
 
+	const [peer, setPeer] = useState(null)
+
 	/*
 		{
 			id: 'consultant._id that is used inside peer.connect()',
@@ -73,6 +75,27 @@ const Chatroom = ({ customer, product }) => {
 					}]
 				}))
 			})
+
+			//video setup
+			navigator.getUserMedia = (
+				navigator.getUserMedia || navigator.webkitGetUserMedia ||
+				navigator.mozGetUserMedia || navigator.msGetUserMedia
+			)
+
+			peer.on('call', call => {
+				navigator.getUserMedia({ audio: true, video: true },
+					stream => call.answer(stream),
+					error => console.log(error)
+				)
+
+				call.on('stream', stream => {
+					var video = document.getElementById('peer-camera')
+					video.srcObject = stream
+					video.play()
+				})
+			})
+
+			setPeer(peer)
 		}
 
 		setCurrentConversation(conversation)
@@ -99,6 +122,20 @@ const Chatroom = ({ customer, product }) => {
 		})
 	}
 
+
+	const startCall = () => {
+		navigator.getUserMedia({ audio: true, video: true },
+			stream => {
+				peer.call(currentConversation.id, stream)
+
+				const video = document.getElementById('my-camera')
+				video.srcObject = stream
+				video.play()
+			},
+			error => console.error(error)
+		)
+	}
+
 	return (
 		<div className='messenger'>
 			<div className='scrollable sidebar'>
@@ -121,8 +158,21 @@ const Chatroom = ({ customer, product }) => {
 						handleMessageInput={handleMessageInput}
 						message={message}
 						sendMessage={sendMessage}
+						startCall={startCall}
 					/>
 				}
+			</div>
+
+			<div className='video-wrapper'>
+				<div className="text-center">
+					<video id="my-camera" width="300" height="300" autoPlay="autoplay" muted={true} className="mx-auto d-block"></video>
+					<span className="label label-info">You</span>
+				</div>
+
+				<div className="text-center">
+					<video id="peer-camera" width="300" height="300" autoPlay="autoplay" className="mx-auto d-block"></video>
+					<span className="label label-info" id="connected_peer">Other</span>
+				</div>
 			</div>
 		</div>
 	)
