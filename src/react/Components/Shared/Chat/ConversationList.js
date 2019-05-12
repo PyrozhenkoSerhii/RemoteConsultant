@@ -7,7 +7,7 @@ const renderRating = (rating) => (
 )
 
 
-const Conversations = ({ conversations, setSelectedConversation }) => (
+const Conversations = ({ conversations, setSelectedConversation, isConsultant }) => (
     <div className="conversation-list">
         {conversations.map(conversation =>
             <div className='conversation-list-item' key={conversation._id} onClick={() => setSelectedConversation(conversation)}>
@@ -15,7 +15,9 @@ const Conversations = ({ conversations, setSelectedConversation }) => (
                 <div className='conversation-info'>
                     <h1 className='conversation-title'>{conversation.fullname}</h1>
                     <p className='conversation-snippet'>{conversation.gender}</p>
-                    <p className='conversation-snippet'>{renderRating(conversation.rating)}</p>
+                    {isConsultant &&
+                        <div className='conversation-snippet'>{renderRating(conversation.rating)}</div>
+                    }
                 </div>
             </div>
         )}

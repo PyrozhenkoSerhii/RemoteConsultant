@@ -1,6 +1,5 @@
 import React from 'react'
 import moment from 'moment'
-import {Button} from 'react-bootstrap'
 
 import Message from './Message'
 
@@ -86,7 +85,9 @@ const Messages = ({ data, currentUser, currentConversation, message, handleMessa
 					value={message}
 					onChange={handleMessageInput}
 				/>
-				<i className='toolbar-button far fa-paper-plane' onClick={sendMessage}/>
+				<i className='toolbar-button far fa-paper-plane'
+					onClick={sendMessage}
+				/>
 			</div>
 		</div>
 	)
