@@ -96,22 +96,25 @@ const Chatroom = ({ consultant }) => {
 
         //video setup
         if (peerSettings.allowAudio && peerSettings.allowVideo) {
-            navigator.getUserMedia = (
-                navigator.getUserMedia || navigator.webkitGetUserMedia ||
-                navigator.mozGetUserMedia || navigator.msGetUserMedia
-            )
-
             peer.on('call', call => {
                 navigator.getUserMedia({ audio: true, video: true },
-                    stream => call.answer(stream),
+                    myStream => {
+                        call.answer(myStream)
+
+                        const myVideo = document.getElementById('my-camera')
+                        myVideo.srcObject = myStream
+                        myVideo.play()
+                    },
                     error => console.log(error)
                 )
 
                 call.on('stream', stream => {
-                    var video = document.getElementById('peer-camera')
+                    const video = document.getElementById('peer-camera')
                     video.srcObject = stream
                     video.play()
                 })
+
+
             })
         }
 
@@ -151,12 +154,18 @@ const Chatroom = ({ consultant }) => {
 
     const startCall = () => {
         navigator.getUserMedia({ audio: true, video: true },
-            stream => {
-                peer.call(currentConversation.id, stream)
+            myStream => {
+                const call = peer.call(currentConversation.id, myStream)
 
-                const video = document.getElementById('my-camera')
-                video.srcObject = stream
-                video.play()
+                call.on('stream', stream => {
+                    const video = document.getElementById('peer-camera')
+                    video.srcObject = stream
+                    video.play()
+                })
+
+                const myVideo = document.getElementById('my-camera')
+                myVideo.srcObject = myStream
+                myVideo.play()
             },
             error => console.error(error)
         )

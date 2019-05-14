@@ -21,6 +21,11 @@ const alertOptions = {
     transition: transitions.SCALE
 }
 
+navigator.getUserMedia = (
+    navigator.getUserMedia || navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia || navigator.msGetUserMedia
+)
+
 
 ReactDOM.render((
     <AlertProvider template={AlertTemplate}{...alertOptions}>
