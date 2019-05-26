@@ -2,7 +2,7 @@
 module.exports = {
     HOST: 'https://remote-consultant.herokuapp.com/',
     BASE_URL: 'https://remote-consultant.herokuapp.com/api/',
-    PORT: '',
+    PORT: '443',
     REPRESENTATIVE: 'representative/',
     CUSTOMER: 'customer/',
     CONSULTANT: 'consultant/',
