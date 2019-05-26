@@ -33,7 +33,7 @@ const port = process.env.PORT || config.api.port
 const PeerServer = require('peer').PeerServer;
 
 const server = PeerServer({
-  port: 9000,
+  port: port,
   path: '/p2p',
   ssl: {
     key: fs.readFileSync('./ssl/key.pem', 'utf8'),
