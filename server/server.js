@@ -55,7 +55,7 @@ api.use(limiter)
 api.use(loggerMiddleware)
 
 api.use(express.static(path.join(__dirname, '../public')))
-api.get('/', function(req, res) {
+api.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
@@ -100,12 +100,14 @@ enviroment === 'dev' && mongoose.set('debug', (coll, method) => {
 });
 
 
-const server = api.listen(config.api.port, err => {
+const port = process.env.PORT || config.api.port
+
+const server = api.listen(port, err => {
   if (err) {
     logger.error(`[API] Error while launhing the server: ${err}`)
     process.exit(1)
   } else {
-    logger.info(`[API] Server is running on port ${config.api.port}`)
+    logger.info(`[API] Server is running on port ${port}`)
   }
 })
 
