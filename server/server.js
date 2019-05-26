@@ -47,13 +47,17 @@ const enviroment = process.env.NODE_ENV || 'dev'
 if (enviroment === 'dev') api.enable('trust proxy')
 
 api.use(helmet())
-api.use(express.static(path.join(__dirname, 'public')))
 api.use(cors())
 api.use(bodyParser.urlencoded({ extended: true }))
 api.use(bodyParser.json())
 api.use(limiter)
 
 api.use(loggerMiddleware)
+
+api.use(express.static(path.join(__dirname, '../public')))
+api.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
+});
 
 // force jwt to work in production env only
 enviroment === 'prod' && api.use(jwt({ secret: config.api.secret }).unless(req =>
@@ -82,6 +86,7 @@ api.use('/api/', order)
 api.use('/api/', certificate)
 api.use(errorHandler)
 api.all('*', (req, res) => {
+  // res.sendFile(path.resolve(__dirname, '../public', 'index.html'))
   res.status(404).send({ error: `Path ${req.originalUrl} with method ${req.method} not found!` })
 })
 
