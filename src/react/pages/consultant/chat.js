@@ -8,7 +8,7 @@ import Peer from 'peerjs'
 import Conversations from '../../Components/Shared/Chat/ConversationList'
 import Messages from '../../Components/Shared/Chat/MessageList'
 
-import { BASE_URL, CONSULTANT, PATCH, CHAT, CUSTOMER, GET, HOST } from '../../../config/routes'
+import { BASE_URL, CONSULTANT, PATCH, CHAT, CUSTOMER, GET, HOST, PORT } from '../../../config/routes'
 
 
 const Chatroom = ({ consultant }) => {

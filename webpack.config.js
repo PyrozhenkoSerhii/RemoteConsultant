@@ -1,8 +1,10 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const path = require('path')
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 const outputDirectory = './public'
+
 
 module.exports = {
     entry: './src/index.js',
@@ -53,6 +55,7 @@ module.exports = {
         new CleanWebpackPlugin([outputDirectory]),
         new HtmlWebpackPlugin({
             template: './src/index.html'
-        })
+        }),
+        new FaviconsWebpackPlugin('./src/assets/favicon.png')
     ]
 }
