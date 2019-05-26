@@ -5,8 +5,10 @@ dotenvConfig()
 const env = process.env.NODE_ENV || 'dev'
 
 const dev = {
+    host: 'localhost',
     api: {
         port: parseInt(process.env.DEV_API_PORT) || 8080,
+        baseUrl: 'http://localhost:8080/api/',
         secret: process.env.DEV_JWT_SECRET || 'secret',
         logs: {
             warning: 'warnings.dev.log',
@@ -26,8 +28,8 @@ const dev = {
         port: process.env.REDIS_PORT || '6379'
     },
     urls: {
-        emailVerifyingBase: process.env.EMAIL_VERIFYING_BASE || 'http://localhost:8080/users/verifying/',
-        passwordResetBase: process.env.PASSWORD_RESET_BASE || 'http://localhost:8080/users/resetPasswordConfirm/'
+        emailVerifyingBase: process.env.EMAIL_VERIFYING_BASE || 'http://localhost:8080/api/users/verifying/',
+        passwordResetBase: process.env.PASSWORD_RESET_BASE || 'http://localhost:8080/api/users/resetPasswordConfirm/'
     },
     defaults: {
         customerImage: 'https://pngimage.net/wp-content/uploads/2018/06/profile-png-5.png',
@@ -38,8 +40,10 @@ const dev = {
 }
 
 const prod = {
+    host: 'https://remote-consultant.herokuapp.com/',
     api: {
         port: parseInt(process.env.PORT),
+        baseUrl: 'https://remote-consultant.herokuapp.com/api/',
         secret: process.env.SECRET,
         logs: {
             warning: 'warnings.log',
@@ -71,8 +75,10 @@ const prod = {
 }
 
 const test = {
+    host: 'localhost',
     api: {
         port: 8080,
+        baseUrl: 'http://localhost:8080/api/',
         secret: 'secret',
         logs: {
             warning: 'warnings.test.log',

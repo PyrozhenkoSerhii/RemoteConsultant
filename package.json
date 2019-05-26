@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "There is a platform to replace a full-time staff consulatant with a part-time online consultant",
   "main": "main.js",
+  "engines": {
+    "node": "10.x"
+  },
   "scripts": {
-    "dev": "better-npm-run dev",
     "client-dev": "better-npm-run client-dev",
     "client-build": "better-npm-run client-build",
     "client-test": "better-npm-run client-test",
@@ -13,17 +15,11 @@
     "server-test": "better-npm-run server-test"
   },
   "betterScripts": {
-    "dev": {
-      "command": "nodemon --exec babel-node server/server.js",
-      "env": {
-        "NODE_ENV": "dev"
-      }
-    },
     "client-dev": {
       "command": "webpack-dev-server --mode development --devtool inline-source-map --hot"
     },
     "client-build": {
-      "command": "webpack-dev-server --mode production"
+      "command": "webpack --mode production"
     },
     "client-test": {
       "command": "jest"

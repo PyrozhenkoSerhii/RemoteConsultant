@@ -27,20 +27,20 @@ import certificate from './controllers/certificate'
 
 const api = express()
 const limiter = requestLimiter({
-    windowsMs: 15 * 60 * 1000,
-    max: 100
+  windowsMs: 15 * 60 * 1000,
+  max: 100
 })
 blacklist.configure({
-    store: {
-        type: 'redis',
-        host: config.redis.host,
-        port: config.redis.port,
-    }
+  store: {
+    type: 'redis',
+    host: config.redis.host,
+    port: config.redis.port,
+  }
 })
 
 api.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
 });
 
 const enviroment = process.env.NODE_ENV || 'dev'
@@ -57,21 +57,19 @@ api.use(loggerMiddleware)
 
 // force jwt to work in production env only
 enviroment === 'prod' && api.use(jwt({ secret: config.api.secret }).unless(req =>
-    req.originalUrl === '/' ||
-    req.originalUrl === '/customers' && req.method === 'POST' ||
-    req.originalUrl === '/customers/authenticate' ||
-    req.originalUrl === '/customers/resetPasswordRequest' ||
-    req.originalUrl === '/customers/verifyEmail' ||
-    req.originalUrl.match(/^\/customers\/verifying\/.*/) ||
-    req.originalUrl.match(/^\/customers\/resetPasswordConfirm\/.*/) ||
-    req.originalUrl === '/companies' ||
-    req.originalUrl === '/consultations' && req.method === 'POST'
+  req.originalUrl.match(/^((?!api).)*$/) ||
+  req.originalUrl === '/api/customers' && req.method === 'POST' ||
+  req.originalUrl === '/api/consultant' && req.method === 'POST' ||
+  req.originalUrl === '/api/representative' && req.method === 'POST' ||
+  req.originalUrl === '/api/customer/authenticate' ||
+  req.originalUrl === '/api/consultant/authenticate' ||
+  req.originalUrl === '/api/representative/authenticate'
 ))
 enviroment === 'prod' && api.use((err, req, res, next) => {
-    if (err.name === 'UnauthorizedError') {
-        logger.warn(`[JWT] No authorization provided with request ${req.originalUrl}`)
-        res.status(401).send({ error: `You have no permitions to make this request` })
-    }
+  if (err.name === 'UnauthorizedError') {
+    logger.warn(`[JWT] No authorization provided with request ${req.originalUrl}`)
+    res.status(401).send({ error: `You have no permitions to make this request` })
+  }
 })
 
 api.use('/api/', customer)
@@ -84,35 +82,35 @@ api.use('/api/', order)
 api.use('/api/', certificate)
 api.use(errorHandler)
 api.all('*', (req, res) => {
-    res.status(404).send({ error: `Path ${req.originalUrl} with method ${req.method} not found!` })
+  res.status(404).send({ error: `Path ${req.originalUrl} with method ${req.method} not found!` })
 })
 
 mongoose.connect(config.db.connectionString, config.db.options).then(
-    () => logger.info(`[API] Connection to ${config.db.databaseName} db was established `),
-    err => logger.error(`[API] Error occured while connection to ${config.db.databaseName} db`, err)
+  () => logger.info(`[API] Connection to ${config.db.databaseName} db was established `),
+  err => logger.error(`[API] Error occured while connection to ${config.db.databaseName} db`, err)
 )
 mongoose.set('useCreateIndex', true)
 enviroment === 'dev' && mongoose.set('debug', (coll, method) => {
-    logger.info(`[Mongoose] Path: /${coll}, method: ${method}`)
+  logger.info(`[Mongoose] Path: /${coll}, method: ${method}`)
 });
 
 
 const server = api.listen(config.api.port, err => {
-    if (err) {
-        logger.error(`[API] Error while launhing the server: ${err}`)
-        process.exit(1)
-    } else {
-        logger.info(`[API] Server is running on port ${config.api.port}`)
-    }
+  if (err) {
+    logger.error(`[API] Error while launhing the server: ${err}`)
+    process.exit(1)
+  } else {
+    logger.info(`[API] Server is running on port ${config.api.port}`)
+  }
 })
 
 
 const ExpressPeerServer = peer.ExpressPeerServer
 const peerServer = ExpressPeerServer(server, {
-    ssl: {
-        key: fs.readFileSync('ssl/key.pem', 'utf8'),
-        cert: fs.readFileSync('ssl/cert.pem', 'utf8')
-    }
+  ssl: {
+    key: fs.readFileSync('ssl/key.pem', 'utf8'),
+    cert: fs.readFileSync('ssl/cert.pem', 'utf8')
+  }
 })
 
 

@@ -7,7 +7,7 @@ import Conversations from '../../Components/Shared/Chat/ConversationList'
 import Messages from '../../Components/Shared/Chat/MessageList'
 
 import { useHTTP } from '../../tools/hooks/http'
-import { BASE_URL, CONSULTANT, GET } from '../../../config/routes'
+import { BASE_URL, CONSULTANT, GET, HOST } from '../../../config/routes'
 
 import Loading from '../../Components/Loading'
 import Error from '../../Components/Error'
@@ -53,7 +53,7 @@ const Chatroom = ({ customer, product }) => {
 
 		let conversation = _find(data, { id: consultant._id })
 		if (!conversation) {
-			const peer = new Peer(customer._id, { host: 'localhost', port: 8080, path: '/p2p' })
+			const peer = new Peer(customer._id, { host: HOST, port: 8080, path: '/p2p' })
 			const connection = peer.connect(consultant._id)
 
 			console.log(`[p2p sender - ${customer._id}] Connection to ${consultant._id}`)
@@ -95,7 +95,7 @@ const Chatroom = ({ customer, product }) => {
 					video.play()
 				})
 
-				
+
 			})
 
 			setPeer(peer)
@@ -172,7 +172,7 @@ const Chatroom = ({ customer, product }) => {
 				}
 			</div>
 
-			<div className='video-wrapper'>
+			{/* <div className='video-wrapper'>
 				<div className="text-center">
 					<video id="my-camera" width="300" height="300" autoPlay="autoplay" muted={true} className="mx-auto d-block"></video>
 					<span className="label label-info">You</span>
@@ -182,7 +182,7 @@ const Chatroom = ({ customer, product }) => {
 					<video id="peer-camera" width="300" height="300" autoPlay="autoplay" className="mx-auto d-block"></video>
 					<span className="label label-info" id="connected_peer">Other</span>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	)
 }
