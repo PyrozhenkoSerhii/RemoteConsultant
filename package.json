@@ -11,6 +11,9 @@
     "server-prod": "better-npm-run server-prod-pm-2",
     "server-test": "better-npm-run server-test"
   },
+  "engines": {
+    "node": "v8.11.3"
+  },
   "betterScripts": {
     "client-dev": {
       "command": "webpack-dev-server --mode development --devtool inline-source-map --hot"
