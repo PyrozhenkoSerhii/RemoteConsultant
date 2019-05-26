@@ -55,7 +55,7 @@ const Chatroom = ({ consultant }) => {
 	}, [data])
 
 	useEffect(() => {
-		const peer = new Peer(consultant._id, { host: HOST, port: 8080, path: '/p2p' })
+		const peer = new Peer(consultant._id, { host: HOST, port: PORT, path: '/p2p' })
 
 		// chat setup
 		peer.on('connection', conn => {

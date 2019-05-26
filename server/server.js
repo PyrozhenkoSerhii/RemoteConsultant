@@ -54,10 +54,7 @@ api.use(limiter)
 
 api.use(loggerMiddleware)
 
-api.use(express.static(path.join(__dirname, '../public')))
-api.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '../public', 'index.html'));
-});
+
 
 // force jwt to work in production env only
 enviroment === 'prod' && api.use(jwt({ secret: config.api.secret }).unless(req =>
@@ -85,6 +82,12 @@ api.use('/api/', representative)
 api.use('/api/', order)
 api.use('/api/', certificate)
 api.use(errorHandler)
+
+api.use(express.static(path.join(__dirname, '../public')))
+api.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
+});
+
 api.all('*', (req, res) => {
   // res.sendFile(path.resolve(__dirname, '../public', 'index.html'))
   res.status(404).send({ error: `Path ${req.originalUrl} with method ${req.method} not found!` })
