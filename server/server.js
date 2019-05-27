@@ -7,7 +7,7 @@ import blacklist from 'express-jwt-blacklist'
 import mongoose from 'mongoose'
 import requestLimiter from 'express-rate-limit'
 import helmet from 'helmet'
-import fs from 'fs'
+// import fs from 'fs'
 
 import config from './config'
 import loggerMiddleware from './middlewares/logger'
@@ -23,10 +23,10 @@ import representative from './controllers/representative'
 import order from './controllers/order'
 import certificate from './controllers/certificate'
 
-import http from 'http'
+// import http from 'http'
 
 
-const PeerServer = require('peer').ExpressPeerServer;
+// const PeerServer = require('peer').ExpressPeerServer;
 const api = express()
 const port = process.env.PORT || config.api.port
 
@@ -121,8 +121,8 @@ enviroment === 'dev' && mongoose.set('debug', (coll, method) => {
 
 
 
-const server = api.listen(port, err => {
-// server.listen(port, err => {
+// const server = api.listen(port, err => {
+api.listen(port, err => {
 	if (err) {
 		logger.error(`[API] Error while launhing the server: ${err}`)
 		process.exit(1)
@@ -132,16 +132,16 @@ const server = api.listen(port, err => {
 })
 
 
-const peerServer = PeerServer(server, {
-	ssl: {
-		key: fs.readFileSync('ssl/key.pem', 'utf8'),
-		cert: fs.readFileSync('ssl/cert.pem', 'utf8'),
-		// passphrase: process.env.PASSPHRASE
-	}
-});
+// const peerServer = PeerServer(server, {
+// 	ssl: {
+// 		key: fs.readFileSync('ssl/key.pem', 'utf8'),
+// 		cert: fs.readFileSync('ssl/cert.pem', 'utf8'),
+// 		passphrase: process.env.PASSPHRASE
+// 	}
+// });
 
 
-api.use('/p2p/', peerServer)
+// api.use('/p2p/', peerServer)
 
 
 
