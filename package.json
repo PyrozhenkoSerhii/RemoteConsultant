@@ -37,7 +37,7 @@
       }
     },
     "server-test": {
-      "command": "mocha --require @babel/register --require mocha-clean --timeout 5000 ./tests/server/*.test.js",
+      "command": "mocha --require @babel/register --require babel-polyfill --require mocha-clean --timeout 5000 ./tests/server/*.test.js",
       "env": {
         "NODE_ENV": "test"
       }

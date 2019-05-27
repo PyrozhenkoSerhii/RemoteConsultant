@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 
 import router from '../../server/server'
 import testData from '../../server/mocs/user'
-import User from '../../server/models/User'
+import Customer from '../../server/models/Customer'
 
 const environment = process.env.NODE_ENV || 'dev'
 
@@ -19,10 +19,10 @@ let insertedUser = undefined
  * Tests would fall if no valid database was provided 
  */
 
-describe('=== User Controller ===', () => {
+describe('=== Customer Controller ===', () => {
     before(done => {
         if (environment === 'test') {
-            User.deleteMany({}, err => {
+            Customer.deleteMany({}, err => {
                 if (err) console.log(err)
                 // IMPORTANT! Waiting for loading of all the api components, especially node-mailer
                 setTimeout(() => done(), 1500)
@@ -32,7 +32,7 @@ describe('=== User Controller ===', () => {
 
     after(done => {
         if (environment === 'test') {
-            User.deleteMany({}, err => {
+            Customer.deleteMany({}, err => {
                 if (err) console.log(err)
                 mongoose.disconnect(err => {
                     if (err) console.log(err)
@@ -42,8 +42,8 @@ describe('=== User Controller ===', () => {
         }
     })
 
-    it("GET /users", done => {
-        request(router).get('/users')
+    it("GET /api/customer", done => {
+        request(router).get('/api/customer/list')
             .end((err, res) => {
                 if (err) throw done(err)
 
@@ -53,19 +53,8 @@ describe('=== User Controller ===', () => {
                 done()
             })
     })
-    it("GET /users redis speeds up", done => {
-        request(router).get('/users')
-            .end((err, res) => {
-                if (err) throw done(err)
-
-                assert.equal(res.status, 200, 'Status must be 200')
-                assert.typeOf(res.body.data, 'array', 'Returned data must be an array')
-
-                done()
-            })
-    })
-    it("POST /users [valid]", done => {
-        request(router).post('/users')
+    it("POST /api/customer [valid]", done => {
+        request(router).post('/api/customer')
             .send(testData.valid).set('Accept', 'application/json')
             .end((err, res) => {
                 if (err) throw done(err)
@@ -79,8 +68,8 @@ describe('=== User Controller ===', () => {
                 done()
             })
     })
-    it("POST /users [duplicate email]", done => {
-        request(router).post('/users')
+    it("POST /api/customer [duplicate email]", done => {
+        request(router).post('/api/customer')
             .send(testData.existing).set('Accept', 'application/json')
             .end((err, res) => {
                 if (err) throw done(err)
@@ -91,18 +80,18 @@ describe('=== User Controller ===', () => {
                 done()
             })
     })
-    it("POST /users [wrong data]", done => {
+    it("POST /api/customer [wrong data]", done => {
         async.series([
-            cb => request(router).post('/users').send(testData.wrongUsername).expect(400, cb),
-            cb => request(router).post('/users').send(testData.wrongEmail).expect(400, cb),
-            cb => request(router).post('/users').send(testData.wrongPassword).expect(400, cb),
-            cb => request(router).post('/users').send(testData.wrongAge).expect(400, cb),
-            cb => request(router).post('/users').send(testData.wrongImage).expect(400, cb),
-            cb => request(router).post('/users').send(testData.empty).expect(400, cb),
+            cb => request(router).post('/api/customer').send(testData.wrongUsername).expect(400, cb),
+            cb => request(router).post('/api/customer').send(testData.wrongEmail).expect(400, cb),
+            cb => request(router).post('/api/customer').send(testData.wrongPassword).expect(400, cb),
+            cb => request(router).post('/api/customer').send(testData.wrongAge).expect(400, cb),
+            cb => request(router).post('/api/customer').send(testData.wrongImage).expect(400, cb),
+            cb => request(router).post('/api/customer').send(testData.empty).expect(400, cb),
         ], done)
     })
-    it("GET /users/:id", done => {
-        request(router).get(`/users/${insertedUser}`)
+    it("GET /api/customer/:id", done => {
+        request(router).get(`/api/customer/list/${insertedUser}`)
             .end((err, res) => {
                 if (err) throw done(err)
 
@@ -112,31 +101,8 @@ describe('=== User Controller ===', () => {
                 done()
             })
     })
-    it("GET /users/:id redis speeds up", done => {
-        request(router).get(`/users/${insertedUser}`)
-            .end((err, res) => {
-                if (err) throw done(err)
-
-                assert.equal(res.status, 200, 'Status must be 200')
-                assert.notTypeOf(res.body.data, 'undefined', 'Response must contain the data')
-
-                done()
-            })
-    })
-    it("AUTHENTICATE /users/authenticate [not verified]", done => {
-        request(router).post('/users/authenticate')
-            .send(testData.auth)
-            .end((err, res) => {
-                if (err) throw done(err)
-
-                assert.equal(res.status, 403, 'Status must be 403')
-                assert.notTypeOf(res.body.error, 'undefined', 'Response must contain an error')
-
-                done()
-            })
-    })
-    it("AUTHENTICATE /users/authenticate [missed pass]", done => {
-        request(router).post('/users/authenticate')
+    it("AUTHENTICATE /api/customer/authenticate [missed pass]", done => {
+        request(router).post('/api/customer/authenticate')
             .send(testData.authMissed)
             .end((err, res) => {
                 if (err) throw done(err)
@@ -147,28 +113,8 @@ describe('=== User Controller ===', () => {
                 done()
             })
     })
-    it("VERIFY EMAIL /users/verifyEmail", done => {
-        request(router).post('/users/verifyEmail')
-            .send({ email: testData.auth.email }).set('Accept', 'application/json')
-            .end((err, res) => {
-                if (err) throw done(err)
-
-                assert.equal(res.status, 200, 'Status must be 200')
-                assert.notTypeOf(res.body.message, 'undefined', 'Response must containt a message')
-
-                request(router).get(`/users/verifying/${insertedUser}`)
-                    .end((err, res) => {
-                        if (err) throw done(err)
-
-                        assert.equal(res.status, 200, 'Status must be 200')
-                        assert.notTypeOf(res.body.message, 'undefined', 'Response must containt a message')
-
-                        done()
-                    })
-            })
-    })
-    it("AUTHENTICATE /users/authenticate [verified]", done => {
-        request(router).post('/users/authenticate')
+    it("AUTHENTICATE /api/customer/authenticate [verified]", done => {
+        request(router).post('/api/customer/authenticate')
             .send(testData.auth)
             .end((err, res) => {
                 if (err) throw done(err)
@@ -179,46 +125,22 @@ describe('=== User Controller ===', () => {
                 done()
             })
     })
-    it("CHANGE PASSWORD /users/resetPasswordRequest", done => {
-        const hash = 'somehash'
-
-        request(router).post('/users/resetPasswordRequest')
-            .send({ email: testData.valid.email, hash }).set('Accept', 'application/json')
-            .end((err, res) => {
-                if (err) throw done(err)
-
-                assert.equal(res.status, 200, 'Status must be 200')
-                assert.notTypeOf(res.body.message, 'undefined', 'Response must containt a message')
-
-                request(router).post(`/users/resetPasswordConfirm/${hash}`)
-                    .send({ password: testData.update.password }).set('Accept', 'application/json')
-                    .end((err, res) => {
-                        if (err) throw done(err)
-
-                        assert.equal(res.status, 200, 'Status must be 200')
-                        assert.notTypeOf(res.body.message, 'undefined', 'Response must containt a message')
-
-                        done()
-                    })
-
-            })
-    })
-    it("PUT /users/:id", done => {
-        request(router).put(`/users/${insertedUser}`)
+    it("PATCH /api/customer/list/:id", done => {
+        request(router).patch(`/api/customer/list/${insertedUser}`)
             .send(testData.update)
             .end((err, res) => {
                 if (err) throw done(err)
 
                 assert.equal(res.status, 200, 'Status must be 200')
-                assert.notTypeOf(res.body.message, 'undefined', 'Response must containt a message')
+                assert.notTypeOf(res.body.data, 'undefined', 'Response must containt an updated data')
 
                 done()
             })
 
     })
-    it("DELETE /users", done => {
+    it("DELETE /api/customer/list", done => {
         
-        request(router).delete(`/users/${insertedUser}`)
+        request(router).delete(`/api/customer/list/${insertedUser}`)
             .end((err, res) => {
                 if (err) throw done(err)
 

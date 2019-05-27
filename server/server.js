@@ -23,7 +23,6 @@ import representative from './controllers/representative'
 import order from './controllers/order'
 import certificate from './controllers/certificate'
 
-// import http from 'http'
 
 
 // const PeerServer = require('peer').ExpressPeerServer;
@@ -121,8 +120,8 @@ enviroment === 'dev' && mongoose.set('debug', (coll, method) => {
 
 
 
-// const server = api.listen(port, err => {
-api.listen(port, err => {
+// api.listen(port, err => {
+const server = api.listen(port, err => {
 	if (err) {
 		logger.error(`[API] Error while launhing the server: ${err}`)
 		process.exit(1)
@@ -133,11 +132,12 @@ api.listen(port, err => {
 
 
 // const peerServer = PeerServer(server, {
-// 	ssl: {
-// 		key: fs.readFileSync('ssl/key.pem', 'utf8'),
-// 		cert: fs.readFileSync('ssl/cert.pem', 'utf8'),
-// 		passphrase: process.env.PASSPHRASE
-// 	}
+	// debug: true,
+	// ssl: {
+		// key: fs.readFileSync('ssl/key.pem', 'utf8'),
+		// cert: fs.readFileSync('ssl/cert.pem', 'utf8'),
+		// passphrase: process.env.PASSPHRASE
+	// }
 // });
 
 
@@ -145,5 +145,5 @@ api.listen(port, err => {
 
 
 
-exports.default = api
+module.exports = server
 // exports.peerServer = peerServer

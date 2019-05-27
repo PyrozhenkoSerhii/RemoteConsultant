@@ -20,10 +20,8 @@ export default {
         'email': 'test@test.com'
     },
     'update': {
-        'username': 'new_test_username',
-        'email': 'new_test@test.com',
-        'password': 'NewTestPass123',
-        'age': 26
+        'field':'username',
+        'value':'new_test_username'
     },
     'wrongUsername': {
         'username': '',

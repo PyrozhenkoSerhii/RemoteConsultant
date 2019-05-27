@@ -53,7 +53,8 @@ const Chatroom = ({ customer, product }) => {
 
 		let conversation = _find(data, { id: consultant._id })
 		if (!conversation) {
-			const peer = new Peer(customer._id, { host: HOST, port: PORT, secure: true, key: 'peerjs' })
+			const peer = new Peer(customer._id, { host: HOST, port: PORT, secure: true, key: 'peerjs', debug: 3 })
+			// const peer = new Peer(customer._id, { host: HOST, port: PORT, key: 'peerjs', path: '/p2p' })
 			const connection = peer.connect(consultant._id)
 
 			console.log(`[p2p sender - ${customer._id}] Connection to ${consultant._id}`)
@@ -64,6 +65,8 @@ const Chatroom = ({ customer, product }) => {
 				consultant: consultant,
 				messages: []
 			}
+
+			connection.on('open', () => console.log('opened'))
 
 			connection.on('data', message => {
 				setCurrentConversation(prevState => ({

@@ -55,8 +55,11 @@ const Chatroom = ({ consultant }) => {
 	}, [data])
 
 	useEffect(() => {
-		const peer = new Peer(consultant._id, { host: HOST, port: PORT, secure: true, key: 'peerjs' })
+		const peer = new Peer(consultant._id, { host: HOST, port: PORT, secure: true, key: 'peerjs', debug: 3 })
+		// const peer = new Peer(consultant._id, { host: HOST, port: PORT, key: 'peerjs', path: '/p2p' })
 
+
+		peer.on('open', res => console.log(res))
 		// chat setup
 		peer.on('connection', conn => {
 			console.log(`[p2p receiver - ${consultant._id}] Connection from ${conn.peer}`)
@@ -113,8 +116,6 @@ const Chatroom = ({ consultant }) => {
 					video.srcObject = stream
 					video.play()
 				})
-
-
 			})
 		}
 

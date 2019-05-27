@@ -78,7 +78,7 @@ router.patch('/customer/list/:id', isObjectId, wrap(async (req, res) => {
 
 
 router.delete('/customer/list/:id', isObjectId, wrap(async (req, res) => {
-    const customer = await RepreCustomersentative.findById(req.params.id)
+    const customer = await Customer.findById(req.params.id)
     if (!customer) return res.status(400).send({ error: `Customer Not Found` })
 
     await customer.remove()
