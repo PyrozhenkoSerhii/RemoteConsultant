@@ -31,7 +31,7 @@ const api = express()
 const port = process.env.PORT || config.api.port
 
 const ExpressPeerServer = require('peer').ExpressPeerServer;
-const server = http.creteServer(api)
+const server = http.createServer(api)
 const peerServer = ExpressPeerServer(server, {
 	debug: true,
 	ssl: {
