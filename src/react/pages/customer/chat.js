@@ -53,7 +53,7 @@ const Chatroom = ({ customer, product }) => {
 
 		let conversation = _find(data, { id: consultant._id })
 		if (!conversation) {
-			const peer = new Peer(customer._id, { host: HOST, secure: true, port: PORT, path: '/p2p' })
+			const peer = new Peer(customer._id, { host: HOST, port: PORT, path: '/p2p' })
 			const connection = peer.connect(consultant._id)
 
 			console.log(`[p2p sender - ${customer._id}] Connection to ${consultant._id}`)

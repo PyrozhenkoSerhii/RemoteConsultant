@@ -26,20 +26,20 @@ import certificate from './controllers/certificate'
 import http from 'http'
 
 
-// const PeerServer = require('peer').ExpressPeerServer;
+const PeerServer = require('peer').ExpressPeerServer;
 const api = express()
 const port = process.env.PORT || config.api.port
 
-const ExpressPeerServer = require('peer').ExpressPeerServer;
-const server = http.createServer(api)
-const peerServer = ExpressPeerServer(server, {
-	debug: true,
-	ssl: {
-		key: fs.readFileSync('./ssl/key.pem', 'utf8'),
-		cert: fs.readFileSync('./ssl/cert.pem', 'utf8'),
-		passphrase: process.env.PASSPHRASE
-	}
-})
+// const ExpressPeerServer = require('peer').ExpressPeerServer;
+// const server = http.createServer(api)
+// const peerServer = ExpressPeerServer(server, {
+// 	debug: true,
+// 	ssl: {
+// 		key: fs.readFileSync('./ssl/key.pem', 'utf8'),
+// 		cert: fs.readFileSync('./ssl/cert.pem', 'utf8'),
+// 		passphrase: process.env.PASSPHRASE
+// 	}
+// })
 
 
 const limiter = requestLimiter({
@@ -54,7 +54,7 @@ blacklist.configure({
 	}
 })
 
-api.use('/p2p', peerServer)
+// api.use('/p2p', peerServer)
 api.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	next();
@@ -121,9 +121,8 @@ enviroment === 'dev' && mongoose.set('debug', (coll, method) => {
 
 
 
-// const server = api.listen(port, err => {
-// const server = api.listen(port, err => {
-server.listen(port, err => {
+const server = api.listen(port, err => {
+// server.listen(port, err => {
 	if (err) {
 		logger.error(`[API] Error while launhing the server: ${err}`)
 		process.exit(1)
@@ -133,16 +132,16 @@ server.listen(port, err => {
 })
 
 
-// const peerServer = PeerServer(server, {
-// 	ssl: {
-// 		key: fs.readFileSync('./ssl/key.pem', 'utf8'),
-// 		cert: fs.readFileSync('./ssl/cert.pem', 'utf8'),
-// 		passphrase: process.env.PASSPHRASE
-// 	}
-// });
+const peerServer = PeerServer(server, {
+	ssl: {
+		key: fs.readFileSync('ssl/key.pem', 'utf8'),
+		cert: fs.readFileSync('ssl/cert.pem', 'utf8'),
+		// passphrase: process.env.PASSPHRASE
+	}
+});
 
 
-// api.use('/p2p/', peerServer)
+api.use('/p2p/', peerServer)
 
 
 
