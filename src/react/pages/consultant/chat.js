@@ -8,7 +8,7 @@ import Peer from 'peerjs'
 import Conversations from '../../Components/Shared/Chat/ConversationList'
 import Messages from '../../Components/Shared/Chat/MessageList'
 
-import { BASE_URL, CONSULTANT, PATCH, CHAT, CUSTOMER, GET, HOST, PORT } from '../../../config/routes'
+import { BASE_URL, CONSULTANT, PATCH, CHAT, CUSTOMER, GET, HOST, PORT, SECURE } from '../../../config/routes'
 
 
 const Chatroom = ({ consultant }) => {
@@ -55,11 +55,22 @@ const Chatroom = ({ consultant }) => {
 	}, [data])
 
 	useEffect(() => {
-		const peer = new Peer(consultant._id, { host: HOST, port: PORT, secure: true, key: 'peerjs', debug: 3 })
-		// const peer = new Peer(consultant._id, { host: HOST, port: PORT, key: 'peerjs', path: '/p2p' })
+		// const peer = new Peer(consultant._id, { host: HOST, port: PORT, secure: true, key: 'peerjs', debug: 3 })
+		const peer = new Peer(consultant._id, {
+			host: HOST, port: PORT, secure: SECURE, path: '/p2p', config: {
+				'iceServers': [
+					{ url: 'stun:stun1.l.google.com:19302' },
+					{
+						url: 'turn:numb.viagenie.ca',
+						credential: 'muazkh',
+						username: 'webrtc@live.com'
+					}
+				]
+			}
+		})
 
 
-		peer.on('open', res => console.log(res))
+		peer.on('open', res => console.log('opened:', res))
 		// chat setup
 		peer.on('connection', conn => {
 			console.log(`[p2p receiver - ${consultant._id}] Connection from ${conn.peer}`)

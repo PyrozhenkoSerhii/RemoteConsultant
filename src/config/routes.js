@@ -1,11 +1,12 @@
 
 module.exports = {
-    HOST: 'remote-consultant-peerjs.herokuapp.com',
+    HOST: 'remote-consultant.herokuapp.com',
     // HOST: 'localhost',
     BASE_URL: 'https://remote-consultant.herokuapp.com/api/',
     // BASE_URL: 'http://localhost:8080/api/',
     PORT: '443',
     // PORT: '8080',
+    SECURE: true,
     REPRESENTATIVE: 'representative/',
     CUSTOMER: 'customer/',
     CONSULTANT: 'consultant/',

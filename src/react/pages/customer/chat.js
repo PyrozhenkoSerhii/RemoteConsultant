@@ -7,7 +7,7 @@ import Conversations from '../../Components/Shared/Chat/ConversationList'
 import Messages from '../../Components/Shared/Chat/MessageList'
 
 import { useHTTP } from '../../tools/hooks/http'
-import { BASE_URL, CONSULTANT, GET, HOST, PORT } from '../../../config/routes'
+import { BASE_URL, CONSULTANT, GET, HOST, PORT, SECURE } from '../../../config/routes'
 
 import Loading from '../../Components/Loading'
 import Error from '../../Components/Error'
@@ -53,8 +53,20 @@ const Chatroom = ({ customer, product }) => {
 
 		let conversation = _find(data, { id: consultant._id })
 		if (!conversation) {
-			const peer = new Peer(customer._id, { host: HOST, port: PORT, secure: true, key: 'peerjs', debug: 3 })
-			// const peer = new Peer(customer._id, { host: HOST, port: PORT, key: 'peerjs', path: '/p2p' })
+			// const peer = new Peer(customer._id, { host: HOST, port: PORT, secure: true, key: 'peerjs', debug: 3 })
+			const peer = new Peer(customer._id, {
+				host: HOST, port: PORT, secure: SECURE, path: '/p2p', config: {
+					'iceServers': [
+						{ url: 'stun:stun1.l.google.com:19302' },
+						{
+							url: 'turn:numb.viagenie.ca',
+							credential: 'muazkh',
+							username: 'webrtc@live.com'
+						}
+					]
+				}
+			})
+
 			const connection = peer.connect(consultant._id)
 
 			console.log(`[p2p sender - ${customer._id}] Connection to ${consultant._id}`)
