@@ -7,6 +7,8 @@ import Peer from 'peerjs'
 
 import Conversations from '../../Components/Shared/Chat/ConversationList'
 import Messages from '../../Components/Shared/Chat/MessageList'
+import VideoPlayer from '../../Components/Shared/Chat/VideoPlayer'
+
 
 import { BASE_URL, CONSULTANT, PATCH, CHAT, CUSTOMER, GET, HOST, PORT, SECURE } from '../../../config/routes'
 
@@ -17,6 +19,7 @@ const Chatroom = ({ consultant }) => {
 		allowAudio: true,
 		allowVideo: true
 	})
+	const [isStreaming, setIsStreaming] = useState(false)
 
 	/*
 		{
@@ -115,9 +118,9 @@ const Chatroom = ({ consultant }) => {
 					myStream => {
 						call.answer(myStream)
 
-						const myVideo = document.getElementById('my-camera')
-						myVideo.srcObject = myStream
-						myVideo.play()
+						// const myVideo = document.getElementById('my-camera')
+						// myVideo.srcObject = myStream
+						// myVideo.play()
 					},
 					error => console.log(error)
 				)
@@ -126,6 +129,8 @@ const Chatroom = ({ consultant }) => {
 					const video = document.getElementById('peer-camera')
 					video.srcObject = stream
 					video.play()
+
+					setIsStreaming(true)
 				})
 			})
 		}
@@ -173,11 +178,13 @@ const Chatroom = ({ consultant }) => {
 					const video = document.getElementById('peer-camera')
 					video.srcObject = stream
 					video.play()
+
+					setIsStreaming(true)
 				})
 
-				const myVideo = document.getElementById('my-camera')
-				myVideo.srcObject = myStream
-				myVideo.play()
+				// const myVideo = document.getElementById('my-camera')
+				// myVideo.srcObject = myStream
+				// myVideo.play()
 			},
 			error => console.error(error)
 		)
@@ -233,19 +240,8 @@ const Chatroom = ({ consultant }) => {
 					/>
 				}
 			</div>
-			{/* 
-            <div className='video-wrapper'>
-                <div className="text-center">
-                    <video id="my-camera" width="300" height="300" autoPlay="autoplay" muted={true} className="mx-auto d-block"></video>
-                    <span className="label label-info">You</span>
-                </div>
 
-                <div className="text-center">
-                    <video id="peer-camera" width="300" height="300" autoPlay="autoplay" className="mx-auto d-block"></video>
-                    <span className="label label-info" id="connected_peer"></span>
-                </div>
-            </div> */}
-
+			<VideoPlayer isStreaming={isStreaming} />
 		</div>
 	)
 }

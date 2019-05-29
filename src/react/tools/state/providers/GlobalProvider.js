@@ -29,7 +29,22 @@ const GlobalProvider = props => {
         setAccounts(refreshedAccount)
     }
 
-    return <GlobalContext.Provider value={{ accounts, authenticate, logout }}>
+    const update = (entity, refreshedInfo) => {
+        console.log(refreshedInfo)
+        const refreshed = {
+            ...accounts.tokens,
+            info: {
+                ...accounts.info,
+                [entity]: refreshedInfo
+            }
+        }
+
+        localStorage.setItem('accounts', JSON.stringify(refreshed))
+
+        setAccounts(refreshed)
+    }
+
+    return <GlobalContext.Provider value={{ accounts, authenticate, logout, update }}>
         {props.children}
     </GlobalContext.Provider>
 }

@@ -68,13 +68,14 @@ router.patch('/consultant/list/:id', isObjectId, wrap(async (req, res) => {
         return res.status(400).send({ error: `${field} field can't be changed this way ` })
     }
 
-    const consultant = await Consultant.findById(req.params.id).select('+password').exec()
+    const consultant = await Consultant.findById(req.params.id).exec()
     if (!consultant) return res.status(400).send({ error: `Consultant Not Found` })
 
-    if (field === 'password') {
-        const verified = await consultant.verifyPassword(old)
-        if (!verified) return res.status(400).send({ error: 'Old password is incorrect!' })
-    }
+    // temporary unavailable
+    // if (field === 'password') {
+        // const verified = await consultant.verifyPassword(old)
+        // if (!verified) return res.status(400).send({ error: 'Old password is incorrect!' })
+    // }
 
     if (field === 'languages' && typeof value === 'object') {
         if (value instanceof Array === false) value = [value]
@@ -87,6 +88,7 @@ router.patch('/consultant/list/:id', isObjectId, wrap(async (req, res) => {
         consultant[field] = value
     }
 
+    console.log(consultant)
     const validationError = consultant.validateSync()
     if (validationError) return res.status(400).send({ error: validationError.errors })
 

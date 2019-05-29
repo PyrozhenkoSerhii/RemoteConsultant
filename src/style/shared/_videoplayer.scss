@@ -1,0 +1,10 @@
+.video-wrapper {
+    position: fixed;
+    bottom: -12px;
+    left: 0;
+
+    #peer-camera {
+        width: 350px;
+        height: auto;
+    }
+}

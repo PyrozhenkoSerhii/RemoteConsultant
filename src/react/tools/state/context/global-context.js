@@ -15,5 +15,6 @@ export default React.createContext({
         }
     },
     authenticate: (entity, info, token) => { },
+    update: (entity, newData) => { },
     logout: entity => { }
 })

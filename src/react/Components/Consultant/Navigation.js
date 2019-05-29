@@ -11,6 +11,7 @@ const Navigation = ({ context, entity }) => (
                 <Link className="nav-link" to="/consultant">Home</Link>
                 <Link className="nav-link" to="/consultant/profile">Profile</Link>
                 <Link className="nav-link" to="/consultant/chat">Chat</Link>
+                <Link className="nav-link" to="/consultant/profile">Profile</Link>
             </Nav>
             <Nav>
                 <Link className="nav-link" to="/">Back</Link>

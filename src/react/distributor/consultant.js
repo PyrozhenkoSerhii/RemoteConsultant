@@ -5,6 +5,7 @@ import { Route, Switch } from 'react-router-dom'
 import HomePage from '../pages/consultant/home'
 import ProductsPage from '../pages/shared/product/products'
 import ChatPage from '../pages/consultant/chat'
+import ProfilePage from '../pages/consultant/profile'
 
 // componenents
 import NavigationComponent from '../Components/Consultant/Navigation'
@@ -29,6 +30,7 @@ const Consultant = () => {
                 <Route exact path='/consultant' render={(props) => <HomePage {...props} consultant={context.accounts.info[entity]} />} />
                 <Route path='/consultant/products' render={(props) => <ProductsPage {...props} />} />
                 <Route path='/consultant/chat' render={(props) => <ChatPage {...props} consultant={context.accounts.info[entity]} />} />
+                <Route path='/consultant/profile' render={(props) => <ProfilePage {...props} consultant={context.accounts.info[entity]} />} />
             </Switch>
         </React.Fragment>
     )
