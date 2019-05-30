@@ -1,10 +1,11 @@
 import { Schema } from 'mongoose'
+import timestamp from 'mongoose-timestamp'
 
 import messages from '../../utils/validation/messages'
 import { message } from '../../utils/validation/range'
 
 
-exports.Request = new Schema({
+const RequestSchema = new Schema({
     consultant: {
         type: Schema.Types.ObjectId,
         ref: 'Consultant',
@@ -14,9 +15,9 @@ exports.Request = new Schema({
         type: String,
         trim: true,
         maxlength: [message.max, messages.restrictions.message]
-    },
-    date: {
-        type: Date,
-        default: Date.now()
     }
 })
+
+RequestSchema.plugin(timestamp)
+
+exports.Request = RequestSchema

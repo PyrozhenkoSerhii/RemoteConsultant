@@ -4,8 +4,9 @@ import messages from '../../utils/validation/messages'
 import { language } from '../../utils/validation/defaults'
 import { title } from '../../utils/validation/range'
 
+import timestamp from 'mongoose-timestamp'
 
-exports.Language = new Schema({
+const LanguageSchema = new Schema({
     title: {
         type: String,
         trim: true,
@@ -19,3 +20,7 @@ exports.Language = new Schema({
         enum: language.enum
     }
 })
+
+LanguageSchema.plugin(timestamp)
+
+exports.Language = LanguageSchema

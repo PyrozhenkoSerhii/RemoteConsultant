@@ -40,12 +40,17 @@
     }
     
     .profile-certificates {
-    
+        
     }
 
-    .profile-languages {
+        .languages-wrapper {
+            display: flex;
+            flex-flow: row wrap;
 
-    }
+            .card {
+                flex: 0 0 33%;
+            }
+        }
 
     .profile-company {
 
@@ -70,4 +75,9 @@
             }
         }
     }
+}
+
+.icon-add {
+    padding: 10px;
+    cursor: pointer;
 }

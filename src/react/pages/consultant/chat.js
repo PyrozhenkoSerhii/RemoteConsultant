@@ -115,13 +115,7 @@ const Chatroom = ({ consultant }) => {
 		if (peerSettings.allowAudio && peerSettings.allowVideo) {
 			peer.on('call', call => {
 				navigator.getUserMedia({ audio: true, video: true },
-					myStream => {
-						call.answer(myStream)
-
-						// const myVideo = document.getElementById('my-camera')
-						// myVideo.srcObject = myStream
-						// myVideo.play()
-					},
+					myStream => call.answer(myStream),
 					error => console.log(error)
 				)
 
@@ -181,10 +175,6 @@ const Chatroom = ({ consultant }) => {
 
 					setIsStreaming(true)
 				})
-
-				// const myVideo = document.getElementById('my-camera')
-				// myVideo.srcObject = myStream
-				// myVideo.play()
 			},
 			error => console.error(error)
 		)

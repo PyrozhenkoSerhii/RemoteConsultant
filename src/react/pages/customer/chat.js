@@ -97,13 +97,7 @@ const Chatroom = ({ customer, product }) => {
 			//video setup
 			peer.on('call', call => {
 				navigator.getUserMedia({ audio: true, video: true },
-					myStream => {
-						call.answer(myStream)
-
-						// const myVideo = document.getElementById('my-camera')
-						// myVideo.srcObject = myStream
-						// myVideo.play()
-					},
+					myStream => call.answer(myStream),
 					error => console.log(error)
 				)
 
@@ -114,8 +108,6 @@ const Chatroom = ({ customer, product }) => {
 
 					setIsStreaming(true)
 				})
-
-
 			})
 
 			setPeer(peer)
@@ -158,10 +150,6 @@ const Chatroom = ({ customer, product }) => {
 
 					setIsStreaming(true)
 				})
-
-				// const myVideo = document.getElementById('my-camera')
-				// myVideo.srcObject = myStream
-				// myVideo.play()
 			},
 			error => console.error(error)
 		)

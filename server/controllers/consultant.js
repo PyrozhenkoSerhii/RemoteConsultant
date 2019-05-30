@@ -61,7 +61,7 @@ router.post('/consultant/authenticate', wrap(async (req, res) => {
  *        'Completed' field may be set to true if all fields required for it was initialized
  */
 router.patch('/consultant/list/:id', isObjectId, wrap(async (req, res) => {
-    const { field, value, old } = req.body
+    let { field, value, old } = req.body
 
     if (!field || !value) return res.status(400).send({ error: `Wrong data! Field and value must be provided` })
     if (['bill', 'verified', 'completed'].includes(field)) {
@@ -78,10 +78,11 @@ router.patch('/consultant/list/:id', isObjectId, wrap(async (req, res) => {
     // }
 
     if (field === 'languages' && typeof value === 'object') {
-        if (value instanceof Array === false) value = [value]
+        console.log('lang', value)
+        consultant.languages.push(value)
 
         //TODO: editing and removing of language and its certificate
-        _forEach(value, language => consultant.language.push(language))
+        // _forEach(value, language => consultant.language.push(language))
 
         consultant.markModified('languages')
     } else if (typeof value === 'string' || typeof value === 'number') {

@@ -1,9 +1,13 @@
 import React from 'react'
-import { Image, Button } from 'react-bootstrap'
-import { MDBInput } from 'mdbreact';
+import moment from 'moment'
+
+import { Image } from 'react-bootstrap'
+
+import { MDBInput, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBCardHeader, MDBCardFooter, MDBBtn, MDBContainer, MDBIcon } from "mdbreact"
 
 
-const Profile = ({ formData, handleUpdate }) => (
+
+const Profile = ({ formData, handleUpdate, handlePopup }) => (
     <div className='profile-wrapper'>
         <div className='profile-info'>
             <div className='profile-left'>
@@ -77,29 +81,40 @@ const Profile = ({ formData, handleUpdate }) => (
                     value={formData.info}
                     type='textarea'
                 />
-
-
             </div>
         </div>
 
-        <div className='profile-certificates'>
-            <p className='header'>Certificates</p>
 
-        </div>
+        <span className='header'>Languages</span>
+        <MDBIcon icon="plus-circle" onClick={() => handlePopup('language')} className='icon-add' />
 
-        <div className='profile-languages'>
-            <p className='header'>Languages</p>
-
-        </div>
+        {formData.languages && formData.languages.map(language => (
+            <div className='languages-wrapper' key={language._id}>
+                <MDBCard className="text-center">
+                    <MDBCardHeader color="primary-color">Verified</MDBCardHeader>
+                    <MDBCardBody>
+                        <MDBCardTitle>{language.title}</MDBCardTitle>
+                        <MDBCardText>{language.level} </MDBCardText>
+                    </MDBCardBody>
+                    <MDBCardFooter color="primary-color">{moment(language.createdAt).fromNow()}</MDBCardFooter>
+                </MDBCard>
+            </div>
+        ))}
 
         <div className='profile-company'>
-            <p className='header'>Company</p>
+            <span className='header'>Company: <em>{formData.company || 'non employed yet'}</em></span>
+            <MDBIcon icon="sync-alt" onClick={() => handlePopup('request')} className='icon-add' />
+        </div>
 
+        <div className='profile-certificates'>
+            <span className='header'>Certificates</span>
+            <MDBIcon icon="sync-alt" onClick={() => handlePopup('certificate')} className='icon-add' />
         </div>
 
 
     </div>
 )
+
 
 
 export default Profile
