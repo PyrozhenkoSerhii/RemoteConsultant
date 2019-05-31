@@ -28,6 +28,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+var ObjectId = require('mongoose').Types.ObjectId;
+
 var router = _express.default.Router();
 
 router.get('/company/list/', (0, _wrap.default)(
@@ -74,7 +76,7 @@ function () {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return _Company.default.findById(req.params.id).populate('certificates');
+            return _Company.default.findById(req.params.id).populate('certificates').populate('requests.consultant');
 
           case 2:
             company = _context2.sent;
@@ -311,7 +313,7 @@ function () {
   var _ref5 = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee5(req, res) {
-    var _req$body2, approved, request, company, _find2, _id, consultant, consultantObj, saved;
+    var _req$body2, approved, request, company, _find2, _id, consultant, saved;
 
     return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
@@ -346,13 +348,13 @@ function () {
 
           case 8:
             _find2 = (0, _find3.default)(company.requests, {
-              consultant: request.consultant,
+              consultant: ObjectId(request.consultant._id),
               message: request.message
             }), _id = _find2._id, consultant = _find2.consultant;
             company.requests.pull(_id);
 
             if (!approved) {
-              _context5.next = 17;
+              _context5.next = 14;
               break;
             }
 
@@ -368,29 +370,19 @@ function () {
             });
 
           case 13:
-            consultantObj = _context5.sent;
-
-            if (!(consultantObj.company !== company._id)) {
-              _context5.next = 16;
-              break;
-            }
-
-            return _context5.abrupt("return", res.status(500).send("Something went wrong while hiring consultant, ".concat(consultantObj)));
-
-          case 16:
             company.consultants.push(consultant);
 
-          case 17:
-            _context5.next = 19;
+          case 14:
+            _context5.next = 16;
             return company.save();
 
-          case 19:
+          case 16:
             saved = _context5.sent;
             return _context5.abrupt("return", res.status(200).send({
               data: saved
             }));
 
-          case 21:
+          case 18:
           case "end":
             return _context5.stop();
         }

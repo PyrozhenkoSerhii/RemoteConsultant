@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { withAlert } from 'react-alert'
+import ViewIcon from '@material-ui/icons/Visibility'
 
 import Loading from '../../Components/Loading'
 import Error from '../../Components/Error'
@@ -30,6 +31,12 @@ const Consultant = ({ company, alert }) => {
         { id: 'online', numeric: true, disablePadding: false, label: 'Online now' },
     ]
 
+    const secondaryOptionIconGetter = () => <ViewIcon />
+
+    const secondaryOptionHandler = () => {
+        alert('will be implemented soon')
+    }
+
     return (
         loading ? <Loading /> :
             error ? <Error error={error} /> :
@@ -38,6 +45,8 @@ const Consultant = ({ company, alert }) => {
                     handleDelete={dismissConsultantant}
                     columns={columns}
                     title='Consultants'
+                    secondaryOptionHandler={secondaryOptionHandler}
+                    secondaryOptionIconGetter={secondaryOptionIconGetter}
                 />
     )
 }

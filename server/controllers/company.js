@@ -6,21 +6,29 @@ import _find from 'lodash/find'
 import Company from '../models/Company'
 import Consultant from '../models/Consultant'
 
+
 import wrap from '../middlewares/wrap'
 import { isObjectId } from '../middlewares/validators'
 
+const ObjectId = require('mongoose').Types.ObjectId
 const router = express.Router()
 
 
 router.get('/company/list/', wrap(async (req, res) => {
     const companies = await Company.find(req.query).populate('certificates')
+
     res.status(200).send({ data: companies })
 }))
 
 
 router.get('/company/list/:id', isObjectId, wrap(async (req, res) => {
-    const company = await Company.findById(req.params.id).populate('certificates')
+    const company = await Company.findById(req.params.id)
+        .populate('certificates')
+        .populate('requests.consultant')
+
     if (!company) return res.status(400).send({ error: `Company Not Found` })
+
+
     res.status(200).send({ data: company })
 }))
 
@@ -91,13 +99,12 @@ router.patch('/company/list/:id/request', isObjectId, wrap(async (req, res) => {
     const company = await Company.findById(req.params.id)
     if (!company) return res.status(400).send({ error: `Company Not Found` })
 
-    const { _id, consultant } = _find(company.requests, { consultant: request.consultant, message: request.message })
+    const { _id, consultant } = _find(company.requests, { consultant: ObjectId(request.consultant._id), message: request.message })
 
     company.requests.pull(_id)
 
     if (approved) {
-        const consultantObj = await Consultant.findOneAndUpdate({ _id: consultant }, { $set: { company: company._id } }, { new: true })
-        if (consultantObj.company !== company._id) return res.status(500).send(`Something went wrong while hiring consultant, ${consultantObj}`)
+        await Consultant.findOneAndUpdate({ _id: consultant }, { $set: { company: company._id } }, { new: true })
         company.consultants.push(consultant)
     }
 

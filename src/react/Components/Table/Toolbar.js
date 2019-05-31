@@ -34,7 +34,7 @@ const toolbarStyles = theme => ({
 });
 
 
-let CustomToolbar = ({ numSelected, handleDelete, classes, handleView, title }) => (
+let CustomToolbar = ({ numSelected, handleDelete, classes, handleView, title, secondaryOptionIconGetter, secondaryOptionHandler }) => (
     <Toolbar className={classNames(classes.root, { [classes.highlight]: numSelected > 0 })}>
         <div className={classes.title}>
             {numSelected > 0
@@ -52,8 +52,8 @@ let CustomToolbar = ({ numSelected, handleDelete, classes, handleView, title }) 
             )}
             {numSelected === 1 && (
                 <Tooltip >
-                    <IconButton aria-label='View' onClick={handleView}>
-                        <ViewIcon />
+                    <IconButton aria-label='View' onClick={secondaryOptionHandler}>
+                        {secondaryOptionIconGetter()}
                     </IconButton>
                 </Tooltip>
             )}

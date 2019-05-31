@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { withAlert } from 'react-alert'
+import ViewIcon from '@material-ui/icons/Visibility'
 
 import Loading from '../../Components/Loading'
 import Error from '../../Components/Error'
@@ -36,9 +37,6 @@ const Product = ({ company, alert }) => {
         }
     }
 
-    const handleView = (product) => {
-
-    }
 
     const columns = [
         { id: 'title', numeric: false, disablePadding: true, label: 'Title' },
@@ -48,15 +46,22 @@ const Product = ({ company, alert }) => {
         { id: 'description', numeric: true, disablePadding: false, label: 'Description' },
     ]
 
+    const secondaryOptionIconGetter = () => <ViewIcon />
+
+    const secondaryOptionHandler = () => {
+        alert('will be implemented soon')
+    }
+
     return (
         loading ? <Loading /> :
             error ? <Error error={error} /> :
                 <CustomTable
                     data={products}
                     handleDelete={handleDelete}
-                    handleView={handleView}
                     columns={columns}
                     title='Products'
+                    secondaryOptionIconGetter={secondaryOptionIconGetter}
+                    secondaryOptionHandler={secondaryOptionHandler}
                 />
     )
 }

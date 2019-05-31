@@ -24,6 +24,7 @@ module.exports = {
     AUTHENTICATE: 'authenticate',
     IMPORT: 'import/',
     IMPORT_CONFIG: 'importConfig/',
+    REQUEST: '/request/',
     BATCH_DELETE: 'batchDelete/',
-    CHAT: 'chat/'
+    CHAT: 'chat/',
 }
