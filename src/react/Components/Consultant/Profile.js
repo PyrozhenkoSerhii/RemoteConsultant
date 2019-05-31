@@ -88,9 +88,9 @@ const Profile = ({ formData, handleUpdate, handlePopup }) => (
         <span className='header'>Languages</span>
         <MDBIcon icon="plus-circle" onClick={() => handlePopup('language')} className='icon-add' />
 
-        {formData.languages && formData.languages.map(language => (
-            <div className='languages-wrapper' key={language._id}>
-                <MDBCard className="text-center">
+        <div className='languages-wrapper'>
+            {formData.languages && formData.languages.map(language => (
+                <MDBCard className="text-center" key={language._id}>
                     <MDBCardHeader color="primary-color">Verified</MDBCardHeader>
                     <MDBCardBody>
                         <MDBCardTitle>{language.title}</MDBCardTitle>
@@ -98,8 +98,8 @@ const Profile = ({ formData, handleUpdate, handlePopup }) => (
                     </MDBCardBody>
                     <MDBCardFooter color="primary-color">{moment(language.createdAt).fromNow()}</MDBCardFooter>
                 </MDBCard>
-            </div>
-        ))}
+            ))}
+        </div>
 
         <div className='profile-company'>
             <span className='header'>Company: <em>{formData.company || 'non employed yet'}</em></span>

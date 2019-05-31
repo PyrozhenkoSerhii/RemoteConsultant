@@ -1,3 +1,5 @@
+import "@babel/polyfill"
+
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
@@ -22,6 +24,7 @@ import product from './controllers/product'
 import representative from './controllers/representative'
 import order from './controllers/order'
 import certificate from './controllers/certificate'
+
 
 
 
