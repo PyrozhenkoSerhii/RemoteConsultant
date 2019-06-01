@@ -266,3 +266,68 @@
     color: #007aff;
     opacity: 0.25;
   }
+
+
+
+  .conversation-info {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+
+    .conversation-info-fullname {
+      font-weight: 500;
+      font-size: 15px; 
+    }
+
+    .conversation-info-rating {
+      color: orange;
+
+      * {
+        color: orange;
+      }
+    }
+  }
+  .conversation-details-wrapper {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+
+    .consultant-info {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: space-around;
+      
+      .consultant-info-item {
+        &.item-language {
+          font-size: 14px;
+          
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: space-between;
+          
+          div {
+            width: 50%;
+          }
+        }
+        
+        &.item-gender {
+          color: gray;
+          font-size: 13px;
+        }
+        
+        &.item-info {
+          padding: 10px 0;
+          font-style: italic;
+          font-size: 13px;
+        }
+      }
+    }
+
+  }
+    
+  .conversation-avatar {
+    margin: 10px;
+    width: 60px;
+    height: 60px;
+  }

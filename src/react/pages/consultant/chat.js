@@ -109,6 +109,27 @@ const Chatroom = ({ consultant }) => {
 					})
 				))
 			})
+
+			conn.on('close', () => {
+				const video = document.getElementById('peer-camera')
+				video.pause()
+				setIsStreaming(false)
+
+				setData(prevState => (
+					prevState.map(conversation => {
+						if (conversation.id !== conn.peer) return conversation
+
+						return {
+							...conversation,
+							messages: [...conversation.messages, {
+								author: conn.peer,
+								message: '> USER HAS BEEN DISCONNECTED',
+								timestamp: new Date().getTime()
+							}]
+						}
+					})
+				))
+			})
 		})
 
 		//video setup
@@ -201,10 +222,6 @@ const Chatroom = ({ consultant }) => {
 		})
 	}
 
-	const handlePeerSettings = () => {
-
-	}
-
 	return (
 		<div className='messenger'>
 			<div className='scrollable sidebar'>
@@ -213,6 +230,7 @@ const Chatroom = ({ consultant }) => {
 						conversations={data.map(conversation => conversation.customer)}
 						setSelectedConversation={startChat}
 						isConsultant={false}
+						selectedConversation={currentConversation}
 					/>
 				}
 			</div>

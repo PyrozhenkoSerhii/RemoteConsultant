@@ -2,19 +2,22 @@ import React, { useState } from 'react'
 import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
 import Peer from 'peerjs'
+import axios from 'axios'
+import { withAlert } from 'react-alert'
 
 import Conversations from '../../Components/Shared/Chat/ConversationList'
 import Messages from '../../Components/Shared/Chat/MessageList'
 import VideoPlayer from '../../Components/Shared/Chat/VideoPlayer'
+import PopupComponent from '../../Components/Shared/Popup'
 
 import { useHTTP } from '../../tools/hooks/http'
-import { BASE_URL, CONSULTANT, GET, HOST, PORT, SECURE } from '../../../config/routes'
+import { BASE_URL, CONSULTANT, GET, HOST, PORT, SECURE, CONSULTATION, POST } from '../../../config/routes'
 
 import Loading from '../../Components/Loading'
 import Error from '../../Components/Error'
 
 
-const Chatroom = ({ customer, product }) => {
+const Chatroom = ({ customer, product, alert }) => {
 	const [loading, consultants, error] = useHTTP(BASE_URL + CONSULTANT + GET, [product])
 
 	const [peer, setPeer] = useState(null)
@@ -155,6 +158,79 @@ const Chatroom = ({ customer, product }) => {
 		)
 	}
 
+	const closeConversation = () => {
+		const conn = currentConversation.connection
+
+		conn.close()
+		setCurrentConversation(null)
+		setData(prevData => prevData.map(connection => {
+			if (connection.id !== currentConversation.connection.id) return connection
+		}))
+
+		const video = document.getElementById('peer-camera')
+		video.pause()
+		setIsStreaming(false)
+
+		setActivePopup({
+			conversationData: currentConversation,
+			title: 'Please, assess our consultant',
+			structure: [
+				{
+					name: 'competence',
+					label: 'Competence (1-5)',
+					type: 'number',
+					icon: 'clipboard'
+				},
+				{
+					name: 'friendliness',
+					label: 'Friendliness (1-5)',
+					type: 'number',
+					icon: 'clipboard'
+				},
+				{
+					name: 'note',
+					label: 'Note',
+					type: 'textarea',
+					icon: 'edit'
+				}
+			]
+		})
+	}
+
+	const [activePopup, setActivePopup] = useState(null)
+	const [popupData, setPopupData] = useState({})
+
+	const handlePopupUpdate = ({ target }) => {
+		setPopupData({ ...popupData, [target.name]: target.value })
+	}
+
+	const submitPopupHandler = () => {
+		console.log(activePopup)
+		const data = {
+			customer: customer._id,
+			consultant: activePopup.conversationData.consultant._id,
+			product: '5cb1fdd4ac1b402f980f0542',
+			alternative: null,
+			messages: activePopup.conversationData.messages,
+			survey: {
+				competence: popupData.competence,
+				friendliness: popupData.friendliness,
+				note: popupData.note,
+			}
+		}
+
+		axios.post(BASE_URL + CONSULTATION + POST, data)
+			.then(res => {
+				alert.success('Thank you for your cooperation')
+				console.log(res.data.data)
+			})
+			.catch(err => console.log(err.response.data.error))
+
+		setActivePopup(null)
+	}
+
+	const handlePopup = type => setActivePopup(type)
+
 	return (
 		<div className='messenger'>
 			<div className='scrollable sidebar'>
@@ -164,6 +240,8 @@ const Chatroom = ({ customer, product }) => {
 							conversations={consultants}
 							setSelectedConversation={startChat}
 							isConsultant={true}
+							selectedConversation={currentConversation}
+							closeConversation={closeConversation}
 						/>
 				}
 			</div>
@@ -182,10 +260,19 @@ const Chatroom = ({ customer, product }) => {
 				}
 			</div>
 
-			<VideoPlayer isStreaming={isStreaming}/>
+			<VideoPlayer isStreaming={isStreaming} />
+
+			{activePopup && <PopupComponent
+				title={activePopup.title}
+				structure={activePopup.structure}
+				formData={popupData}
+				handleUpdate={handlePopupUpdate}
+				handleSubmit={submitPopupHandler}
+				handlePopup={handlePopup}
+			/>}
 		</div>
 	)
 }
 
 
-export default Chatroom
+export default withAlert()(Chatroom)

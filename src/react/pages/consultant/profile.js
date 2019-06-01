@@ -114,10 +114,7 @@ const Profile = ({ consultant, alert }) => {
         setupTimer({ field: target.name, value: target.value }, 1000)
     }
 
-    const handlePopup = type => {
-        setActivePopup(null)
-        setActivePopup(type)
-    }
+    const handlePopup = type => setActivePopup(type)
 
     const setupTimer = (data, delay) => {
         if (timer) clearTimeout(timer)

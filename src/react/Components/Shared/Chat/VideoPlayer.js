@@ -8,7 +8,7 @@ const VideoPlayer = ({isStreaming}) => (
             <span className="label label-info">You</span>
         </div> */}
 
-        <video id="peer-camera"  autoPlay="autoplay" controls={isStreaming} ></video>
+        <video id="peer-camera" style={{opacity: isStreaming ? '1' : '0'}} autoPlay="autoplay" controls={isStreaming} ></video>
     </div>
 )
 
