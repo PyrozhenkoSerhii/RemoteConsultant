@@ -2,9 +2,9 @@ import React from 'react'
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBCard, MDBCardBody, MDBInput } from 'mdbreact'
 import Select from '@material-ui/core/Select'
 
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import FormControl from '@material-ui/core/FormControl'
 
 
 const Popup = ({ title, structure, formData, handleUpdate, handleSubmit, handlePopup, checking }) => (

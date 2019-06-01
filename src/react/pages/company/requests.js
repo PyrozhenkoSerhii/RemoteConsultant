@@ -9,7 +9,7 @@ import { withAlert } from 'react-alert'
 
 import { BASE_URL, COMPANY, PATCH, REQUEST } from '../../../config/routes'
 
-import CustomTable from '../../Components/Table/Table'
+import CustomTable from '../../Components/Shared/Table/Table'
 
 
 const Request = ({ company, alert }) => {

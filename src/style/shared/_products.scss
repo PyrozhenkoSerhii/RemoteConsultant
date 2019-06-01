@@ -1,5 +1,44 @@
-.card-group {   
-    .products-card {
-        min-width: 20%;
+.products-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    margin: 30px 0;
+
+    .filter {
+        flex: 1 20%;
+
+        .filter-wrapper {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-items: center;
+
+            & > * {
+                margin: 10px auto;
+            }
+
+            width: 100%;
+            padding: 10px 20px;
+        }
     }
+
+    .products {
+        flex: 2 60%;
+        display: flex;
+        flex-flow: row wrap;
+
+        .products-card {
+            flex: 1 18%;
+            margin: 10px 5px;
+            cursor: pointer;
+        }
+    }
+
+    .selected {
+        bottom: 0%;
+        width: 25%;
+        position: fixed;
+    }
+
+    
+
+    
 }

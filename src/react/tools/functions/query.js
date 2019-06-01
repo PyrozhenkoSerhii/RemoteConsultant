@@ -11,8 +11,9 @@ const buildUrl = (url, params, query) => {
     let urlBuilder = url
     urlBuilder += params ? params : ''
     if (query) {
+        urlBuilder += '?'
         _forEach(query, (value, key) => {
-            urlBuilder += `?${key}=${value}`
+            urlBuilder += `${key}=${value}&`
         })
     }
     return urlBuilder

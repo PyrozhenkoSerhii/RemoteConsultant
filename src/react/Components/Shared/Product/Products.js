@@ -1,11 +1,11 @@
 import React from 'react'
-import { Card, Button, CardGroup } from 'react-bootstrap'
+import { Card } from 'react-bootstrap'
 
 
-const Products = ({ products }) => (
-    <CardGroup>
+const Products = ({ products, handleSelectProduct }) => (
+    <React.Fragment>
         {products.map(product => (
-            <Card className='products-card animated-slide-up' key={product._id}>
+            <Card className='products-card animated-slide-up' key={product._id} onClick={() => handleSelectProduct(JSON.stringify(product))}>
                 <Card.Img className='products-image' variant='top' src={product.image} />
                 <Card.Body>
                     <Card.Title className='products-title'>{product.title}</Card.Title>
@@ -17,7 +17,7 @@ const Products = ({ products }) => (
                 </Card.Footer>
             </Card>
         ))}
-    </CardGroup>
+    </React.Fragment>
 )
 
 

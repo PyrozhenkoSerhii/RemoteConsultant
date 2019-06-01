@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom'
 
 // pages
 import ProductsPage from '../pages/shared/product/products'
-import ProfilePage from '../pages/customer/profile'
 import ChatPage from '../pages/customer/chat'
 
 // components
@@ -26,8 +25,8 @@ const Customer = () => {
         <NavigationComponent context={context} entity={entity} />
 
         <Switch>
-            <Route exact path='/customer' render={(props) => <ProductsPage {...props} />} />
-            <Route path='/customer/profile' render={(props) => <ProfilePage {...props} customer={context.accounts.info[entity]} />} />
+            <Route exact path='/customer' render={(props) => <ProductsPage {...props} allowActions={true} />} />
+            {/* <Route path='/customer/profile' render={(props) => <ProfilePage {...props} customer={context.accounts.info[entity]} />} /> */}
             <Route path='/customer/chat' render={(props) => <ChatPage {...props} customer={context.accounts.info[entity]} />} />
         </Switch>
     </React.Fragment>

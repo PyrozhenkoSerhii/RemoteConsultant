@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 // pages
-import HomePage from '../pages/consultant/home'
 import ProductsPage from '../pages/shared/product/products'
 import ChatPage from '../pages/consultant/chat'
 import ProfilePage from '../pages/consultant/profile'
@@ -27,10 +26,9 @@ const Consultant = () => {
             <NavigationComponent context={context} entity={entity} />
 
             <Switch>
-                <Route exact path='/consultant' render={(props) => <HomePage {...props} consultant={context.accounts.info[entity]} />} />
-                <Route path='/consultant/products' render={(props) => <ProductsPage {...props} />} />
+                <Route exact path='/consultant' render={(props) => <ProfilePage {...props} consultant={context.accounts.info[entity]} />} />
+                <Route path='/consultant/products' render={(props) => <ProductsPage {...props} allowActions={false} />} />
                 <Route path='/consultant/chat' render={(props) => <ChatPage {...props} consultant={context.accounts.info[entity]} />} />
-                <Route path='/consultant/profile' render={(props) => <ProfilePage {...props} consultant={context.accounts.info[entity]} />} />
             </Switch>
         </React.Fragment>
     )

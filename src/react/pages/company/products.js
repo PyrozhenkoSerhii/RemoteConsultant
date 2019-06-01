@@ -6,7 +6,7 @@ import ViewIcon from '@material-ui/icons/Visibility'
 import Loading from '../../Components/Loading'
 import Error from '../../Components/Error'
 
-import CustomTable from '../../Components/Table/Table'
+import CustomTable from '../../Components/Shared/Table/Table'
 
 
 import { useHTTP } from '../../tools/hooks/http'
