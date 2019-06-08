@@ -10,7 +10,8 @@ const router = express.Router()
 
 
 router.get('/consultation/list/', wrap(async (req, res) => {
-    const consultations = await Consultation.find(req.query)
+    const consultations = await Consultation.find(req.query).populate('consultant')
+
     res.status(200).send({ data: consultations })
 }))
 

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
+import _uniqBy from 'lodash/uniqBy'
 import Peer from 'peerjs'
 import axios from 'axios'
 import { withAlert } from 'react-alert'
@@ -11,13 +12,18 @@ import VideoPlayer from '../../Components/Shared/Chat/VideoPlayer'
 import PopupComponent from '../../Components/Shared/Popup'
 
 import { useHTTP } from '../../tools/hooks/http'
+import { buildUrl } from '../../tools/functions/query'
 import { BASE_URL, CONSULTANT, GET, HOST, PORT, SECURE, CONSULTATION, POST } from '../../../config/routes'
 
 import Loading from '../../Components/Loading'
+import Redirect from '../../Components/Redirect'
 import Error from '../../Components/Error'
+import productContext from '../../tools/state/context/product-context';
 
 
 const Chatroom = ({ customer, product, alert }) => {
+	const context = useContext(productContext)
+
 	const [loading, consultants, error] = useHTTP(BASE_URL + CONSULTANT + GET, [product])
 
 	const [peer, setPeer] = useState(null)
@@ -172,6 +178,7 @@ const Chatroom = ({ customer, product, alert }) => {
 		setIsStreaming(false)
 
 		setActivePopup({
+			type: 'consultation',
 			conversationData: currentConversation,
 			title: 'Please, assess our consultant',
 			structure: [
@@ -198,6 +205,7 @@ const Chatroom = ({ customer, product, alert }) => {
 	}
 
 	const [activePopup, setActivePopup] = useState(null)
+	const [redirect, setRedirect] = useState(null)
 	const [popupData, setPopupData] = useState({})
 
 	const handlePopupUpdate = ({ target }) => {
@@ -205,31 +213,71 @@ const Chatroom = ({ customer, product, alert }) => {
 	}
 
 	const submitPopupHandler = () => {
-		console.log(activePopup)
-		const data = {
-			customer: customer._id,
-			consultant: activePopup.conversationData.consultant._id,
-			product: '5cb1fdd4ac1b402f980f0542',
-			alternative: null,
-			messages: activePopup.conversationData.messages,
-			survey: {
-				competence: popupData.competence,
-				friendliness: popupData.friendliness,
-				note: popupData.note,
-			}
-		}
+		if (activePopup.type === 'consultation') {
+			const product = context.product && context.product._id ? context.product._id : 'none'
 
-		axios.post(BASE_URL + CONSULTATION + POST, data)
-			.then(res => {
-				alert.success('Thank you for your cooperation')
-				console.log(res.data.data)
-			})
-			.catch(err => console.log(err.response.data.error))
+			const data = {
+				customer: customer._id,
+				consultant: activePopup.conversationData.consultant._id,
+				product: product,
+				alternative: null,
+				messages: activePopup.conversationData.messages,
+				survey: {
+					competence: popupData.competence,
+					friendliness: popupData.friendliness,
+					note: popupData.note,
+				}
+			}
+
+			axios.post(BASE_URL + CONSULTATION + POST, data)
+				.then(res => {
+					alert.success('Thank you for your cooperation')
+					console.log(res.data.data)
+				})
+				.catch(err => console.log(err.response.data.error))
+		} else {
+			setRedirect(`${product.website}/${product._id}`)
+		}
 
 		setActivePopup(null)
 	}
 
 	const handlePopup = type => setActivePopup(type)
+
+
+	const handleOrderPopup = product => {
+		axios.get(buildUrl(BASE_URL + CONSULTATION + GET, null, { product: product._id, customer: customer._id }))
+			.then(res => {
+				const consultants = res.data.data.map(consultation => {
+					return { value: consultation.consultant._id, label: consultation.consultant.fullname }
+				})
+
+				setActivePopup({
+					type: 'order',
+					title: `Ordering ${product.title} Redirect to: ${product.company.website}/${product._id}`,
+					structure: [
+						{
+							name: 'count',
+							label: 'Quantity',
+							type: 'number',
+							icon: 'list-ol'
+						},
+						{
+							name: 'consultant',
+							label: 'The most useful consultant',
+							type: 'select',
+							options: _uniqBy(consultants, 'value')
+						}
+					]
+				})
+			})
+			.catch(err => console.log(err.response))
+	}
+
+
+	if(redirect){
+		return <Redirect to={redirect}/>
+	}
 
 	return (
 		<div className='messenger'>
@@ -242,6 +290,7 @@ const Chatroom = ({ customer, product, alert }) => {
 							isConsultant={true}
 							selectedConversation={currentConversation}
 							closeConversation={closeConversation}
+							handleOrderPopup={handleOrderPopup}
 						/>
 				}
 			</div>
@@ -270,6 +319,9 @@ const Chatroom = ({ customer, product, alert }) => {
 				handleSubmit={submitPopupHandler}
 				handlePopup={handlePopup}
 			/>}
+
+
+
 		</div>
 	)
 }

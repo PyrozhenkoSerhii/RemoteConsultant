@@ -36,7 +36,7 @@ function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return _Consultation.default.find(req.query);
+            return _Consultation.default.find(req.query).populate('consultant');
 
           case 2:
             consultations = _context.sent;

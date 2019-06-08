@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from 'react'
-import axios from 'axios'
-import { withAlert } from 'react-alert'
+import React, { useState, useMemo, useContext } from 'react'
+import { Redirect } from 'react-router-dom'
 import _uniqBy from 'lodash/uniqBy'
 import _map from 'lodash/map'
 
@@ -15,9 +14,12 @@ import { useHTTP } from '../../../tools/hooks/http'
 import { buildUrl } from '../../../tools/functions/query'
 import { BASE_URL, PRODUCT, COMPANY, GET } from '../../../../config/routes'
 
+import productContext from '../../../tools/state/context/product-context'
+
 
 const Products = ({ allowActions }) => {
     const [filters, setFilters] = useState([])
+    const [redirect, setRedirect] = useState(null)
 
     const [selectedProduct, setSelectedProduct] = useState(null)
 
@@ -36,13 +38,20 @@ const Products = ({ allowActions }) => {
         setSelectedProduct(product)
     }
 
+    const context = useContext(productContext)
+
     const makeConsultation = () => {
-        console.log('consultantion by: ', selectedProduct)
+        context.addProduct(selectedProduct)
+        setRedirect('/customer/chat')
     }
 
     const makeOrder = () => {
-        console.log('order of: ', selectedProduct)
+        context.addProduct(selectedProduct)
+        setRedirect('/customer/')
+
     }
+
+    if (redirect) return <Redirect to={redirect} />
 
     return (
         <div className='products-wrapper'>

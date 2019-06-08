@@ -13,13 +13,13 @@ const router = express.Router()
 
 
 router.get('/product/list/', wrap(async (req, res) => {
-    const products = await Product.find(req.query)
+    const products = await Product.find(req.query).populate('company')
     res.status(200).send({ data: products })
 }))
 
 
 router.get('/product/list/:id', isObjectId, wrap(async (req, res) => {
-    const product = await Product.findById(req.params.id)
+    const product = await Product.findById(req.params.id).populate('company')
     if (!product) return res.status(400).send({ error: `Product Not Found` })
     res.status(200).send({ data: product })
 }))

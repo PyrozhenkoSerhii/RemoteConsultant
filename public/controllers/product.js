@@ -44,7 +44,7 @@ function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return _Product.default.find(req.query);
+            return _Product.default.find(req.query).populate('company');
 
           case 2:
             products = _context.sent;
@@ -76,7 +76,7 @@ function () {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return _Product.default.findById(req.params.id);
+            return _Product.default.findById(req.params.id).populate('company');
 
           case 2:
             product = _context2.sent;

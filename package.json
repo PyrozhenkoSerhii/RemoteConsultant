@@ -94,6 +94,7 @@
     "@fortawesome/fontawesome-free": "^5.8.2",
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
+    "animakit-expander": "^2.1.4",
     "async": "^2.6.1",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",

@@ -7,17 +7,20 @@ import consultantPage from './consultant'
 import customerPage from './customer'
 
 import GlobalProvider from '../tools/state/providers/GlobalProvider'
+import ProductProvider from '../tools/state/providers/ProductProvider'
 
 
 const Distributor = () => (
     <GlobalProvider>
-        <Switch>
-            <Route exact path='/' component={DistributorComponent} />
+        <ProductProvider>
+            <Switch>
+                <Route exact path='/' component={DistributorComponent} />
 
-            <Route path='/company' component={companyPage} />
-            <Route path='/customer' component={customerPage} />
-            <Route path='/consultant' component={consultantPage} />
-        </Switch>
+                <Route path='/company' component={companyPage} />
+                <Route path='/customer' component={customerPage} />
+                <Route path='/consultant' component={consultantPage} />
+            </Switch>
+        </ProductProvider>
     </GlobalProvider>
 )
 
