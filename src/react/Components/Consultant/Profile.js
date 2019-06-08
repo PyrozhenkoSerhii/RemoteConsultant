@@ -2,9 +2,15 @@ import React from 'react'
 import moment from 'moment'
 
 import { Image } from 'react-bootstrap'
+import { MDBInput, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBCardHeader, MDBCardFooter, MDBBtn, MDBContainer, MDBIcon, MDBCardImage } from "mdbreact"
 
-import { MDBInput, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBCardHeader, MDBCardFooter, MDBBtn, MDBContainer, MDBIcon } from "mdbreact"
+import renderImage from '../../tools/functions/imageRenderer'
 
+const renderCompanyInfo = (company) => {
+    if (!company) return 'Not employed yet'
+
+    return `${company.title} (${company.website})`
+}
 
 
 const Profile = ({ formData, handleUpdate, handlePopup }) => (
@@ -102,13 +108,21 @@ const Profile = ({ formData, handleUpdate, handlePopup }) => (
         </div>
 
         <div className='profile-company'>
-            <span className='header'>Company: <em>{formData.company || 'non employed yet'}</em></span>
+            <span className='header'>Company: <em>{renderCompanyInfo(formData.company)}</em></span>
             <MDBIcon icon="sync-alt" onClick={() => handlePopup('request')} className='icon-add' />
         </div>
 
         <div className='profile-certificates'>
             <span className='header'>Certificates</span>
             <MDBIcon icon="sync-alt" onClick={() => handlePopup('certificate')} className='icon-add' />
+
+            {formData.certificate && <MDBCard style={{ width: "22rem" }}>
+                <MDBCardImage className="img-fluid" src={renderImage(formData.certificate.image)} waves />
+                <MDBCardBody>
+                    <MDBCardTitle>{formData.certificate.title} ({formData.certificate.type})</MDBCardTitle>
+                    <MDBCardText>{formData.certificate.note}</MDBCardText>
+                </MDBCardBody>
+            </MDBCard>}
         </div>
 
 

@@ -1,5 +1,6 @@
 /node_modules
 /bundle
+/uploads
 package-lock.json
 /.vs
 /.idea

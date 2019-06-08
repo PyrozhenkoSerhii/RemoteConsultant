@@ -15,7 +15,7 @@ import CustomToolbar from './Toolbar'
 
 
 
-const CustomTable = ({ data, columns, handleDelete, title, secondaryOptionIconGetter, secondaryOptionHandler }) => {
+const CustomTable = ({ data, columns, handleDelete, title, secondaryOptionTitle, handleView, secondaryOptionIconGetter, secondaryOptionHandler }) => {
     const [order, setOrder] = useState('asc')
     const [orderBy, setOrderBy] = useState(columns[0].id)
     const [selected, setSelected] = useState([])
@@ -26,6 +26,12 @@ const CustomTable = ({ data, columns, handleDelete, title, secondaryOptionIconGe
     const deleteInterception = () => {
         setSelected([])
         handleDelete(selected)
+    }
+
+
+    const handleViewInterception = () => {
+        if (handleView)
+            handleView(selected[0])
     }
 
 
@@ -107,8 +113,10 @@ const CustomTable = ({ data, columns, handleDelete, title, secondaryOptionIconGe
             <CustomToolbar
                 numSelected={selected.length}
                 handleDelete={deleteInterception}
+                handleView={handleViewInterception}
                 secondaryOptionIconGetter={secondaryOptionIconGetter}
                 secondaryOptionHandler={secondaryOptionHandlerInterception}
+                secondaryOptionTitle={secondaryOptionTitle}
                 title={title}
             />
             <div>

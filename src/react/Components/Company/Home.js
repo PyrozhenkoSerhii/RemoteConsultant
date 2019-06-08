@@ -2,7 +2,7 @@ import React from 'react'
 import { Image, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-const Main = ({ company, itemsAvailable, onlineConsultants, newRequests }) => (
+const Home = ({ company, itemsAvailable, onlineConsultants, newRequests }) => (
     <div className='company-home-wrapper'>
         <div className='company-content-wrapper'>
             <div className='company-image-wrapper'>
@@ -17,7 +17,7 @@ const Main = ({ company, itemsAvailable, onlineConsultants, newRequests }) => (
         <div className='company-digest'>
             <div className='company-digest-item'>
                 <p className='sub-header'>Consultants</p>
-                <p className='description'>{onlineConsultants} of your consultants is online now!</p>
+                <p className='description'>{onlineConsultants} consultants was hired!</p>
                 <Link to='/company/consultants'>
                     <Button variant='info'>Find out more</Button>
                 </Link>
@@ -41,4 +41,4 @@ const Main = ({ company, itemsAvailable, onlineConsultants, newRequests }) => (
 )
 
 
-export default Main
+export default Home

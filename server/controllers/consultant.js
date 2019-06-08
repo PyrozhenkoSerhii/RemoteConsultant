@@ -1,14 +1,22 @@
 import express from 'express'
+import fs from 'fs'
 import _assignIn from 'lodash/assignIn'
 import _forEach from 'lodash/forEach'
 
-import { sign } from '../utils/jwt'
 import Consultant from '../models/Consultant'
-import wrap from '../middlewares/wrap'
-import { isObjectId } from '../middlewares/validators'
+import Certificate from '../models/Certificate'
+
+import { sign } from '../utils/jwt'
 import { images } from '../utils/validation/defaults'
+import { isObjectId } from '../middlewares/validators'
+
+import wrap from '../middlewares/wrap'
+import upload from '../middlewares/multer'
+
+
 
 const router = express.Router()
+
 
 
 router.get('/consultant/list', wrap(async (req, res) => {
@@ -18,7 +26,7 @@ router.get('/consultant/list', wrap(async (req, res) => {
 
 
 router.get('/consultant/list/:id', isObjectId, wrap(async (req, res) => {
-    const consultant = await Consultant.findById(req.params.id)
+    const consultant = await Consultant.findById(req.params.id).populate('company')
     if (!consultant) return res.status(400).send({ error: `Consultant Not Found` })
     res.status(200).send({ data: consultant })
 }))
@@ -38,7 +46,7 @@ router.post('/consultant/', wrap(async (req, res) => {
 router.post('/consultant/authenticate', wrap(async (req, res) => {
     if (!req.body.email || !req.body.password) return res.status(400).json({ error: 'Email and password are required!' })
 
-    let consultant = await Consultant.findOne({ email: req.body.email }).select('+password').exec()
+    let consultant = await Consultant.findOne({ email: req.body.email }).select('+password').populate('company').exec()
     if (!consultant) return res.status(400).send({ error: `Email or password is incorrect` })
 
     const verified = await consultant.verifyPassword(req.body.password)
@@ -68,17 +76,16 @@ router.patch('/consultant/list/:id', isObjectId, wrap(async (req, res) => {
         return res.status(400).send({ error: `${field} field can't be changed this way ` })
     }
 
-    const consultant = await Consultant.findById(req.params.id).exec()
+    const consultant = await Consultant.findById(req.params.id).populate('company').exec()
     if (!consultant) return res.status(400).send({ error: `Consultant Not Found` })
 
     // temporary unavailable
     // if (field === 'password') {
-        // const verified = await consultant.verifyPassword(old)
-        // if (!verified) return res.status(400).send({ error: 'Old password is incorrect!' })
+    // const verified = await consultant.verifyPassword(old)
+    // if (!verified) return res.status(400).send({ error: 'Old password is incorrect!' })
     // }
 
     if (field === 'languages' && typeof value === 'object') {
-        console.log('lang', value)
         consultant.languages.push(value)
 
         //TODO: editing and removing of language and its certificate
@@ -89,7 +96,6 @@ router.patch('/consultant/list/:id', isObjectId, wrap(async (req, res) => {
         consultant[field] = value
     }
 
-    console.log(consultant)
     const validationError = consultant.validateSync()
     if (validationError) return res.status(400).send({ error: validationError.errors })
 
@@ -99,6 +105,32 @@ router.patch('/consultant/list/:id', isObjectId, wrap(async (req, res) => {
 
     /* don't let the passport be sent to client */
     saved.password = undefined
+
+    res.status(200).send({ data: saved })
+}))
+
+
+router.patch('/consultant/list/:id/certificate', isObjectId, upload.single('file'), wrap(async (req, res) => {
+    const consultant = await Consultant.findById(req.params.id).populate('company')
+    if (!consultant) return res.status(400).send({ error: `Consultant Not Found` })
+
+    const imageFile = fs.readFileSync(req.file.path)
+    var finalImg = {
+        contentType: req.file.mimetype,
+        data: new Buffer(imageFile, 'base64')
+    };
+
+    consultant.certificate = {
+        title: req.body.title,
+        type: req.body.type,
+        note: req.body.note,
+        image: finalImg
+    }
+
+    const validationError = consultant.validateSync()
+    if (validationError) return res.status(400).send({ error: validationError.errors })
+
+    const saved = await consultant.save()
 
     res.status(200).send({ data: saved })
 }))

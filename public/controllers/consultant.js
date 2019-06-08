@@ -2,19 +2,25 @@
 
 var _express = _interopRequireDefault(require("express"));
 
+var _fs = _interopRequireDefault(require("fs"));
+
 var _assignIn2 = _interopRequireDefault(require("lodash/assignIn"));
 
 var _forEach2 = _interopRequireDefault(require("lodash/forEach"));
 
-var _jwt = require("../utils/jwt");
-
 var _Consultant = _interopRequireDefault(require("../models/Consultant"));
 
-var _wrap = _interopRequireDefault(require("../middlewares/wrap"));
+var _Certificate = _interopRequireDefault(require("../models/Certificate"));
+
+var _jwt = require("../utils/jwt");
+
+var _defaults = require("../utils/validation/defaults");
 
 var _validators = require("../middlewares/validators");
 
-var _defaults = require("../utils/validation/defaults");
+var _wrap = _interopRequireDefault(require("../middlewares/wrap"));
+
+var _multer = _interopRequireDefault(require("../middlewares/multer"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -74,7 +80,7 @@ function () {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return _Consultant.default.findById(req.params.id);
+            return _Consultant.default.findById(req.params.id).populate('company');
 
           case 2:
             consultant = _context2.sent;
@@ -174,7 +180,7 @@ function () {
             _context4.next = 4;
             return _Consultant.default.findOne({
               email: req.body.email
-            }).select('+password').exec();
+            }).select('+password').populate('company').exec();
 
           case 4:
             consultant = _context4.sent;
@@ -268,7 +274,7 @@ function () {
 
           case 5:
             _context5.next = 7;
-            return _Consultant.default.findById(req.params.id).exec();
+            return _Consultant.default.findById(req.params.id).populate('company').exec();
 
           case 7:
             consultant = _context5.sent;
@@ -289,7 +295,6 @@ function () {
             // if (!verified) return res.status(400).send({ error: 'Old password is incorrect!' })
             // }
             if (field === 'languages' && _typeof(value) === 'object') {
-              console.log('lang', value);
               consultant.languages.push(value); //TODO: editing and removing of language and its certificate
               // _forEach(value, language => consultant.language.push(language))
 
@@ -298,11 +303,10 @@ function () {
               consultant[field] = value;
             }
 
-            console.log(consultant);
             validationError = consultant.validateSync();
 
             if (!validationError) {
-              _context5.next = 15;
+              _context5.next = 14;
               break;
             }
 
@@ -310,12 +314,12 @@ function () {
               error: validationError.errors
             }));
 
-          case 15:
+          case 14:
             if (isCompleted(consultant)) consultant.completed = true;
-            _context5.next = 18;
+            _context5.next = 17;
             return consultant.save();
 
-          case 18:
+          case 17:
             saved = _context5.sent;
 
             /* don't let the passport be sent to client */
@@ -324,7 +328,7 @@ function () {
               data: saved
             });
 
-          case 21:
+          case 20:
           case "end":
             return _context5.stop();
         }
@@ -336,19 +340,19 @@ function () {
     return _ref5.apply(this, arguments);
   };
 }()));
-router.patch('/consultant/list/:id/chat', _validators.isObjectId, (0, _wrap.default)(
+router.patch('/consultant/list/:id/certificate', _validators.isObjectId, _multer.default.single('file'), (0, _wrap.default)(
 /*#__PURE__*/
 function () {
   var _ref6 = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee6(req, res) {
-    var consultant, validationError, saved;
+    var consultant, imageFile, finalImg, validationError, saved;
     return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
             _context6.next = 2;
-            return _Consultant.default.findById(req.params.id);
+            return _Consultant.default.findById(req.params.id).populate('company');
 
           case 2:
             consultant = _context6.sent;
@@ -363,11 +367,21 @@ function () {
             }));
 
           case 5:
-            consultant.chat = req.body;
+            imageFile = _fs.default.readFileSync(req.file.path);
+            finalImg = {
+              contentType: req.file.mimetype,
+              data: new Buffer(imageFile, 'base64')
+            };
+            consultant.certificate = {
+              title: req.body.title,
+              type: req.body.type,
+              note: req.body.note,
+              image: finalImg
+            };
             validationError = consultant.validateSync();
 
             if (!validationError) {
-              _context6.next = 9;
+              _context6.next = 11;
               break;
             }
 
@@ -375,17 +389,17 @@ function () {
               error: validationError.errors
             }));
 
-          case 9:
-            _context6.next = 11;
+          case 11:
+            _context6.next = 13;
             return consultant.save();
 
-          case 11:
+          case 13:
             saved = _context6.sent;
             res.status(200).send({
               data: saved
             });
 
-          case 13:
+          case 15:
           case "end":
             return _context6.stop();
         }
@@ -397,13 +411,13 @@ function () {
     return _ref6.apply(this, arguments);
   };
 }()));
-router.delete('/consultant/list/:id', _validators.isObjectId, (0, _wrap.default)(
+router.patch('/consultant/list/:id/chat', _validators.isObjectId, (0, _wrap.default)(
 /*#__PURE__*/
 function () {
   var _ref7 = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee7(req, res) {
-    var consultant;
+    var consultant, validationError, saved;
     return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
@@ -424,15 +438,29 @@ function () {
             }));
 
           case 5:
-            _context7.next = 7;
-            return consultant.remove();
+            consultant.chat = req.body;
+            validationError = consultant.validateSync();
 
-          case 7:
+            if (!validationError) {
+              _context7.next = 9;
+              break;
+            }
+
+            return _context7.abrupt("return", res.status(400).send({
+              error: validationError.errors
+            }));
+
+          case 9:
+            _context7.next = 11;
+            return consultant.save();
+
+          case 11:
+            saved = _context7.sent;
             res.status(200).send({
-              message: "Consultant deleted"
+              data: saved
             });
 
-          case 8:
+          case 13:
           case "end":
             return _context7.stop();
         }
@@ -444,43 +472,39 @@ function () {
     return _ref7.apply(this, arguments);
   };
 }()));
-/**
- * Adding an opportunity to clear a collection for non-production environment
- */
-
-process.env.NODE_ENV !== 'prod' && router.delete('/consultant/clear', (0, _wrap.default)(
+router.delete('/consultant/list/:id', _validators.isObjectId, (0, _wrap.default)(
 /*#__PURE__*/
 function () {
   var _ref8 = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee8(req, res) {
-    var consultants;
+    var consultant;
     return regeneratorRuntime.wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
             _context8.next = 2;
-            return _Consultant.default.deleteMany();
+            return _Consultant.default.findById(req.params.id);
 
           case 2:
-            _context8.next = 4;
-            return _Consultant.default.find();
+            consultant = _context8.sent;
 
-          case 4:
-            consultants = _context8.sent;
-
-            if (!consultants.length) {
-              _context8.next = 7;
+            if (consultant) {
+              _context8.next = 5;
               break;
             }
 
-            return _context8.abrupt("return", res.status(500).send({
-              error: "Due to unknown reason consultants weren't deleted"
+            return _context8.abrupt("return", res.status(400).send({
+              error: "Consultant Not Found"
             }));
+
+          case 5:
+            _context8.next = 7;
+            return consultant.remove();
 
           case 7:
             res.status(200).send({
-              message: 'Consultants were deleted'
+              message: "Consultant deleted"
             });
 
           case 8:
@@ -493,6 +517,57 @@ function () {
 
   return function (_x15, _x16) {
     return _ref8.apply(this, arguments);
+  };
+}()));
+/**
+ * Adding an opportunity to clear a collection for non-production environment
+ */
+
+process.env.NODE_ENV !== 'prod' && router.delete('/consultant/clear', (0, _wrap.default)(
+/*#__PURE__*/
+function () {
+  var _ref9 = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee9(req, res) {
+    var consultants;
+    return regeneratorRuntime.wrap(function _callee9$(_context9) {
+      while (1) {
+        switch (_context9.prev = _context9.next) {
+          case 0:
+            _context9.next = 2;
+            return _Consultant.default.deleteMany();
+
+          case 2:
+            _context9.next = 4;
+            return _Consultant.default.find();
+
+          case 4:
+            consultants = _context9.sent;
+
+            if (!consultants.length) {
+              _context9.next = 7;
+              break;
+            }
+
+            return _context9.abrupt("return", res.status(500).send({
+              error: "Due to unknown reason consultants weren't deleted"
+            }));
+
+          case 7:
+            res.status(200).send({
+              message: 'Consultants were deleted'
+            });
+
+          case 8:
+          case "end":
+            return _context9.stop();
+        }
+      }
+    }, _callee9, this);
+  }));
+
+  return function (_x17, _x18) {
+    return _ref9.apply(this, arguments);
   };
 }()));
 

@@ -5,9 +5,11 @@ import _find from 'lodash/find'
 import moment from 'moment'
 import DoneOutline from '@material-ui/icons/DoneOutline'
 import { withAlert } from 'react-alert'
+import ImgsViewer from 'react-images-viewer'
 
 
 import { BASE_URL, COMPANY, PATCH, REQUEST } from '../../../config/routes'
+import renderImage from '../../tools/functions/imageRenderer'
 
 import CustomTable from '../../Components/Shared/Table/Table'
 
@@ -55,15 +57,45 @@ const Request = ({ company, alert }) => {
 
     const secondaryOptionIconGetter = () => <DoneOutline />
 
+    const [imageViewer, setImageViewer] = useState({
+        isOpen: false,
+        imgs: null
+    })
+
+    const handleView = requestId => {
+        const request = _find(requests, { _id: requestId })
+        const imageSrc = renderImage(request.consultant.certificate.image)
+        setImageViewer({
+            isOpen: true,
+            imgs: { src: imageSrc }
+        })
+    }
+
+    const closeView = () => {
+        setImageViewer({ imgs: null, isOpen: false })
+    }
+
+
+
     return (
-        <CustomTable
-            data={restructuredRequests}
-            title='Requests'
-            columns={columns}
-            handleDelete={rejectRequest}
-            secondaryOptionHandler={approveRequest}
-            secondaryOptionIconGetter={secondaryOptionIconGetter}
-        />
+        <React.Fragment>
+            <CustomTable
+                data={restructuredRequests}
+                title='Requests'
+                columns={columns}
+                handleView={handleView}
+                handleDelete={rejectRequest}
+                secondaryOptionTitle='approve'
+                secondaryOptionHandler={approveRequest}
+                secondaryOptionIconGetter={secondaryOptionIconGetter}
+            />
+
+            <ImgsViewer
+                isOpen={imageViewer.isOpen}
+                imgs={[imageViewer.imgs]}
+                onClose={closeView}
+            />
+        </React.Fragment>
     )
 }
 

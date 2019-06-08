@@ -6,7 +6,7 @@ import _pull from 'lodash/pull'
 import messages from '../utils/validation/messages'
 import defaults from '../utils/validation/defaults'
 import regex from '../utils/validation/regex'
-import { email, username, fullname, password, matureAge, url, rating, info } from '../utils/validation/range'
+import { email, username, fullname, password, matureAge, url, rating, info, title, type, note } from '../utils/validation/range'
 import logger from '../utils/logger'
 
 import { Language } from './submodels/Language'
@@ -87,8 +87,31 @@ const ConsultantSchema = new Schema({
         maxlength: [url.max, messages.restrictions.url]
     },
     certificate: {
-        type: Schema.Types.ObjectId,
-        ref: 'Certificate'
+        title: {
+            type: String,
+            trim: true,
+            required: [true, messages.required.title],
+            minlength: [title.min, messages.restrictions.title],
+            maxlength: [title.max, messages.restrictions.title]
+        },
+        type: {
+            type: String,
+            trim: true,
+            lowercase: true,
+            index: true,
+            required: [true, messages.required.type],
+            minlength: [type.min, messages.restrictions.type],
+            maxlength: [type.max, messages.restrictions.type]
+        },
+        image: {
+            data: Buffer,
+            contentType: String
+        },
+        note: {
+            type: String,
+            trim: true,
+            maxlength: [note.max, messages.required.note]
+        }
     },
     languages: [Language],
     company: {

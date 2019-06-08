@@ -31,10 +31,9 @@ const Consultant = ({ company, alert }) => {
         { id: 'online', numeric: true, disablePadding: false, label: 'Online now' },
     ]
 
-    const secondaryOptionIconGetter = () => <ViewIcon />
 
-    const secondaryOptionHandler = () => {
-        alert('will be implemented soon')
+    const handleView = () => {
+        console.log('Will be implemented soon!')
     }
 
     return (
@@ -43,10 +42,9 @@ const Consultant = ({ company, alert }) => {
                 <CustomTable
                     data={consultants}
                     handleDelete={dismissConsultantant}
+                    handleView={handleView}
                     columns={columns}
                     title='Consultants'
-                    secondaryOptionHandler={secondaryOptionHandler}
-                    secondaryOptionIconGetter={secondaryOptionIconGetter}
                 />
     )
 }

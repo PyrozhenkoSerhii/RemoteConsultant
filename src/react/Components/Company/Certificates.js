@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, Button, CardGroup } from 'react-bootstrap'
+import renderImage from '../../tools/functions/imageRenderer'
 
 
 const Certificate = ({ company, move, all }) => (
@@ -16,7 +17,7 @@ const Certificate = ({ company, move, all }) => (
                 )}
                 {company.length > 0 && company.map(certificate => (
                     <Card className='certificates-card animated-slide-up' key={certificate._id} style={{ width: '18rem' }}>
-                        <Card.Img className='certificates-image' variant='top' src={certificate.image} />
+                        <Card.Img className='certificates-image' variant='top' src={renderImage(certificate.image)} />
                         <Card.Body>
                             <Card.Title className='certificates-title'>{certificate.title}</Card.Title>
                             <Card.Text className='certificates-text'>{certificate.note}</Card.Text>
@@ -38,7 +39,7 @@ const Certificate = ({ company, move, all }) => (
                 )}
                 {all.length > 0 && all.map(certificate => (
                     <Card className='certificates-card animated-slide-up' key={certificate._id} style={{ width: '18rem' }}>
-                        <Card.Img className='certificates-image' variant='top' src={certificate.image} />
+                        <Card.Img className='certificates-image' variant='top' src={renderImage(certificate.image)} />
                         <Card.Body>
                             <Card.Title className='certificates-title'>{certificate.title}</Card.Title>
                             <Card.Text className='certificates-text'>{certificate.note}</Card.Text>

@@ -34,7 +34,7 @@ const toolbarStyles = theme => ({
 });
 
 
-let CustomToolbar = ({ numSelected, handleDelete, classes, handleView, title, secondaryOptionIconGetter, secondaryOptionHandler }) => (
+let CustomToolbar = ({ numSelected, handleDelete, handleView, secondaryOptionIconGetter, secondaryOptionHandler, secondaryOptionTitle, title, classes }) => (
     <Toolbar className={classNames(classes.root, { [classes.highlight]: numSelected > 0 })}>
         <div className={classes.title}>
             {numSelected > 0
@@ -44,18 +44,25 @@ let CustomToolbar = ({ numSelected, handleDelete, classes, handleView, title, se
         </div>
         <div className={classes.actions}>
             {numSelected > 0 && (
-                <Tooltip >
+                <Tooltip title='delete'>
                     <IconButton aria-label='Delete' onClick={handleDelete}>
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>
             )}
             {numSelected === 1 && (
-                <Tooltip >
-                    <IconButton aria-label='View' onClick={secondaryOptionHandler}>
-                        {secondaryOptionIconGetter()}
-                    </IconButton>
-                </Tooltip>
+                <React.Fragment>
+                    {handleView && <Tooltip title='view'>
+                        <IconButton aria-label='View' onClick={handleView}>
+                            <ViewIcon />
+                        </IconButton>
+                    </Tooltip>}
+                    {secondaryOptionHandler && secondaryOptionIconGetter && <Tooltip title={secondaryOptionTitle}>
+                        <IconButton aria-label='Action' onClick={secondaryOptionHandler}>
+                            {secondaryOptionIconGetter()}
+                        </IconButton>
+                    </Tooltip>}
+                </React.Fragment>
             )}
         </div>
     </Toolbar>

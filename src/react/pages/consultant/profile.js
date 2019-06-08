@@ -5,7 +5,7 @@ import { withAlert } from 'react-alert'
 import ProfileComponent from '../../Components/Consultant/Profile'
 import PopupComponent from '../../Components/Shared/Popup'
 
-import { BASE_URL, CONSULTANT, PATCH, GET, COMPANY } from '../../../config/routes'
+import { BASE_URL, CONSULTANT, PATCH, POST, GET, LIST, COMPANY, CERTIFICATE } from '../../../config/routes'
 import globalContext from '../../tools/state/context/global-context'
 
 import { useHTTP } from '../../tools/hooks/http'
@@ -57,9 +57,13 @@ const getPopup = (data, type) => {
                     label: 'Type',
                     type: 'select',
                     options: [
-                        { 'value': 'PC', 'label': 'PC' },
+                        { 'value': 'Genaral', 'label': 'General' },
+                        { 'value': 'PC', 'label': 'Personal Computers' },
                         { 'value': 'Phones', 'label': 'Phones' },
-                        { 'value': 'TV', 'label': 'TV' }
+                        { 'value': 'Laptops', 'label': 'Laptops' },
+                        { 'value': 'Hardware', 'label': 'Hardware' },
+                        { 'value': 'Software', 'label': 'Software' },
+                        { 'value': 'Other', 'label': 'Other' }
                     ]
                 },
                 {
@@ -73,7 +77,13 @@ const getPopup = (data, type) => {
                     label: 'A small note',
                     type: 'textarea',
                     icon: 'edit'
-                }
+                },
+                {
+                    name: 'certImage',
+                    label: 'Certificate photo/file',
+                    type: 'file',
+                    icon: 'edit'
+                },
             ]
         },
         request: {
@@ -161,20 +171,21 @@ const Profile = ({ consultant, alert }) => {
             setActivePopup(null)
             setChecking(false)
 
-            axios.patch(BASE_URL + CONSULTANT + PATCH + consultant._id, {
-                field: 'certificate',
-                value: {
-                    consultant: consultant._id,
-                    message: formData.reqMessage
-                }
-            }).then(res => {
-                setFormData(prev => ({ ...prev, reqMessage: null }))
-                alert.success('Request was sent!')
-            }).catch(err => {
-                alert.error('Sorry. An error occurred!')
-                console.log(err.response.data.error)
-            })
-            alert.success('Successfully')
+            const data = new FormData()
+            data.append('title', formData.certTitle)
+            data.append('type', formData.certType)
+            data.append('note', formData.note)
+            data.append('file', formData.certImage)
+
+            axios.patch(BASE_URL + CONSULTANT + PATCH + consultant._id + '/' + CERTIFICATE, data)
+                .then(res => {
+                    setFormData(prev => ({ ...prev, certTitle: null, certType: null, note: null, certImage: null, ...res.data.data }))
+                    context.update('consultant', res.data.data)
+                })
+                .catch(err => {
+                    alert.error('Sorry. An error occurred!')
+                    console.log(err.response.data.error)
+                })
         }, 1000)
     }
 
@@ -202,8 +213,12 @@ const Profile = ({ consultant, alert }) => {
         }, 1000)
     }
 
-    const handlePopupUpdate = ({ target }) => setFormData({ ...formData, [target.name]: target.value })
+    const handlePopupUpdate = ({ target }) => {
+        if (target.type === 'file') setFormData({ ...formData, [target.name]: target.files[0] })
+        else setFormData({ ...formData, [target.name]: target.value })
+    }
 
+    console.log(consultant)
 
     const renderPopup = () => {
         let popupData = null

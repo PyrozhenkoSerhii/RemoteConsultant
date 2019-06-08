@@ -8,7 +8,7 @@
 
     .popup-body {
         position: absolute;
-        top: 20%;
+        top: 16%;
         bottom: 0;
         left: 0;
         right: 0;
@@ -20,6 +20,23 @@
             width: 89%;
             margin-left: 11%;
         }
+
+        .popup-file {
+            color: rgb(138, 136, 136);
+
+            .full-uploader {
+                .custom-file-label::after {
+                    content: 'Ready';
+                    color: green;
+                }
+            }
+
+            .fas {
+                color: green;
+            }
+
+            
+        }
     }
 }
 
@@ -27,3 +44,4 @@
     margin-left: 10px;
     color: white;
 }
+

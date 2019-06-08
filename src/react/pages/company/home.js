@@ -3,11 +3,9 @@ import HomeComponent from '../../Components/Company/Home'
 
 
 const Main = ({ company }) => {
-
-    // TODO: get rid of hardcoded values
-    const newRequests = 5
-    const onlineConsultants = 23
-    const itemsAvailable = 23212
+    const newRequests = company.requests.length
+    const onlineConsultants = company.consultants.length
+    const itemsAvailable = company.products.length
 
     return <HomeComponent
         company={company}

@@ -46,11 +46,10 @@ const Product = ({ company, alert }) => {
         { id: 'description', numeric: true, disablePadding: false, label: 'Description' },
     ]
 
-    const secondaryOptionIconGetter = () => <ViewIcon />
-
-    const secondaryOptionHandler = () => {
-        alert('will be implemented soon')
+    const handleView = () => {
+        console.log('Will be implemented soon!')
     }
+
 
     return (
         loading ? <Loading /> :
@@ -60,8 +59,7 @@ const Product = ({ company, alert }) => {
                     handleDelete={handleDelete}
                     columns={columns}
                     title='Products'
-                    secondaryOptionIconGetter={secondaryOptionIconGetter}
-                    secondaryOptionHandler={secondaryOptionHandler}
+                    handleView={handleView}
                 />
     )
 }

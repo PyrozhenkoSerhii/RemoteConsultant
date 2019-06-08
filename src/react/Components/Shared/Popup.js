@@ -7,6 +7,13 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 
 
+const getFileInputStyle = data => !data || !data.name ? '' : 'full-uploader'
+
+const getFileInputIcon = data => !data || !data.name ? (<i className="fas fa-upload"></i>) : (<i className="fas fa-check"></i>) 
+
+const getFIleInputLabel = (data, defaultLabel) => !data || !data.name ? defaultLabel : data.name 
+
+
 const Popup = ({ title, structure, formData, handleUpdate, handleSubmit, handlePopup, checking }) => (
     <div className='popup-wrapper'>
         <div className='popup-body'>
@@ -38,21 +45,39 @@ const Popup = ({ title, structure, formData, handleUpdate, handleSubmit, handleP
                                                         </Select>
                                                     </FormControl>
 
-                                                ) : (
-                                                    <MDBInput
-                                                        key={element.name}
-                                                        label={element.label}
-                                                        icon={element.icon}
-                                                        group
-                                                        type={element.type}
-                                                        validate
-                                                        error='wrong'
-                                                        success='right'
-                                                        name={element.name}
-                                                        onChange={handleUpdate}
-                                                        value={formData[element.name] || ''}
-                                                    />
-                                                )
+                                                ) : element.type === 'file' ?
+                                                    (
+                                                        <div key={element.name} className="input-group popup-file">
+                                                            <div className="input-group-prepend">
+                                                                <span className="input-group-text" id="inputGroupFileAddon01">{getFileInputIcon(formData[element.name])}</span>
+                                                            </div>
+                                                            <div className={`custom-file ${getFileInputStyle(formData[element.name])}`}>
+                                                                <input
+                                                                    type="file"
+                                                                    className='custom-file-input'
+                                                                    id={element.name}
+                                                                    onChange={handleUpdate}
+                                                                    name={element.name}
+                                                                />
+                                                                <label className="custom-file-label" htmlFor={element.name}>{getFIleInputLabel(formData[element.name], element.label)}</label>
+                                                            </div>
+                                                        </div>
+                                                    ) :
+                                                    (
+                                                        <MDBInput
+                                                            key={element.name}
+                                                            label={element.label}
+                                                            icon={element.icon}
+                                                            group
+                                                            type={element.type}
+                                                            validate
+                                                            error='wrong'
+                                                            success='right'
+                                                            name={element.name}
+                                                            onChange={handleUpdate}
+                                                            value={formData[element.name] || ''}
+                                                        />
+                                                    )
                                         })}
                                     </div>
                                     <div className='text-center py-4 mt-3'>

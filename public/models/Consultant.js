@@ -102,8 +102,31 @@ var ConsultantSchema = new _mongoose.Schema({
     maxlength: [_range.url.max, _messages.default.restrictions.url]
   },
   certificate: {
-    type: _mongoose.Schema.Types.ObjectId,
-    ref: 'Certificate'
+    title: {
+      type: String,
+      trim: true,
+      required: [true, _messages.default.required.title],
+      minlength: [_range.title.min, _messages.default.restrictions.title],
+      maxlength: [_range.title.max, _messages.default.restrictions.title]
+    },
+    type: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      index: true,
+      required: [true, _messages.default.required.type],
+      minlength: [_range.type.min, _messages.default.restrictions.type],
+      maxlength: [_range.type.max, _messages.default.restrictions.type]
+    },
+    image: {
+      data: Buffer,
+      contentType: String
+    },
+    note: {
+      type: String,
+      trim: true,
+      maxlength: [_range.note.max, _messages.default.required.note]
+    }
   },
   languages: [_Language.Language],
   company: {
