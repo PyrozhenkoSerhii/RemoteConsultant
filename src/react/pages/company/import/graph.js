@@ -7,7 +7,7 @@ import _pull from 'lodash/pull'
 import _some from 'lodash/some'
 import _mapKeys from 'lodash/mapKeys'
 
-import { Button, Spinner } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 
 
 
@@ -39,7 +39,7 @@ const style = [
   {
     selector: '.eh-handle',
     style: {
-      'background-color': 'blue',
+      'background-color': 'black',
       'width': 8,
       'height': 12,
       'shape': 'ellipse',
@@ -51,30 +51,30 @@ const style = [
   {
     selector: '.eh-hover',
     style: {
-      'background-color': 'blue'
+      'background-color': 'black'
     }
   },
   {
     selector: '.eh-source',
     style: {
       'border-width': 2,
-      'border-color': 'blue'
+      'border-color': 'black'
     }
   },
   {
     selector: '.eh-target',
     style: {
       'border-width': 2,
-      'border-color': 'blue'
+      'border-color': 'black'
     }
   },
   {
     selector: '.eh-preview, .eh-ghost-edge',
     style: {
-      'background-color': 'blue',
-      'line-color': 'blue',
-      'target-arrow-color': 'blue',
-      'source-arrow-color': 'blue'
+      'background-color': 'black',
+      'line-color': 'black',
+      'target-arrow-color': 'black',
+      'source-arrow-color': 'black'
     }
   },
   {

@@ -5,7 +5,10 @@ import _forEach from 'lodash/forEach'
 import _isArray from 'lodash/isArray'
 import _isObject from 'lodash/isObjectLike'
 
+import { MDBListGroupItem, MDBBadge } from "mdbreact"
+
 import AdapterComponent from '../../../Components/Company/Import/Adapter'
+
 
 
 const Adapter = ({ rawData, setImportedStructure, setFieldsPathMap, setStartPath }) => {
@@ -55,10 +58,10 @@ const Adapter = ({ rawData, setImportedStructure, setFieldsPathMap, setStartPath
             if (_isObject(element)) {
                 return (
                     <div key={field} className={isSelected(element)} style={{ paddingLeft: currentDepth * 20 }}>
-                        <p className='chain-element' onClick={() => handleObjectSelection(currentPath, element)}>
-                            <span>{field}</span>
-                            <span className="type-identifier">{dataType}</span>
-                        </p>
+                        <MDBListGroupItem className="d-flex justify-content-between align-items-center" onClick={() => handleObjectSelection(currentPath, element)}>
+                            <span>{field}{dataType}</span>
+                            <MDBBadge color="primary" pill>{Object.keys(element).length}</MDBBadge>
+                        </MDBListGroupItem>
                         {renderChain(element, currentPath, currentDepth)}
                     </div>
                 )
@@ -70,10 +73,11 @@ const Adapter = ({ rawData, setImportedStructure, setFieldsPathMap, setStartPath
         return _map(selected.fields, (value, path) => {
             const selectedField = path.split('.').pop()
             return (
-                <div key={selectedField} className='chain-selected-field animated-slide-right'>
+                <MDBListGroupItem className="d-flex justify-start align-items-center animated-slide-right" key={selectedField} style={{height: '45px', backgroundColor: '#f5f5f5'}}>
                     <span>{selectedField}</span>
                     <span className="type-identifier">{buildIdentifier(typeof value)}</span>
-                </div>
+                </MDBListGroupItem>
+                
             )
         })
     }
