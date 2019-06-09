@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import { withAlert } from 'react-alert'
 import { Button } from 'react-bootstrap'
+import SimpleReactValidator from 'simple-react-validator'
 
 import { BASE_URL, REPRESENTATIVE, CUSTOMER, CONSULTANT, POST, AUTHENTICATE } from '../../config/routes'
 import globalContext from '../tools/state/context/global-context'
@@ -56,7 +57,11 @@ const Authentication = ({ callbackUrl, entity, alert }) => {
 
     const context = useContext(globalContext)
 
-    const handleUpdate = ({ target: { id: field, value } }) => setFormData({ ...formData, [field]: value })
+    const validator = useMemo(() => new SimpleReactValidator({ className: 'text-danger' }), [])
+
+    const handleUpdate = ({ target }) => {
+        setFormData({ ...formData, [target.id || target.name]: target.value })
+    }
 
     const handleSubmit = event => {
         event.preventDefault()
@@ -100,6 +105,7 @@ const Authentication = ({ callbackUrl, entity, alert }) => {
                         validated={validated}
                         data={formData}
                         toggleAction={toggleAction}
+                        validator={validator}
                     />
                 </React.Fragment>
 

@@ -1,11 +1,13 @@
 import React from 'react'
-import { Button, Form } from 'react-bootstrap'
-import {
-    MDBContainer,
-    MDBRow,
-    MDBCol,
-    MDBInput
-} from 'mdbreact'
+import { Button } from 'react-bootstrap'
+import { MDBContainer, MDBRow, MDBCol, MDBInput } from 'mdbreact'
+
+import Select from '@material-ui/core/Select'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import FormControl from '@material-ui/core/FormControl'
+
+
 
 
 const RegisterForm = ({ handleSubmit, handleUpdate, toggleAction, data }) => (
@@ -100,19 +102,19 @@ const RegisterForm = ({ handleSubmit, handleUpdate, toggleAction, data }) => (
                                 />
                             </MDBCol>
                             <MDBCol md='6'>
-                                <Form.Group controlId='gender'>
-                                    <Form.Label>Gender</Form.Label>
-                                    <Form.Control
-                                        as='select'
+                                <FormControl className='register-select'>
+                                    <InputLabel htmlFor='gender'>Gender</InputLabel>
+                                    <Select
                                         onChange={handleUpdate}
-                                        value={data.gender || 'Unknown'}
+                                        id='gender'
+                                        name='gender'
+                                        value={data.gender || 'unknown'}
                                     >
-                                        <option>unknown</option>
-                                        <option>male</option>
-                                        <option>female</option>
-                                    </Form.Control>
-                                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                                </Form.Group>
+                                        <MenuItem value='unknown'>Unknown</MenuItem>
+                                        <MenuItem value='male'>Male</MenuItem>
+                                        <MenuItem value='female'>Female</MenuItem>
+                                    </Select>
+                                </FormControl>
                             </MDBCol>
                         </MDBRow>
                     </div>

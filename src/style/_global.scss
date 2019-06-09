@@ -13,13 +13,25 @@ body {
     color: rgb(138, 136, 136);
 }
 
-.loading {
+.loading, .redirect {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 100;
     color: #afabab;
+}
+
+
+.redirect {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+
+    & > * {
+        margin-top: 20px;
+    }
 }
 
 
@@ -44,4 +56,13 @@ body {
 
 .material-select {
     width: 100%;
+}
+
+.register-select {
+    width: 100%;
+    margin-top: 19px !important;
+}
+
+.text-danger {
+    text-align: center;
 }

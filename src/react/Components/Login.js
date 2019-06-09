@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap'
 import { MDBContainer, MDBRow, MDBCol, MDBInput } from 'mdbreact'
 
 
-const LoginForm = ({ handleUpdate, handleSubmit, toggleAction, data }) => (
+const LoginForm = ({ handleUpdate, handleSubmit, toggleAction, data, validator }) => (
     <MDBContainer>
         <MDBRow>
             <MDBCol md='3' />
@@ -25,9 +25,11 @@ const LoginForm = ({ handleUpdate, handleSubmit, toggleAction, data }) => (
                             success='right'
                             id='email'
                             onChange={handleUpdate}
-                            value={data.email || ''}
+                            onBlur={validator.showMessageFor.bind(null, 'email')}
+                            value={data.email}
                             required
                         />
+                        {validator.message('email', data.email, 'required|email')}
                         <MDBInput
                             label='Type your password'
                             icon='lock'
@@ -36,9 +38,11 @@ const LoginForm = ({ handleUpdate, handleSubmit, toggleAction, data }) => (
                             validate
                             id='password'
                             onChange={handleUpdate}
+                            onBlur={validator.showMessageFor.bind(null, 'password')}
                             value={data.password || ''}
                             required
                         />
+                        {validator.message('password', data.password, 'required')}
                     </div>
                     <div className='text-center'>
                         <Button variant='success' type='submit'>Sign in</Button>

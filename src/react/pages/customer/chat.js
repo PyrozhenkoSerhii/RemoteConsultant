@@ -212,7 +212,8 @@ const Chatroom = ({ customer, product, alert }) => {
 		setPopupData({ ...popupData, [target.name]: target.value })
 	}
 
-	const submitPopupHandler = () => {
+	const submitPopupHandler = e => {
+		e.preventDefault();
 		if (activePopup.type === 'consultation') {
 			const product = context.product && context.product._id ? context.product._id : 'none'
 
@@ -236,7 +237,7 @@ const Chatroom = ({ customer, product, alert }) => {
 				})
 				.catch(err => console.log(err.response.data.error))
 		} else {
-			setRedirect(`${product.website}/${product._id}`)
+			setRedirect(`${context.product.company.website}/${context.product._id}`)
 		}
 
 		setActivePopup(null)
@@ -275,8 +276,8 @@ const Chatroom = ({ customer, product, alert }) => {
 	}
 
 
-	if(redirect){
-		return <Redirect to={redirect}/>
+	if (redirect) {
+		return <Redirect url={redirect} />
 	}
 
 	return (
