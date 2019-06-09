@@ -105,7 +105,7 @@ var ConsultantSchema = new _mongoose.Schema({
     title: {
       type: String,
       trim: true,
-      required: [true, _messages.default.required.title],
+      // required: [true, messages.required.title],
       minlength: [_range.title.min, _messages.default.restrictions.title],
       maxlength: [_range.title.max, _messages.default.restrictions.title]
     },
@@ -114,7 +114,7 @@ var ConsultantSchema = new _mongoose.Schema({
       trim: true,
       lowercase: true,
       index: true,
-      required: [true, _messages.default.required.type],
+      // required: [true, messages.required.type],
       minlength: [_range.type.min, _messages.default.restrictions.type],
       maxlength: [_range.type.max, _messages.default.restrictions.type]
     },

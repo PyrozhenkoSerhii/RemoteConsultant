@@ -90,7 +90,7 @@ const ConsultantSchema = new Schema({
         title: {
             type: String,
             trim: true,
-            required: [true, messages.required.title],
+            // required: [true, messages.required.title],
             minlength: [title.min, messages.restrictions.title],
             maxlength: [title.max, messages.restrictions.title]
         },
@@ -99,7 +99,7 @@ const ConsultantSchema = new Schema({
             trim: true,
             lowercase: true,
             index: true,
-            required: [true, messages.required.type],
+            // required: [true, messages.required.type],
             minlength: [type.min, messages.restrictions.type],
             maxlength: [type.max, messages.restrictions.type]
         },
