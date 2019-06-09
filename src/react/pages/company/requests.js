@@ -31,7 +31,9 @@ const Request = ({ company, alert }) => {
 
 
     const handleResolve = (approved, request) => {
-        axios.patch(BASE_URL + COMPANY + PATCH + company._id + REQUEST, { approved, request })
+        const minimizedRequest = {...request, consultant: {_id: request.consultant._id}}
+
+        axios.patch(BASE_URL + COMPANY + PATCH + company._id + REQUEST, { approved, request: minimizedRequest })
             .then(res => {
                 console.log(res)
                 setRequests(_filter(requests, value => value._id !== request._id))
