@@ -111,7 +111,7 @@ function () {
  * In production, companies must be created directly in database by platform administrator
  */
 
-process.env.NODE_ENV !== 'prod' && router.post('/company/', (0, _wrap.default)(
+process.env.NODE_ENV !== 'production' && router.post('/company/', (0, _wrap.default)(
 /*#__PURE__*/
 function () {
   var _ref3 = _asyncToGenerator(
@@ -506,7 +506,7 @@ function () {
  * Providing an opportunity to clear a collection for non-production environment
  */
 
-process.env.NODE_ENV !== 'prod' && router.delete('/company/clear', (0, _wrap.default)(
+process.env.NODE_ENV !== 'production' && router.delete('/company/clear', (0, _wrap.default)(
 /*#__PURE__*/
 function () {
   var _ref8 = _asyncToGenerator(

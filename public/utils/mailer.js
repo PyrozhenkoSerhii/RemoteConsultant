@@ -4,7 +4,7 @@ var _nodemailer = _interopRequireDefault(require("nodemailer"));
 
 var _logger = _interopRequireDefault(require("./logger"));
 
-var _config = _interopRequireDefault(require("../config"));
+var _config = _interopRequireDefault(require("config"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43,8 +43,8 @@ exports.createGmailTransport = function (result) {
     secure: true,
     socketTimeout: 5000,
     auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASSWORD
+      user: _config.default.get('mailer.user'),
+      pass: _config.default.get('mailer.password')
     }
   }, {
     from: 'Serhii Pyrozhenko <Pirogenkoss85@gmail.com>',
@@ -62,7 +62,7 @@ exports.verificationMessage = function (user) {
   return {
     to: user.email,
     subject: 'Email verification',
-    text: "Hello, ".concat(user.username, "! If it isn't you, just ignore the message. Otherwise, please, ") + "verify your email by following link ".concat(_config.default.urls.emailVerifyingBase).concat(user._id, "!")
+    text: "Hello, ".concat(user.username, "! If it isn't you, just ignore the message. Otherwise, please, ") + "verify your email by following link ".concat(_config.default.get('urls.emailVerifyingBase')).concat(user._id, "!")
   };
 };
 
@@ -70,7 +70,7 @@ exports.passwordResetMessage = function (user, hash) {
   return {
     to: user.email,
     subject: 'Password reset',
-    text: "Hello, ".concat(user.username, "! You've just sent a request to restore your password,") + "if it isn't you, just ignore the message. Otherwise, please, use following link ".concat(_config.default.urls.passwordResetBase).concat(hash, "!")
+    text: "Hello, ".concat(user.username, "! You've just sent a request to restore your password,") + "if it isn't you, just ignore the message. Otherwise, please, use following link ".concat(_config.default.get('urls.passwordResetBase')).concat(hash, "!")
   };
 };
 //# sourceMappingURL=mailer.js.map

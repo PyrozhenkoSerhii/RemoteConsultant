@@ -36,7 +36,7 @@ router.get('/company/list/:id', isObjectId, wrap(async (req, res) => {
 /**
  * In production, companies must be created directly in database by platform administrator
  */
-process.env.NODE_ENV !== 'prod' && router.post('/company/', wrap(async (req, res) => {
+process.env.NODE_ENV !== 'production' && router.post('/company/', wrap(async (req, res) => {
     const company = new Company({ ...req.body })
 
     const validationError = company.validateSync()
@@ -140,7 +140,7 @@ router.delete('/company/list/:id', isObjectId, wrap(async (req, res) => {
 /**
  * Providing an opportunity to clear a collection for non-production environment
  */
-process.env.NODE_ENV !== 'prod' && router.delete('/company/clear', wrap(async (req, res) => {
+process.env.NODE_ENV !== 'production' && router.delete('/company/clear', wrap(async (req, res) => {
     await Company.deleteMany()
 
     const companies = await Company.find()

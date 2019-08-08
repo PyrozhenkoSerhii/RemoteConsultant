@@ -2,6 +2,8 @@
 
 require("@babel/polyfill");
 
+var _dotenv = _interopRequireDefault(require("dotenv"));
+
 var _express = _interopRequireDefault(require("express"));
 
 var _bodyParser = _interopRequireDefault(require("body-parser"));
@@ -22,7 +24,7 @@ var _helmet = _interopRequireDefault(require("helmet"));
 
 var _fs = _interopRequireDefault(require("fs"));
 
-var _config = _interopRequireDefault(require("./config"));
+var _config = _interopRequireDefault(require("config"));
 
 var _logger = _interopRequireDefault(require("./middlewares/logger"));
 
@@ -48,19 +50,15 @@ var _certificate = _interopRequireDefault(require("./controllers/certificate"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+_dotenv.default.config({
+  silent: true
+});
+
 var PeerServer = require('peer').ExpressPeerServer;
 
 var api = (0, _express.default)();
-var port = process.env.PORT || _config.default.api.port; // const ExpressPeerServer = require('peer').ExpressPeerServer;
-// const server = http.createServer(api)
-// const peerServer = ExpressPeerServer(server, {
-// 	debug: true,
-// 	ssl: {
-// 		key: fs.readFileSync('./ssl/key.pem', 'utf8'),
-// 		cert: fs.readFileSync('./ssl/cert.pem', 'utf8'),
-// 		passphrase: process.env.PASSPHRASE
-// 	}
-// })
+
+var port = process.env.PORT || _config.default.get('api.port');
 
 var limiter = (0, _expressRateLimit.default)({
   windowsMs: 15 * 60 * 1000,
@@ -70,11 +68,10 @@ var limiter = (0, _expressRateLimit.default)({
 _expressJwtBlacklist.default.configure({
   store: {
     type: 'redis',
-    host: _config.default.redis.host,
-    port: _config.default.redis.port
+    host: _config.default.get('redis.host'),
+    port: _config.default.get('redis.port')
   }
-}); // api.use('/p2p', peerServer)
-
+});
 
 api.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -91,12 +88,12 @@ api.use(_bodyParser.default.json());
 api.use(limiter);
 api.use(_logger.default); // force jwt to work in production env only
 
-enviroment === 'prod' && api.use((0, _expressJwt.default)({
-  secret: _config.default.api.secret
+enviroment === 'production' && api.use((0, _expressJwt.default)({
+  secret: _config.default.get('api.secret')
 }).unless(function (req) {
   return req.originalUrl.match(/^((?!api).)*$/) || req.originalUrl === '/api/customers' && req.method === 'POST' || req.originalUrl === '/api/consultant' && req.method === 'POST' || req.originalUrl === '/api/representative' && req.method === 'POST' || req.originalUrl === '/api/customer/authenticate' || req.originalUrl === '/api/consultant/authenticate' || req.originalUrl === '/api/representative/authenticate';
 }));
-enviroment === 'prod' && api.use(function (err, req, res, next) {
+enviroment === 'production' && api.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     _logger2.default.warn("[JWT] No authorization provided with request ".concat(req.originalUrl));
 
@@ -119,24 +116,22 @@ api.get('*', function (req, res) {
   res.sendFile(_path.default.join(__dirname, '../public', 'index.html'));
 });
 api.all('*', function (req, res) {
-  // res.sendFile(path.resolve(__dirname, '../public', 'index.html'))
   res.status(404).send({
     error: "Path ".concat(req.originalUrl, " with method ").concat(req.method, " not found!")
   });
 });
 
-_mongoose.default.connect(_config.default.db.connectionString, _config.default.db.options).then(function () {
-  return _logger2.default.info("[API] Connection to ".concat(_config.default.db.databaseName, " db was established "));
+_mongoose.default.connect(_config.default.get('db.connectionString'), _config.default.get('db.options')).then(function () {
+  return _logger2.default.info("[API] Connection to ".concat(_config.default.get('db.databaseName'), " db was established "));
 }, function (err) {
-  return _logger2.default.error("[API] Error occured while connection to ".concat(_config.default.db.databaseName, " db"), err);
+  return _logger2.default.error("[API] Error occured while connection to ".concat(_config.default.get('db.databaseName'), " db: "), err);
 });
 
 _mongoose.default.set('useCreateIndex', true);
 
 enviroment === 'dev' && _mongoose.default.set('debug', function (coll, method) {
   _logger2.default.info("[Mongoose] Path: /".concat(coll, ", method: ").concat(method));
-}); // api.listen(port, err => {
-
+});
 var server = api.listen(port, function (err) {
   if (err) {
     _logger2.default.error("[API] Error while launhing the server: ".concat(err));

@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
-import config from '../config'
+import config from 'config'
 import logger from './logger'
-// import blacklist from 'express-jwt-blacklist'
 
 
 exports.sign = user => {
@@ -9,7 +8,7 @@ exports.sign = user => {
 
     return jwt.sign(
         user.toJSON(),
-        config.api.secret,
+        config.get('api.secret'),
         {
             expiresIn: '24h'
         })
@@ -17,7 +16,7 @@ exports.sign = user => {
 
 
 exports.verify = token => {
-    jwt.verify(token, config.secret, (err, decoded) => {
+    jwt.verify(token, config.get('secret'), (err, decoded) => {
         if (err) {
             logger.warn(`[JWT] Token isn't valid, err: ${JSON.stringify(err.name)}`)
             return false

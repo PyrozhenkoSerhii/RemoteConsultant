@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _winston = require("winston");
 
-var _config = _interopRequireDefault(require("../config"));
+var _config = _interopRequireDefault(require("config"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27,11 +27,11 @@ var logger = (0, _winston.createLogger)({
       return "".concat(info.timestamp, " ").concat(info.level, ": ").concat(info.message);
     }))
   }), new _winston.transports.File({
-    filename: _config.default.api.logs.warning,
+    filename: _config.default.get('api.logs.warning'),
     level: 'warn',
     silent: enviroment === 'test'
   }), new _winston.transports.File({
-    filename: _config.default.api.logs.error,
+    filename: _config.default.get('api.logs.error'),
     level: 'error',
     silent: enviroment === 'test'
   })]

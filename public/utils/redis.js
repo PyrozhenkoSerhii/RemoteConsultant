@@ -7,15 +7,15 @@ exports.default = void 0;
 
 var _redis = _interopRequireDefault(require("redis"));
 
-var _config = _interopRequireDefault(require("../config"));
+var _config = _interopRequireDefault(require("config"));
 
 var _logger = _interopRequireDefault(require("./logger"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var client = _redis.default.createClient({
-  port: _config.default.redis.port,
-  host: _config.default.redis.host,
+  port: _config.default.get('redis.port'),
+  host: _config.default.get('redis.host'),
   retry_strategy: function retry_strategy(options) {
     if (options.error && options.error.code === 'ECONNREFUSED') {
       return new Error('The server refused the connection');
@@ -34,7 +34,7 @@ var client = _redis.default.createClient({
 });
 
 client.on('connect', function () {
-  _logger.default.info("[Redis] Connection created on port ".concat(_config.default.redis.port, " and host ").concat(_config.default.redis.host));
+  _logger.default.info("[Redis] Connection created on port ".concat(_config.default.get('redis.port'), " and host ").concat(_config.default.get('redis.host')));
 });
 client.on('error', function (err) {
   _logger.default.error("Redis error: ".concat(err, " "));

@@ -5,13 +5,12 @@
   "main": "main.js",
   "scripts": {
     "client-dev": "better-npm-run client-dev",
-    "client-build": "better-npm-run client-build",
     "client-test": "better-npm-run client-test",
+    "client-build": "better-npm-run client-build",
     "server-dev": "better-npm-run server-dev",
-    "server-prod": "better-npm-run server-prod-pm-2",
     "server-test": "better-npm-run server-test",
-    "server-build": "babel -d ./public ./server -s",
-    "start": "node ./public/server.js"
+    "server-build": "better-npm-run server-build",
+    "server-prod": "better-npm-run server-prod"
   },
   "engines": {
     "node": "v8.11.3"
@@ -20,28 +19,28 @@
     "client-dev": {
       "command": "webpack-dev-server --mode development --devtool inline-source-map --hot"
     },
-    "client-build": {
-      "command": "webpack --mode production"
-    },
     "client-test": {
       "command": "jest"
     },
-    "server-dev": {
-      "command": "nodemon --exec babel-node server/server.js",
-      "env": {
-        "NODE_ENV": "dev"
-      }
+    "client-build": {
+      "command": "webpack --mode production"
     },
-    "server-prod-pm2": {
-      "command": "pm2 start src/server.js --interpreter ./node_modules/.bin/babel-node",
-      "env": {
-        "NODE_ENV": "prod"
-      }
+    "server-dev": {
+      "command": "nodemon --exec babel-node server/server.js"
     },
     "server-test": {
       "command": "mocha --require @babel/register --require babel-polyfill --require mocha-clean --timeout 5000 ./tests/server/*.test.js",
       "env": {
         "NODE_ENV": "test"
+      }
+    },
+    "server-build": {
+      "command": "babel -d ./public ./server -s"
+    },
+    "server-prod": {
+      "command": "node ./public/server.js",
+      "env": {
+        "NODE_ENV": "production"
       }
     }
   },

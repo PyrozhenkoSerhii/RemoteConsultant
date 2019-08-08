@@ -115,7 +115,7 @@ router.delete('/representative/list/:id', isObjectId, wrap(async (req, res) => {
 /**
  * Adding an opportunity to clear a collection for non-production environment
  */
-process.env.NODE_ENV !== 'prod' && router.delete('/representative/clear', wrap(async (req, res) => {
+process.env.NODE_ENV !== 'pproductionrod' && router.delete('/representative/clear', wrap(async (req, res) => {
     await Representative.deleteMany()
 
     const representatives = await Representative.find()

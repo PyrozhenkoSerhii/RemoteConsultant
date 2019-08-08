@@ -1,5 +1,8 @@
 import "@babel/polyfill"
 
+import dotenv from 'dotenv'
+dotenv.config({ silent: true })
+
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
@@ -11,7 +14,7 @@ import requestLimiter from 'express-rate-limit'
 import helmet from 'helmet'
 import fs from 'fs'
 
-import config from './config'
+import config from 'config'
 import loggerMiddleware from './middlewares/logger'
 import errorHandler from './middlewares/errorHandler'
 import logger from './utils/logger'
@@ -26,22 +29,9 @@ import order from './controllers/order'
 import certificate from './controllers/certificate'
 
 
-
-
 const PeerServer = require('peer').ExpressPeerServer;
 const api = express()
-const port = process.env.PORT || config.api.port
-
-// const ExpressPeerServer = require('peer').ExpressPeerServer;
-// const server = http.createServer(api)
-// const peerServer = ExpressPeerServer(server, {
-// 	debug: true,
-// 	ssl: {
-// 		key: fs.readFileSync('./ssl/key.pem', 'utf8'),
-// 		cert: fs.readFileSync('./ssl/cert.pem', 'utf8'),
-// 		passphrase: process.env.PASSPHRASE
-// 	}
-// })
+const port = process.env.PORT || config.get('api.port')
 
 
 const limiter = requestLimiter({
@@ -51,12 +41,11 @@ const limiter = requestLimiter({
 blacklist.configure({
 	store: {
 		type: 'redis',
-		host: config.redis.host,
-		port: config.redis.port,
+		host: config.get('redis.host'),
+		port: config.get('redis.port'),
 	}
 })
 
-// api.use('/p2p', peerServer)
 api.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	next();
@@ -74,9 +63,8 @@ api.use(limiter)
 api.use(loggerMiddleware)
 
 
-
 // force jwt to work in production env only
-enviroment === 'prod' && api.use(jwt({ secret: config.api.secret }).unless(req =>
+enviroment === 'production' && api.use(jwt({ secret: config.get('api.secret') }).unless(req =>
 	req.originalUrl.match(/^((?!api).)*$/) ||
 	req.originalUrl === '/api/customers' && req.method === 'POST' ||
 	req.originalUrl === '/api/consultant' && req.method === 'POST' ||
@@ -85,7 +73,7 @@ enviroment === 'prod' && api.use(jwt({ secret: config.api.secret }).unless(req =
 	req.originalUrl === '/api/consultant/authenticate' ||
 	req.originalUrl === '/api/representative/authenticate'
 ))
-enviroment === 'prod' && api.use((err, req, res, next) => {
+enviroment === 'production' && api.use((err, req, res, next) => {
 	if (err.name === 'UnauthorizedError') {
 		logger.warn(`[JWT] No authorization provided with request ${req.originalUrl}`)
 		res.status(401).send({ error: `You have no permitions to make this request` })
@@ -108,13 +96,12 @@ api.get('*', function (req, res) {
 });
 
 api.all('*', (req, res) => {
-	// res.sendFile(path.resolve(__dirname, '../public', 'index.html'))
 	res.status(404).send({ error: `Path ${req.originalUrl} with method ${req.method} not found!` })
 })
 
-mongoose.connect(config.db.connectionString, config.db.options).then(
-	() => logger.info(`[API] Connection to ${config.db.databaseName} db was established `),
-	err => logger.error(`[API] Error occured while connection to ${config.db.databaseName} db`, err)
+mongoose.connect(config.get('db.connectionString'), config.get('db.options')).then(
+	() => logger.info(`[API] Connection to ${config.get('db.databaseName')} db was established `),
+	err => logger.error(`[API] Error occured while connection to ${config.get('db.databaseName')} db: `, err)
 )
 mongoose.set('useCreateIndex', true)
 enviroment === 'dev' && mongoose.set('debug', (coll, method) => {
@@ -123,7 +110,6 @@ enviroment === 'dev' && mongoose.set('debug', (coll, method) => {
 
 
 
-// api.listen(port, err => {
 const server = api.listen(port, err => {
 	if (err) {
 		logger.error(`[API] Error while launhing the server: ${err}`)
@@ -143,9 +129,7 @@ const peerServer = PeerServer(server, {
 	}
 });
 
-
 api.use('/p2p/', peerServer)
-
 
 
 module.exports = server

@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 
 import logger from './logger'
-import config from '../config'
+import config from 'config'
 
 
 exports.createTestTransport = result => nodemailer.createTestAccount((err, account) => {
@@ -41,8 +41,8 @@ exports.createGmailTransport = (result) => {
             secure: true,
             socketTimeout: 5000,
             auth: {
-                user: process.env.MAIL_USER,
-                pass: process.env.MAIL_PASSWORD
+                user: config.get('mailer.user'),
+                pass: config.get('mailer.password')
             }
         },
         {
@@ -63,12 +63,12 @@ exports.verificationMessage = user => ({
     to: user.email,
     subject: 'Email verification',
     text: `Hello, ${user.username}! If it isn't you, just ignore the message. Otherwise, please, ` +
-        `verify your email by following link ${config.urls.emailVerifyingBase}${user._id}!`
+        `verify your email by following link ${config.get('urls.emailVerifyingBase')}${user._id}!`
 })
 
 exports.passwordResetMessage = (user, hash) => ({
     to: user.email,
     subject: 'Password reset',
     text: `Hello, ${user.username}! You've just sent a request to restore your password,` +
-        `if it isn't you, just ignore the message. Otherwise, please, use following link ${config.urls.passwordResetBase}${hash}!`
+        `if it isn't you, just ignore the message. Otherwise, please, use following link ${config.get('urls.passwordResetBase')}${hash}!`
 })

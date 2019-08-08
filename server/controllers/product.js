@@ -141,7 +141,7 @@ router.post('/product/batchDelete', wrap(async (req, res) => {
 /**
  * Adding an opportunity to clear a collection for non-production environment
  */
-process.env.NODE_ENV !== 'prod' && router.delete('/product/clear', wrap(async (req, res) => {
+process.env.NODE_ENV !== 'production' && router.delete('/product/clear', wrap(async (req, res) => {
     await Product.deleteMany()
 
     const products = await Product.find()

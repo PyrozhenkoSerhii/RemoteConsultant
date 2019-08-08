@@ -322,7 +322,7 @@ function () {
  * Adding an opportunity to clear a collection for non-production environment
  */
 
-process.env.NODE_ENV !== 'prod' && router.delete('/consultation/clear', (0, _wrap.default)(
+process.env.NODE_ENV !== 'production' && router.delete('/consultation/clear', (0, _wrap.default)(
 /*#__PURE__*/
 function () {
   var _ref7 = _asyncToGenerator(

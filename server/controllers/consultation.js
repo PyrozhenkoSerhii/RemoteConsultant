@@ -78,7 +78,7 @@ router.delete('/consultation/list/:id', isObjectId, wrap(async (req, res) => {
 /**
  * Adding an opportunity to clear a collection for non-production environment
  */
-process.env.NODE_ENV !== 'prod' && router.delete('/consultation/clear', wrap(async (req, res) => {
+process.env.NODE_ENV !== 'production' && router.delete('/consultation/clear', wrap(async (req, res) => {
     await Consultation.deleteMany()
 
     const consultations = await Consultation.find()

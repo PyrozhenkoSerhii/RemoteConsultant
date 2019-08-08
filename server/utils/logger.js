@@ -1,7 +1,7 @@
 import { createLogger, format, transports } from 'winston'
 const { combine } = format
 
-import config from '../config'
+import config from 'config'
 
 const enviroment = process.env.NODE_ENV || 'dev'
 
@@ -21,12 +21,12 @@ let logger = createLogger({
             )
         }),
         new transports.File({
-            filename: config.api.logs.warning,
+            filename: config.get('api.logs.warning'),
             level: 'warn',
             silent: enviroment === 'test'
         }),
         new transports.File({
-            filename: config.api.logs.error,
+            filename: config.get('api.logs.error'),
             level: 'error',
             silent: enviroment === 'test'
         })

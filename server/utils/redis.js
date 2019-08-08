@@ -1,11 +1,11 @@
 import redis from 'redis'
 
-import config from '../config'
+import config from 'config'
 import logger from './logger'
 
 const client = redis.createClient({
-    port: config.redis.port,
-    host: config.redis.host,
+    port: config.get('redis.port'),
+    host: config.get('redis.host'),
     retry_strategy: (options) => {
         if (options.error && options.error.code === 'ECONNREFUSED') {
             return new Error('The server refused the connection');
@@ -21,7 +21,7 @@ const client = redis.createClient({
 })
 
 client.on('connect', () => {
-    logger.info(`[Redis] Connection created on port ${config.redis.port} and host ${config.redis.host}`)
+    logger.info(`[Redis] Connection created on port ${config.get('redis.port')} and host ${config.get('redis.host')}`)
 })
 
 client.on('error', (err) => {
