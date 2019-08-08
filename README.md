@@ -1,17 +1,40 @@
-Dev mode: 
-[x] 'npm i'
-[x] rename '.env-sample' to '.env' and enter your variables
-[x] 'npm run server-dev' to run server in the development mode
-[x] 'npm run client-dev' to run client in the development mode
+# Installation
+## Dev mode
+Install dependencies
+```bash
+npm i
+```
+Rename '.env-sample' file to '.env' and enter your variables
 
-Prod mode: 
-[x] 'npm i'
-[x] rename '.env-sample' to '.env' and enter your variables
-[x] 'npm run client-build' to build the client to a public folder
-[x] 'npm run server-build' to build the server to a public folder
-[x] 'npm run prod'
+Launch server in terminal/console
+```bash
+npm run server-dev
+```
+Launch client in another terminal/console
+```bash
+npm run client-dev
+```
 
-Notes: 
-[x] Every env has its own log file for errors and warnings separately
-[x] When you run tests provided database get cleared at the beginning and end of the test SO be carefull
+## Prod mode
+Install dependencies
+```bash
+npm i --production
+```
+Rename '.env-sample' file to '.env' and enter your variables
+
+Build server and client
+```bash
+npm run client-build
+npm run server-build
+```
+
+Launch
+```bash
+npm run server-prod
+```
+
+## Notes
+Every env has its own log file for errors and warnings separately
+
+When you run tests provided database get cleared at the beginning and end of the test SO be carefull
 
