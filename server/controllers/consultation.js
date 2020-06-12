@@ -3,6 +3,7 @@ import _merge from 'lodash/assignIn'
 import _last from 'lodash/last'
 
 import Consultation from '../models/Consultation'
+import Customer from '../models/Customer'
 import wrap from '../middlewares/wrap'
 import { isObjectId } from '../middlewares/validators'
 
@@ -24,6 +25,15 @@ router.get('/consultation/list/:id', isObjectId, wrap(async (req, res) => {
 
 
 router.post('/consultation/', wrap(async (req, res) => {
+    const customer = await Customer.findById(req.body.customer)
+    customer.quota = customer.quota ? customer.quota - 1 : 0;
+    
+    const customerValidationError = customer.validateSync()
+    if (customerValidationError) return res.status(400).send({ error: customerValidationError.errors })
+
+    const savedCustomer = await customer.save()
+
+    
     let consultation = new Consultation({ ...req.body })
 
     const validationError = consultation.validateSync()

@@ -13,7 +13,7 @@ import PopupComponent from '../../Components/Shared/Popup'
 
 import { useHTTP } from '../../tools/hooks/http'
 import { buildUrl } from '../../tools/functions/query'
-import { BASE_URL, CONSULTANT, GET, HOST, PORT, SECURE, CONSULTATION, POST } from '../../../config/routes'
+import { BASE_URL, CONSULTANT, GET, HOST, PORT, SECURE, CONSULTATION, POST, ORDER } from '../../../config/routes'
 
 import Loading from '../../Components/Loading'
 import Redirect from '../../Components/Redirect'
@@ -237,7 +237,18 @@ const Chatroom = ({ customer, product, alert }) => {
 				})
 				.catch(err => console.log(err.response.data.error))
 		} else {
-			setRedirect(`${context.product.company.website}/${context.product._id}`)
+      // ordering item
+      axios.post(buildUrl(BASE_URL + ORDER + POST), {
+        customer: customer._id,
+        consultant: popupData.consultant,
+        product: context.product && context.product._id ? context.product._id : 'none',
+        quantity: Number(popupData.count),
+        sum: context.product.price * Number(popupData.count),
+      }).then(res => {
+        console.log(res);
+        setRedirect(`${context.product.company.website}/${context.product._id}`)
+      }).catch(err => console.log(err.response.data.error))
+
 		}
 
 		setActivePopup(null)

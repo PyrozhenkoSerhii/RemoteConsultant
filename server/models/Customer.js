@@ -71,6 +71,10 @@ const UserSchema = new Schema({
     verified: {
         type: Boolean,
         default: false
+    },
+    quota: {
+      type: Number,
+      default: 5,
     }
 })
 

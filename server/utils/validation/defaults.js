@@ -11,6 +11,12 @@ module.exports = Object.freeze({
         ],
         default: 'unknown'
     },
+    orderStatus: {
+      enum: [
+        'Pending', 'Successful', 'Cancelled'
+      ],
+      default: 'Pending'
+    },
     impact: {
         enum: [
             'buy', 'uncertain', 'not_buy'

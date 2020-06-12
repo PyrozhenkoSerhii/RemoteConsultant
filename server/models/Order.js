@@ -5,6 +5,8 @@ import _forEach from 'lodash/forEach'
 import messages from '../utils/validation/messages'
 import { quantity, sum } from '../utils/validation/range'
 import { calculate, getValue } from '../utils/contribution/calculator'
+import { orderStatus } from '../utils/validation/defaults'
+
 
 import Consultant from './Consultant'
 
@@ -37,21 +39,26 @@ const OrderSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Consultant',
         required: [true, messages.required.consultant]
+    },
+    status: {
+      type: String,
+      enum: orderStatus.enum,
+      default: orderStatus.default,
     }
 })
 
 OrderSchema.plugin(timestamps)
 
 
-OrderSchema.post('save', async order => {
-    const coefficients = await calculate(order)
+// OrderSchema.post('save', async order => {
+//     const coefficients = await calculate(order)
 
-    const sums = getValue(order.sum, coefficients)
+//     const sums = getValue(order.sum, coefficients)
 
-    _forEach(sums, (sum, consultant) => {
-        Consultant.findOneAndUpdate({ username: consultant }, { $inc: { bill: sum } })
-    })
-})
+//     _forEach(sums, (sum, consultant) => {
+//         Consultant.findOneAndUpdate({ username: consultant }, { $inc: { bill: sum } })
+//     })
+// })
 
 
 module.exports = mongoose.model('Order', OrderSchema)

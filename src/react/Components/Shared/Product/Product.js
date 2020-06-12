@@ -8,7 +8,7 @@ const Product = ({ product, allowActions, makeOrder, makeConsultation }) => (
         <MDBCardBody>
             <p>Category: {product.category}</p>
             <p>Price: {product.price}</p>
-            <p>Auantity: {product.quantity}</p>
+            <p>Quantity: {product.quantity}</p>
             {product.specification && _map(product.specification, (value, key) => (
                 <p key={key}>{key}: {JSON.stringify(value)}</p>
             ))}

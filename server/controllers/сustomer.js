@@ -22,6 +22,13 @@ router.get('/customer/list/:id', isObjectId, wrap(async (req, res) => {
     return res.status(200).send({ data: customer })
 }))
 
+router.get('/customer/list/:id/quota', isObjectId, wrap(async (req, res) => {
+    console.log(req);
+    const customer = await Customer.findById(req.params.id)
+    if (!customer) return res.status(400).send({ error: `Customer not found` })
+    return res.status(200).send({ data: customer.quota })
+}))
+
 
 router.post('/customer/', wrap(async (req, res) => {
     const customer = new Customer({ ...req.body })

@@ -2,6 +2,7 @@ import express from 'express'
 import _assignIn from 'lodash/assignIn'
 
 import Order from '../models/Order'
+
 import wrap from '../middlewares/wrap'
 import { isObjectId } from '../middlewares/validators'
 
@@ -13,6 +14,26 @@ router.get('/order/list/', wrap(async (req, res) => {
     res.status(200).send({ data: orders })
 }))
 
+
+router.get('/order/listByCustomer/:id', isObjectId, wrap(async (req, res) => {
+    const orders = await Order.find({customer: req.params.id})
+      .populate({
+        path: 'consultant',
+        select: 'fullname',
+        model: 'Consultant',
+      })
+      .populate({
+        path: 'product',
+        select: 'title',
+        populate: {
+          path: 'company',
+          select: 'title',
+          model: 'Company',
+        }
+      })
+
+    res.status(200).send({ data: orders });
+}))
 
 router.get('/order/list/:id', isObjectId, wrap(async (req, res) => {
     const order = await Order.findById(req.params.id)

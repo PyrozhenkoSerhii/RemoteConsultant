@@ -1,0 +1,21 @@
+.subscrition-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+}
+
+.badge {
+  padding: 10px;
+}
+
+.get-more-link {
+  font-size: 12px;
+  color: grey;
+
+  &:hover {
+    text-decoration: underline;
+    color: darkgrey;
+    cursor: pointer;
+  }
+}
