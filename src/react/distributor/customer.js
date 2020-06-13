@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 // pages
@@ -13,6 +13,8 @@ import withAuthentication from './withAuthentication'
 
 // tools
 import globalContext from '../tools/state/context/global-context'
+import {useHTTP} from '../tools/hooks/http'
+import { BASE_URL, CUSTOMER, GET } from '../../config/routes'
 
 
 // TODO: switch to the location.path
@@ -23,6 +25,15 @@ const callbackUrl = '/customer'
 
 const Customer = () => {
     const context = useContext(globalContext)
+
+    const [loading, customer, error] = useHTTP(`${BASE_URL}${CUSTOMER}${GET}${context.accounts.info[entity]._id}`, []);
+    useEffect(() => {
+      if(customer) {
+        context.update('customer', customer)
+      }
+    }, [customer])
+
+    console.log(context);
 
     return (<React.Fragment>
         <NavigationComponent context={context} entity={entity} />

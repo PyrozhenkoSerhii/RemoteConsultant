@@ -23,7 +23,6 @@ router.get('/customer/list/:id', isObjectId, wrap(async (req, res) => {
 }))
 
 router.get('/customer/list/:id/quota', isObjectId, wrap(async (req, res) => {
-    console.log(req);
     const customer = await Customer.findById(req.params.id)
     if (!customer) return res.status(400).send({ error: `Customer not found` })
     return res.status(200).send({ data: customer.quota })
@@ -55,6 +54,28 @@ router.post('/customer/authenticate', wrap(async (req, res) => {
     customer.password = undefined
 
     return res.status(200).send({ token, data: customer })
+}))
+
+router.post('/customer/list/:id/payment', wrap(async (req, res) => {
+    const customer = await Customer.findById(req.params.id);
+    if(!customer) return res.status(400).send({ error: `Customer wasn't found` })
+
+    customer.paymentHistory.push(Date.now())
+
+    if(req.body.saveInfo) {
+      customer.paymentInfo = {
+        nameOnCard: req.body.nameOnCard,
+        address: req.body.address,
+        cardNumber: req.body.cardNumber,
+        cardExp: req.body.cardExp,
+      }
+    }
+
+    const saved = await customer.save()
+
+    return res.status(200).send({data: "Paid"});
+
+
 }))
 
 

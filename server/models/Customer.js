@@ -75,7 +75,14 @@ const UserSchema = new Schema({
     quota: {
       type: Number,
       default: 5,
-    }
+    },
+    paymentInfo: {
+      nameOnCard: String,
+      address: String,
+      cardNumber: String,
+      cardExp: String,
+    },
+    paymentHistory: Array,
 })
 
 
