@@ -5,13 +5,9 @@ import { message } from '../../utils/validation/range'
 
 
 exports.Message = new Schema({
-    sender: {
+  author: {
         type: String,
-        required: [true, messages.required.sender]
-    },
-    receiver: {
-        type: String,
-        required: [true, messages.required.receiver]
+        required: [true, messages.required.author]
     },
     message: {
         type: String,
@@ -20,7 +16,7 @@ exports.Message = new Schema({
         minlength: [message.min, messages.restrictions.message],
         maxlength: [message.max, messages.restrictions.message]
     },
-    date: {
+    timestamp: {
         type: Date,
         default: Date.now()
     }

@@ -60,6 +60,7 @@ const Chatroom = ({ customer, product, alert }) => {
   const [paymentDialog, setPaymentDialog] = useState(false);
   const [paymentProceeding, setPaymentProceeding] = useState(false);
   const [paymentCallback, setPaymentCallback] = useState(null);
+  const [paidConsultation, setPaidConsultation] = useState(false);
 
   const [paymentData, setPaymentData] = useState({
     nameOnCard: customer?.paymentInfo?.nameOnCard || "",
@@ -88,6 +89,7 @@ const Chatroom = ({ customer, product, alert }) => {
       .then(res => {
         setPaymentProceeding(false)
         setPaymentDialog(false)
+        setPaidConsultation(true);
 
         alert.success('Thank you for your payment. You can proceed to consultation now')
 
@@ -285,8 +287,11 @@ const Chatroom = ({ customer, product, alert }) => {
           competence: popupData.competence,
           friendliness: popupData.friendliness,
           note: popupData.note,
-        }
+        },
+        paidConsultation,
       }
+
+      setPaidConsultation(false);
 
       axios.post(BASE_URL + CONSULTATION + POST, data)
         .then(res => {

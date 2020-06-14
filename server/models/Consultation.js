@@ -32,7 +32,11 @@ const ConsultationSchema = new Schema({
         maxlength: [title.max, messages.restrictions.title]
     },
     messages: [Message],
-    survey: Survey
+    survey: Survey,
+    paidConsultation: {
+      type: Boolean,
+      default: false,
+    }
 })
 
 ConsultationSchema.plugin(timestamps)
