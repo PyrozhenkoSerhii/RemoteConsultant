@@ -43,12 +43,6 @@ const Profile = ({ formData, handleUpdate, handlePopup }) => (
                         type='number'
                         disabled
                     />
-                    <MDBInput
-                        label='Bill'
-                        value={10}
-                        type='number'
-                        disabled
-                    />
                 </div>
 
                 <MDBInput
@@ -107,10 +101,10 @@ const Profile = ({ formData, handleUpdate, handlePopup }) => (
             ))}
         </div>
 
-        <div className='profile-company'>
+        {/* <div className='profile-company'>
             <span className='header'>Company: <em>{renderCompanyInfo(formData.company)}</em></span>
             <MDBIcon icon="sync-alt" onClick={() => handlePopup('request')} className='icon-add' />
-        </div>
+        </div> */}
 
         <div className='profile-certificates'>
             <span className='header'>Certificates</span>

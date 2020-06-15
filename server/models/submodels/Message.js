@@ -5,7 +5,7 @@ import { message } from '../../utils/validation/range'
 
 
 exports.Message = new Schema({
-  author: {
+    author: {
         type: String,
         required: [true, messages.required.author]
     },

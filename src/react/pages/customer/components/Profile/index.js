@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 
 import { Image } from 'react-bootstrap'
 import {
   MDBPopover, MDBPopoverBody, MDBPopoverHeader, MDBCard, MDBCardBody, MDBBadge,
-  MDBCardTitle, MDBCardText, MDBCardHeader, MDBBtn, MDBContainer
+  MDBCardTitle, MDBCardText, MDBCardHeader, MDBBtn, MDBContainer, MDBCollapse
 } from "mdbreact";
 
 import CustomTable from '../../../../Components/Shared/Table/Table'
 
 
 
-export const ProfileComponent = ({ customer, quota, orders, columns }) => {
+export const ProfileComponent = ({ customer, quota, orders, columns, consultations }) => {
+  const [expandedId, setExpandedId] = useState(null);
+
+  const changeExpanded = (newId) => {
+    setExpandedId((oldId) => oldId === newId ? null : newId)
+  }
+
+  console.log(consultations);
+
   return (
     <div className="profile-wrapper">
       <div className="profile-info">
@@ -27,10 +35,8 @@ export const ProfileComponent = ({ customer, quota, orders, columns }) => {
               <MDBCardHeader color="green lighten-1">Active</MDBCardHeader>
               <MDBCardBody>
                 <MDBCardTitle>Basic</MDBCardTitle>
-                <MDBCardText>
-                  <p>- up to 5 free consultations per day</p>
-                  <p>- unlimited paid consultations</p>
-                </MDBCardText>
+                <MDBCardText>- up to 5 free consultations per day</MDBCardText>
+                <MDBCardText>- unlimited paid consultations</MDBCardText>
                 <MDBBtn color="green lighten-1">Learn more</MDBBtn>
               </MDBCardBody>
             </MDBCard>
@@ -38,10 +44,8 @@ export const ProfileComponent = ({ customer, quota, orders, columns }) => {
               <MDBCardHeader color="dark" text="grey">Not activated</MDBCardHeader>
               <MDBCardBody>
                 <MDBCardTitle>Premium</MDBCardTitle>
-                <MDBCardText>
-                  <p>- unlimited free consultations</p>
-                  <p>- bonuses and sales</p>
-                </MDBCardText>
+                <MDBCardText>- bonuses and sales</MDBCardText>
+                <MDBCardText>- unlimited free consultations</MDBCardText>
                 <MDBBtn color="darkgray" disabled>Coming soon...</MDBBtn>
               </MDBCardBody>
             </MDBCard>
@@ -60,7 +64,6 @@ export const ProfileComponent = ({ customer, quota, orders, columns }) => {
               id="popper1"
             >
               <MDBBtn outline color="info" size='sm'>How to get more?</MDBBtn>
-              {/* <span className="get-more-link">How to get more?</span> */}
               <div>
                 <MDBPopoverHeader>Paid consultations</MDBPopoverHeader>
                 <MDBPopoverBody>
@@ -76,7 +79,38 @@ export const ProfileComponent = ({ customer, quota, orders, columns }) => {
             columns={columns}
           />
 
+          <br/>
+          <p className='header'>Consultations archive</p>
+          <div className='animated-slide-up'>
+            {consultations && consultations.map((consultation) => (
+              <div key={consultation._id} className='archive-item-wrapper'>
+                <div className='archive-item-info'>
+                  <span>Consultant: <i>{consultation.consultantName}</i></span>
+                  <span>Product: <i>{`${consultation.productTitle} (${consultation.companyTitle})`}</i></span>
+
+                  <MDBBtn
+                    outline
+                    color="info"
+                    size='sm'
+                    onClick={() => changeExpanded(consultation._id)}
+                  >
+                    Show messages
+                </MDBBtn>
+                </div>
+                <MDBCollapse id={consultation._id} isOpen={expandedId === consultation._id}>
+                  {consultation.messages.map((message) => (
+                    <div key={message._id} className='archive-item-message'>
+                      <span><strong>{message.author}</strong>: {message.message}</span>
+                      <span>{message.timestamp}</span>
+                    </div>
+                  ))}
+                </MDBCollapse>
+              </div>
+            ))}
+          </div>
+
         </div>
+
       </div>
 
 

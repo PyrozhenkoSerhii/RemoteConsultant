@@ -17,6 +17,31 @@ router.get('/consultation/list/', wrap(async (req, res) => {
 }))
 
 
+router.get('/consultation/list/byCustomer/:id', wrap(async (req, res) => {
+    const consultations = await Consultation.find({ customer: req.params.id, paidConsultation: true })
+      .populate({
+        path: 'consultant',
+        select: 'fullname',
+      })
+      .populate({
+        path: 'product',
+        select: 'title',
+        populate: {
+          path: 'company',
+          select: 'title',
+          model: 'Company',
+        }
+      })
+      // only messages from consultant will be populated, customer's messages will be set as 'null'
+      .populate({
+        path: 'messages.author',
+        model: 'Consultant',
+        select: 'fullname',
+      })
+
+    res.status(200).send({data: consultations});
+}))
+
 router.get('/consultation/list/:id', isObjectId, wrap(async (req, res) => {
     const consultation = await Consultation.findById(req.params.id)
     if (!consultation) return res.status(400).send({ error: `Consultation Not Found` })

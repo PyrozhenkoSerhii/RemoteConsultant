@@ -6,6 +6,8 @@ npm i
 ```
 Rename '.env-sample' file to '.env' and enter your variables
 
+Add 'uploads' folder to the root folder
+
 Launch server in terminal/console
 ```bash
 npm run server-dev
@@ -21,6 +23,8 @@ Install dependencies
 npm i --production
 ```
 Rename '.env-sample' file to '.env' and enter your variables
+
+Add 'uploads' folder to the root folder
 
 Build server and client
 ```bash
