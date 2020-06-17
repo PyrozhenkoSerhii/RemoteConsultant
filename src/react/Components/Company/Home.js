@@ -14,7 +14,7 @@ const Home = ({ company, itemsAvailable, onlineConsultants, newRequests }) => (
             </div>
         </div>
 
-        <div className='company-digest'>
+        {/* <div className='company-digest'>
             <div className='company-digest-item'>
                 <p className='sub-header'>Consultants</p>
                 <p className='description'>{onlineConsultants} consultants was hired!</p>
@@ -36,7 +36,7 @@ const Home = ({ company, itemsAvailable, onlineConsultants, newRequests }) => (
                     <Button variant='info'>Find out more</Button>
                 </Link>
             </div>
-        </div>
+        </div> */}
     </div>
 )
 

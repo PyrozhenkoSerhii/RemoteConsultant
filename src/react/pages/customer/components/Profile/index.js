@@ -67,7 +67,7 @@ export const ProfileComponent = ({ customer, quota, orders, columns, consultatio
               <div>
                 <MDBPopoverHeader>Paid consultations</MDBPopoverHeader>
                 <MDBPopoverBody>
-                  Basic account gives you only 5 consultations per day. After they are expired you can pay for every consultation you use as an additional step before consultation
+                  Basic account gives you only 4 consultations per day. After they are expired you can pay for every consultation you use as an additional step before consultation
                 </MDBPopoverBody>
               </div>
             </MDBPopover>

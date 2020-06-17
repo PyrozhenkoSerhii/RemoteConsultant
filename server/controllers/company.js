@@ -120,8 +120,8 @@ router.patch('/company/list/:id/importConfig', isObjectId, wrap(async (req, res)
 
     company.importConfig = req.body.importConfig
 
-    const validationError = company.importConfig.validateSync()
-    if (validationError) return res.status(400).send({ error: validationError.errors })
+    // const validationError = company.importConfig.validateSync()
+    // if (validationError) return res.status(400).send({ error: validationError.errors })
 
     const saved = await company.save()
     return res.status(200).send({ data: saved })

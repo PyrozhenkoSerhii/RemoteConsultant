@@ -37,6 +37,23 @@ Launch
 npm run server-prod
 ```
 
+## Company creation
+To make a company use 
+- POST /api/company/ (for basic info) and PATCH /api/company/list/:id/importConfig for configs fields
+- or create company directly from DB
+
+The following fields are required:
+  "title": "",
+  "website": "",
+  "secret": "",
+  "info": "",
+  "image": "",
+  "importConfig": {
+      "mode": "FILE_MODE",
+      "url": "",
+      "interval": 0
+  },
+
 ## Notes
 Every env has its own log file for errors and warnings separately
 

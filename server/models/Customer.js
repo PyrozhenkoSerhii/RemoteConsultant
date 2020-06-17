@@ -74,7 +74,7 @@ const UserSchema = new Schema({
     },
     quota: {
       type: Number,
-      default: 5,
+      default: 4,
     },
     paymentInfo: {
       nameOnCard: String,

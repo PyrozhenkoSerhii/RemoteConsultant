@@ -460,7 +460,7 @@ const Chatroom = ({ customer, product, alert }) => {
 
                         <div className="custom-control custom-checkbox">
                           <input type="checkbox" className="custom-control-input" id="defaultUnchecked" name="saveInfo" checked={paymentData.saveInfo} onChange={onPaymentDataUpdate} />
-                          <label className="custom-control-label" htmlFor="defaultUnchecked">Save billing info</label>
+                          <label className="custom-control-label" htmlFor="defaultUnchecked">Save billing info (CVV won't be saved)</label>
                         </div>
 
                         <div className='text-center py-2 mt-3'>
@@ -468,7 +468,7 @@ const Chatroom = ({ customer, product, alert }) => {
                             color={paymentProceeding ? 'warning' : 'primary'}
                             type='submit'
                             disabled={paymentProceeding}
-                          ><MDBIcon icon="dollar-sign" className="icon-white" font="white" />{paymentProceeding ? "Proceeding..." : "Pay $0.99"}</MDBBtn>
+                          ><MDBIcon icon="dollar-sign" className="icon-white" font="white" />{paymentProceeding ? "Proceeding..." : "Pay $1.65"}</MDBBtn>
                           <MDBBtn color='danger' type='button' onClick={() => setPaymentDialog(false)}>Cancel</MDBBtn>
                         </div>
                       </form>
